@@ -338,8 +338,8 @@ function applySettings(){document.documentElement.style.setProperty('--fs',{s:.9
 applySettings();
 
 const $=id=>document.getElementById(id);
-const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp'};
-const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['papa','Le scale'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['t4','Sulla riva'],['hands','Soggetto Uno'],['sailor','Il marinaio'],['night','Le orme'],['cat','Pimienta'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['eco','Eco'],['doctor','Il dottor Marrajo']];
+const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp',naming:'img/naming.webp',argue:'img/argue.webp',door:'img/door.webp',lantern:'img/lantern.webp',truth:'img/truth.webp',cellar:'img/cellar.webp',cave:'img/cave.webp',coffee:'img/coffee.webp',bed:'img/bed.webp',flood:'img/flood.webp'};
+const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['papa','Le scale'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['t4','Sulla riva'],['hands','Soggetto Uno'],['sailor','Il marinaio'],['night','Le orme'],['lantern','Nella lanterna'],['cellar','In cantina'],['cave','La grotta'],['truth','La verità'],['cat','Pimienta'],['naming','Un nome'],['flood','La marea'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['eco','Eco'],['argue','Papà e gli uomini in nero'],['door','Alla porta'],['bed','Sotto il letto'],['coffee','Il caffè'],['doctor','Il dottor Marrajo']];
 function unlock(id){if(!GAL.includes(id)){GAL.push(id);store.set('gallery',GAL)}}
 
 /* all decision points, for the route map */
@@ -583,7 +583,7 @@ async function convince(when){
     {t:'Gli racconti quello che hai visto',d:S.clues.length?'Hai degli indizi.':'Ti serve almeno un indizio.',off:!S.clues.length},
     {t:'«È il figlio di un pescatore di Arguineguín. Lo riporto io.»',d:'Una bugia.'},
     {t:'«Solo un giorno, papà. Ti prego.»'}]);
-  if(a===0){bump('papa',14,'Papà ti crede.');await panel({txt:'dark'},[nar('Papà ascolta senza dire niente. Poi guarda la bottiglietta a lungo, e la rimette in tasca senza bere.'),say(P,'Aspettiamo. Finché non capiamo.')])}
+  if(a===0){bump('papa',14,'Papà ti crede.');await panel({img:'truth'},[nar('Papà ascolta senza dire niente. Poi guarda la bottiglietta a lungo, e la rimette in tasca senza bere.'),say(P,'Aspettiamo. Finché non capiamo.')])}
   if(a===1){S.f.lie=true;toast('Papà ci crede a metà. La bugia tornerà a galla.')}
   if(a===2)bump('papa',-8,'Papà cede, ma è preoccupato.');
   if(S.f.messa&&a!==0)await panel({txt:'dark'},[say(P,'Va bene. Ma se il dottore chiede, a messa ci vado tutte le domeniche.')]);
@@ -684,12 +684,13 @@ const SCENES=[
     nar(h===0?'Poi guarda per terra. Orme bagnate. Piccole. Salgono verso la scala della lanterna.':'Poi guarda per terra. Orme bagnate. Piccole. Scendono verso la cantina.'),
     say(P,'Nayra.'),say(N,'Sì, papà?'),
     say(P,'Dimmi che è un\'altra gallina.'),
-    nar(h===0?'Papà sale. Nayra gli corre dietro. Il bambino è lì, rannicchiato accanto alla lente.':'Papà scende. Nayra gli corre dietro. Il bambino è lì, tra le botti, che trema.')]);
+    ]);
+  await panel({img:h===0?'lantern':'cellar'},[nar(h===0?'Papà sale. Nayra gli corre dietro. Il bambino è lì, rannicchiato accanto alla lente.':'Papà scende. Nayra gli corre dietro. Il bambino è lì, tra le botti, che trema.')]);
   await convince('Domattina');
 }],
 ['Kai',async()=>{
   await sonar();
-  await panel(S.f.hide===2?{txt:'dark'}:{img:'cat'},[...(S.f.hide===2?[nar('Nella grotta, alla luce della candela. Pimienta ha seguito Nayra fin quaggiù.')]:[]),
+  await panel(S.f.hide===2?{img:'cave'}:{img:'cat'},[...(S.f.hide===2?[nar('Nella grotta, alla luce della candela. Pimienta ha seguito Nayra fin quaggiù.')]:[]),
     say(B,'C\'è... qualcosa. Sulla pancia. Vibra.'),
     say(N,'È Pimienta, la gatta. Sta facendo le fusa.'),
     say(B,'Morde?'),
@@ -703,7 +704,7 @@ const SCENES=[
     say(B,'La nave... è colpa mia.'),say(N,'Cosa?'),
     say(B,'Era pesante. Gli altri hanno spinto troppo forte. Non volevano. Volevano solo che arrivassi.'),
     say(N,'Arrivassi dove?'),say(B,'Fuori.')]);
-  await panel({img:'kai',crop:['1/1','80% 30%',1.7,'78% 32%']},[
+  await panel({img:'naming'},[
     say(N,'Come ti chiami?'),say(B,'Uno.'),
     say(N,'Uno non è un nome. È un numero.'),
     say(B,'Lì non c\'erano nomi.'),
@@ -714,14 +715,15 @@ const SCENES=[
 }],
 ['L\'alba',async()=>{
   if(S.f.secret){
-    await panel({txt:'dark'},[
+    await panel({img:'flood'},[
       nar('Alba. La marea sale. L\'acqua entra nella grotta e arriva alle caviglie.'),
       say(K,'Nayra. L\'acqua.','whisper kai'),
       th('L\'alta marea. Me n\'ero dimenticata. Lo porto su, finché papà è fuori.')]);
     S.f.secret='up'}
   await panel({img:'t6'},[
     nar('Alba. Uomini in nero tra i rottami. Una carrozza con uno squalo dipinto sulla portiera.'),
-    th('Il dottor Marrajo. Di persona. Alle sei del mattino. Per una nave "senza nome".'),
+    th('Il dottor Marrajo. Di persona. Alle sei del mattino. Per una nave "senza nome".')]);
+  await panel({img:'argue'},[
     nar('Papà scende a parlare con loro. Lo sentono tutti, da quanto urla. Poi si avvia verso il porto, a chiamare la Guardia Civil.')]);
   if(S.f.lamp)await panel({txt:'dark'},[say('Uomo in nero · dalla spiaggia','Un pescatore dice di aver visto una luce scendere dal faro, stanotte.','off')]);
   await panel({txt:'dark'},[say('Voce di papà · dalla spiaggia','NAYRA! Scendi, presto! Ho bisogno di te!','shout off'),th('È la voce di papà. Ma papà è andato al porto.')]);
@@ -735,17 +737,18 @@ const SCENES=[
 }],
 ['La benda',async()=>{
   if(S.f.found){
-    await panel({txt:'dark'},[
+    await panel({img:'door'},[
       nar('Poco dopo, qualcuno bussa alla porta. Due uomini in nero.'),
       say('Uomo in nero','Buongiorno, signorina. Cerchiamo un bambino della nave. È molto malato, il dottore è preoccupato.'),
-      th('Malato. Certo.'),
+      th('Malato. Certo.')]);
+    await panel({img:'bed'},[
       nar('Kai è sotto il letto, immobile. Non respira nemmeno.'),
       say(N,'Qui non c\'è nessun bambino.'),
       say('Uomo in nero','Allora torneremo a trovarla. Così, per sicurezza.')]);
     S.f.watched=true}
   if(S.f.secret==='up'){
-    await panel({txt:'dark'},[
-      nar('A metà mattina papà torna dal porto. Apre la porta della cucina e si blocca.'),
+    await panel({img:'coffee'},[
+      nar('A metà mattina papà torna dal porto e si versa un caffè. Poi si gira.'),
       say(P,'Nayra. Perché c\'è un bambino nella mia cucina?')]);
     bump('papa',-6,'Papà non è contento che gliel\'hai nascosto.');S.f.secret=false;
     await convince('Oggi stesso');
