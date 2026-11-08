@@ -352,8 +352,18 @@ const NODES=[
  {id:'tell',sc:'Il faro',q:'Convincere papà',o:['La verità','La bugia','La supplica']},
  {id:'words',sc:'Kai',q:'Le prime parole',o:['Dolce','Curiosa','Diffidente']},
  {id:'eco',sc:'L\'alba',q:'La voce di papà',o:['Rispondi','Resti in silenzio','Esiti']},
- {id:'band',sc:'La benda',q:'Papà e la benda',o:['Lo fermi','Lasci fare','Esiti']}];
-const ENDINGS=[['found','Ti hanno trovata','Eco sa dove sei'],['hidden','Nel silenzio','Gli uomini in nero non sanno niente']];
+ {id:'band',sc:'La benda',q:'Papà e la benda',o:['Lo fermi','Lasci fare','Esiti']},
+ {id:'tell2',sc:'Scena 2 · Un bambino nuovo',q:'La nuova storia per papà',o:['La verità','La cugina di Telde','«Non lo so nemmeno io»']},
+ {id:'ask',sc:'Scena 2 · Il gofio',q:'Cosa chiedi a Kai',o:['Chi è Brasa','Com\'era l\'isola','Niente, altro latte']},
+ {id:'friend',sc:'Scena 2 · Gli altri',q:'L\'amico preferito',o:['Brasa','Susurro','Niebla','Roca','Aleta']},
+ {id:'promise',sc:'Scena 2 · Gli altri',q:'La risposta a Kai',o:['La promessa','Non è colpa tua','Devi riposare']},
+ {id:'light',sc:'Scena 2 · La visita',q:'La luce sulla riva',o:['Ammetti','Dai la colpa alla lanterna']},
+ {id:'market',sc:'Scena 2 · La visita',q:'Il volantino',o:['Lo strappi','Fai domande','Te ne vai']},
+ {id:'eco2',sc:'Scena 2 · La perquisizione',q:'Kai sta per uscire',o:['La pentola','La tosse','Niente']},
+ {id:'confront',sc:'Scena 2 · Dopo',q:'Papà ti ha scoperta',o:['La verità','«Anche da te»','Silenzio']},
+ {id:'face',sc:'Scena 2 · Dopo',q:'Il volto',o:['Sì','Meglio di no']},
+ {id:'job',sc:'Scena 2 · L\'annuncio',q:'Il sanatorio',o:['Per i soldi','Per i bambini','Di nascosto']}];
+const ENDINGS=[['found','Ti hanno trovata','Eco sa dove sei'],['hidden','Nel silenzio','Gli uomini in nero non sanno niente'],['job','La porta principale','Nayra entra al sanatorio come aiutante'],['sneak','La grotta del lato nord','Nayra entrerà di nascosto']];
 function markPath(id,i){if(i==null)return;const a=PATHS[id]||[];if(!a.includes(i)){a.push(i);PATHS[id]=a;store.set('paths',PATHS)}}
 function pathPct(){let tot=0,got=0;NODES.forEach(n=>{tot+=n.o.length;got+=(PATHS[n.id]||[]).length});return Math.round(got/tot*100)}
 
@@ -377,7 +387,7 @@ function fillMenu(){
   const main=document.createElement('div');main.className='m-main';const grid=document.createElement('div');grid.className='m-grid';l.append(main,grid);
   const add=(box,cls,t,sub,fn,off)=>{const b=document.createElement('button');b.type='button';b.className='m-item '+cls;b.innerHTML=`<span>${t}</span>${sub?`<small>${sub}</small>`:''}`;b.onclick=fn;if(off)b.disabled=true;box.appendChild(b)};
   if(!open)add(main,'primary','Bloccato','finisci il capitolo prima',null,true);
-  else if(save){add(main,'primary','Continua →','parte '+(save.scene+1)+'/8',()=>startGame(save));add(main,'alt','Nuova','',()=>startGame(null))}
+  else if(save){add(main,'primary','Continua →','scena '+(save.scene<8?1:2)+' · parte '+(save.scene<8?save.scene+1:save.scene-7),()=>startGame(save));add(main,'alt','Nuova','',()=>startGame(null))}
   else add(main,'primary','Nuova partita →','',()=>startGame(null));
   add(grid,'','Capitoli','1/3',()=>page('chapters'));
   add(grid,'','Percorsi',pathPct()+'%',()=>page('paths'));
@@ -395,7 +405,7 @@ function page(kind,from){
   const b=$('subBody');b.innerHTML='';$('subMeta').textContent='';
   if(kind==='chapters'){$('subTitle').textContent='Capitoli';
     b.innerHTML=`<p class="lead">Tre epoche, la stessa isola. Le scelte di un capitolo cambiano chi esiste nel successivo.</p>
-    <div class="chap"><img src="${IMG.t1}" alt=""><div class="in"><b>I · 1893 — La notte del naufragio</b><span>Nayra trova un bambino bendato sugli scogli.</span><br><button class="ghost" type="button" id="chPlay">Gioca la Scena 1</button></div></div>
+    <div class="chap"><img src="${IMG.t1}" alt=""><div class="in"><b>I · 1893 — La notte del naufragio</b><span>Nayra trova un bambino bendato sugli scogli.</span><br><button class="ghost" type="button" id="chPlay">Gioca dall'inizio</button></div></div>
     <div class="chap locked"><div class="in"><b>II · 2026</b><span>Bloccato. I super esistono, ma nessuno li vuole.</span></div></div>
     <div class="chap locked"><div class="in"><b>III · 2079</b><span>Bloccato. Il sangue originale vale più di qualsiasi cosa.</span></div></div>`;
     $('chPlay').onclick=()=>startGame(null);}
@@ -525,7 +535,7 @@ function investigate(){
     p.innerHTML=`<img src="${IMG.debris}" alt="Rottami sulla spiaggia: una cassa, una bottiglia rotta, un registro" style="display:block;width:100%;height:auto">`;
     const spots=[[24,40,'Una cassa con lo squalo dei Marrajo','Lo squalo dei Marrajo. Cosa ci fa su una nave che porta provviste?','crate'],
       [50,50,'Una bottiglia di Tonico che brilla tra i sassi','È il Tonico di papà. Brilla dello stesso azzurro del mare di stanotte.'],
-      [78,40,'Il registro di bordo: «Carico per il laboratorio inferiore, NON per il sanatorio»','Laboratorio inferiore. Sotto il sanatorio c\'è qualcos\'altro.']];
+      [78,40,'Il registro di bordo: «Carico per il laboratorio inferiore, NON per il sanatorio»','Laboratorio inferiore. Sotto il sanatorio c\'è qualcos\'altro.','logbook']];
     const talk=document.createElement('div');talk.className='talk';let found=0;
     spots.forEach(s=>{const d=document.createElement('button');d.type='button';d.className='spot';d.setAttribute('aria-label','Esamina');d.style.left=s[0]+'%';d.style.top=s[1]+'%';p.appendChild(d);
       d.onclick=e=>{e.stopPropagation();if(d.classList.contains('found'))return;d.classList.add('found');found++;if(s[4])S.f[s[4]]=true;clue(s[2],1);q.textContent=`Oggetti esaminati: ${found} di 3`;
@@ -588,7 +598,7 @@ async function convince(when){
     {t:"Gli racconti quello che hai visto",d:S.kc?"Hai qualcosa da raccontargli.":"Non hai visto niente da raccontargli. Forse sulla spiaggia c'era qualcosa che ti sei persa.",off:!S.kc},
     {t:"«È il figlio di un pescatore di Arguineguín. Lo riaccompagno io.»",d:"Una bugia."},
     {t:"«Solo un giorno, papà. Ti prego.»"}]);
-  if(a===0){bump("papa",14,"Papà ti crede.");await panel({img:"truth"},[nar("Papà ascolta senza dire niente. Poi fissa a lungo la bottiglietta e la rimette in tasca senza bere."),say(P,"Aspettiamo. Finché non ci capiamo qualcosa.")])}
+  if(a===0){bump("papa",14,"Papà ti crede.");S.f.papaKnows=true;await panel({img:"truth"},[nar("Papà ascolta senza dire niente. Poi fissa a lungo la bottiglietta e la rimette in tasca senza bere."),say(P,"Aspettiamo. Finché non ci capiamo qualcosa.")])}
   if(a===1){S.f.lie=true;await panel({txt:"dark"},[say(P,"Arguineguín, eh? ...Va bene. Ma lo riaccompagni presto.")]);toast("Papà ci crede a metà. La bugia tornerà a galla.")}
   if(a===2){bump("papa",-8,"Papà cede, ma è preoccupato.");await panel({txt:"dark"},[say(P,"Un giorno. Uno solo.")])}
   if(S.f.messa&&a!==0)await panel({txt:"dark"},[say(P,"E se il dottore chiede, a messa ci vado tutte le domeniche.")]);
@@ -781,7 +791,7 @@ const SCENES=[
     nar("Più tardi, papà si inginocchia davanti al bambino con una ciotola d'acqua."),
     say(P,"Hai del sangue sulla benda, ragazzo. Fammi dare un'occhiata."),
     nar("Le dita di papà sono già sul nodo. Kai si irrigidisce.")]);
-  const a=await choose("band","Papà sta per togliergli la benda",[{t:"«Papà, fermo!»"},{t:"Lasci fare a papà"}],{t:1,def:null});
+  const a=await choose("band","Papà sta per togliergli la benda",[{t:"«Papà, fermo!»"},{t:"Lasci fare a papà"}],{t:1,def:null});if(a!==0)S.f.forgot=true;
   if(a===0){bump("trust",15,"Kai se ne ricorderà.");bump("papa",-6);
     await panel({txt:"paper"},[say(P,"Ehi! Volevo solo pulirgli la faccia!"),say(N,"Lo so. Ma lui non vuole. Vero, Kai?"),say(K,"...Grazie.")]);
     if(S.trust>=60)await panel({txt:"dark"},[th("Il suo cuore è andato più veloce. Per me.",K)]);
@@ -797,13 +807,179 @@ const SCENES=[
   await panel({img:"diary"},[th("Se papà l'ha dimenticato in una notte, posso dimenticarlo anch'io. Allora lo scrivo. Si chiama Kai. È arrivato dal mare. Chiede scusa per tutto.")]);
   clue("Chi guarda Kai negli occhi si dimentica di lui",1);
 }]];
+/* ---------- SCENA 2 ---------- */
+const SC1=SCENES.length;
+const FRIENDS=[
+ ["Brasa","il fuoco","Odora di fumo anche quando dorme. Ha le mani sempre calde. Quando ha paura, le coperte fanno puzza di bruciato.","Una notte faceva freddo. Brasa ha messo le mani sul muro finché la pietra non è diventata tiepida. Ci siamo addormentati tutti lì contro."],
+ ["Susurro","la mente","Non parla quasi mai. Non serve: sa già cosa stai per dire. A volte piange senza motivo. Dice che è colpa dei pensieri degli infermieri.","Una volta mi ha detto: «Tu hai i pensieri più silenziosi di tutti, Uno. Con te riposo.» Stava sempre vicino a me."],
+ ["Niebla","l'invisibile","La più piccola. Ha i passi leggerissimi. A volte non la sento proprio, nemmeno il cuore. Ho paura che un giorno sparisca e basta.","Le canticchiavo una canzone per sapere dov'era. Quando smetteva di rispondere, cantavo più forte."],
+ ["Roca","la forza","Grande, enorme. Ma ragiona come un bambino piccolo. Mi teneva per mano per non perdermi. Ha rotto una porta di ferro per prendermi una mela.","Dopo la porta l'hanno legato per tre giorni. Non si è lamentato. Diceva solo: «La mela era buona, Uno?»"],
+ ["Aleta","lo squalo","Odora di sale. Di notte si trasforma, nel sonno, e le lenzuola si bagnano. Rideva sempre. È quella che mi ha detto di scappare.","Mi ha detto: «Il mare ti porta, Uno. Ti porta sempre da qualche parte.» Aveva ragione."]];
+function picker(q,how,items,need,doneLabel){
+  return race(new Promise(res=>{
+    const c=document.createElement('div');c.className='choice';
+    c.innerHTML=`<p class="how">${how}</p><div class="q"></div>`;const qq=c.querySelector('.q');let n=0;
+    const talk=document.createElement('div');talk.className='talk';
+    const upd=()=>{qq.textContent=`${q}: ${n} di ${items.length}`};upd();
+    const fin=document.createElement('button');fin.type='button';fin.className='ch';fin.innerHTML=`<span>${doneLabel}</span>`;fin.disabled=true;
+    items.forEach(it=>{const b=document.createElement('button');b.type='button';b.className='ch';b.innerHTML=`<span>${it.t}</span>`;c.appendChild(b);
+      b.onclick=e=>{e.stopPropagation();b.disabled=true;b.classList.add('picked');n++;upd();
+        it.lines.forEach((l,k)=>{const el=itemEl(l);talk.appendChild(el);setTimeout(()=>{el.classList.add('on');reveal(el)},80+k*500)});
+        if(it.fx)it.fx();if(n>=need)fin.disabled=false;if(n>=items.length){fin.disabled=false}}});
+    c.appendChild(fin);col.appendChild(c);col.appendChild(talk);reveal(c);
+    fin.onclick=e=>{e.stopPropagation();fin.disabled=true;fin.classList.add('picked');c.querySelectorAll('.ch').forEach(x=>x.disabled=true);res()};
+  }));
+}
+const ROOMS=["Cucina","Camera di Nayra","Cantina","Lanterna"];
+const RHINT=["Passi verso il fuoco. Qualcuno apre la credenza.","Passi sul corridoio. Si fermano davanti alla porta di Nayra.","Passi che scendono. Gradini di pietra.","Passi pesanti verso le scale. Salgono."];
+function hideSeek(rounds){
+  return race(new Promise(async res=>{
+    let kai=S.f.hide===0?3:S.f.hide===1?2:1,caught=false;
+    const ally=S.f.papaKnows&&S.papa>=60;
+    for(let r=0;r<rounds&&!caught;r++){
+      let target=Math.floor(Math.random()*4);if(target===kai&&Math.random()<.35)target=(target+1)%4;
+      const lines=[nar(`Perquisizione · turno ${r+1} di ${rounds}. Kai ora è: ${ROOMS[kai]}.`)];
+      if(S.trust>=60)lines.push(say(K,RHINT[target],"whisper kai"));else lines.push(th("Non so dove andranno. Devo indovinare."));
+      await panel({txt:"dark"},lines);
+      const pick=await new Promise(rr=>{const c=document.createElement('div');c.className='choice';c.innerHTML='<div class="q">Dove sposti Kai?</div>';
+        ROOMS.forEach((nm,i)=>{const b=document.createElement('button');b.type='button';b.className='ch';b.innerHTML=`<span>${nm}${i===kai?' (resta qui)':''}</span>`;c.appendChild(b);
+          b.onclick=e=>{e.stopPropagation();c.querySelectorAll('.ch').forEach(x=>x.disabled=true);b.classList.add('picked');rr(i)}});col.appendChild(c);reveal(c)});
+      kai=pick;
+      if(ally&&r===1){await panel({txt:"dark"},[say(P,"Signori, un caffè? Con questo freddo..."),nar("Uno degli uomini si ferma a bere. La stanza che voleva controllare resta chiusa.")]);continue}
+      if(kai===target){caught=true;break}
+      await panel({txt:"dark"},[nar(`Gli uomini rovistano: ${ROOMS[target]}. Niente.`)]);
+    }
+    S.f.kaiRoom=kai;res(caught);
+  }));
+}
+SCENES.push(
+["Un bambino nuovo",async()=>{
+  await panel({txt:"dark"},[nar("Scena 2 · I tre giorni dopo"),nar("15 ottobre 1893, pomeriggio.")]);
+  if(S.f.forgot){
+    await panel({img:"coffee"},[say(P,"Allora. Ricominciamo. Chi è?"),th("Gliel'ho già spiegato ieri. Per lui è la prima volta.")]);
+    const a=await choose("tell2","Che storia gli racconti stavolta?",[
+      {t:"La verità, tutta",d:S.kc?"Hai qualcosa da raccontargli.":"Non hai visto niente da raccontargli.",off:!S.kc},
+      {t:"«È il figlio di una cugina di Telde. Resta qualche giorno.»",d:"Una bugia che nessuno può controllare in fretta."},
+      {t:"«Non lo so nemmeno io, papà. Ma ha bisogno di noi.»"}]);
+    if(a===0){bump("papa",14,"Papà ti crede.");S.f.papaKnows=true}
+    if(a===2)bump("papa",8);
+    await panel({txt:"dark"},[say(P,"E perché porta quella benda?"),say(N,"Ha gli occhi malati. La luce gli fa male."),th("Questa è la bugia che terrò per sempre. La verità gli costerebbe la memoria.")]);
+  }else{
+    await panel({img:"kitchen"},[nar("Papà guarda Kai che tasta il bordo del tavolo con le dita."),say(P,"Non tocca niente senza prima toccarlo. Come i ciechi."),say(N,"Lo è. Più o meno."),say(P,"«Più o meno» non esiste, Nayra. O ci vedi o non ci vedi."),say(K,"Io sento."),say(P,"...Cosa senti?"),say(K,"Che lei ha fame. Le brontola la pancia da un'ora."),nar("Papà ride. È la prima volta da giorni."),say(P,"Questo lo sento anch'io.")]);
+  }
+}],
+["Il gofio",async()=>{
+  await panel({txt:"paper"},[nar("Nayra impasta il gofio con il miele e il latte. Kai annusa la ciotola, la testa inclinata."),say(K,"Cos'è?"),say(N,"Gofio. Farina di cereali tostati. Qui lo mangiamo tutti, da sempre."),say(K,"Sull'isola mangiavamo pappa grigia. Sempre la stessa. Sapeva di ferro.")]);
+  await picker("Assaggi","Fai assaggiare a Kai le tre cose sul tavolo. Ogni sapore gli fa tornare in mente qualcosa.",[
+    {t:"Il gofio col miele",lines:[say(K,"È... dolce. Non sapevo che si potesse mangiare una cosa dolce.")]},
+    {t:"Il latte",lines:[say(K,"Brasa rubava lo zucchero dalle tasche degli infermieri. Ce lo dividevamo in sei. Un granello a testa.")]},
+    {t:"Un'oliva",lines:[nar("Kai la sputa."),say(K,"No. Questo no. Mai più."),...(S.f.forgot&&!S.f.papaKnows?[]:[say(P,"Il ragazzo ha gusto. Le olive di tua zia fanno schifo davvero.")])]}],3,"Continua");
+  await panel({txt:"dark"},[th("«Ce lo dividevamo in sei.» Allora non era solo. C'erano altri cinque bambini, là.")]);
+  const a=await choose("ask","Cosa gli chiedi?",[{t:"«Chi è Brasa?»"},{t:"«Che posto era, l'isola?»"},{t:"Non chiedi niente e gli versi altro latte."}]);
+  if(a===0){bump("trust",6);await panel({txt:"dark"},[say(K,"Un amico. Ne ho cinque. Stasera te li racconto.")])}
+  if(a===1){bump("trust",-6,"Kai si chiude.");await panel({txt:"dark"},[say(K,"Non voglio parlarne."),nar("Poi, piano, quasi senza volerlo:"),say(K,"Sotto c'erano le gallerie. Si sentiva il vulcano respirare.")]);clue("Sotto il sanatorio ci sono delle gallerie, dentro il vulcano",1)}
+  if(a===2){bump("trust",12,"Kai se ne ricorderà.");await panel({txt:"dark"},[nar("Kai beve in silenzio. Poi, da solo:"),say(K,"Sono cinque. Stasera te li racconto.")])}
+}],
+["Gli altri",async()=>{
+  await panel({img:"naming"},[nar("Sera. La stanza di Nayra, una candela. Il diario è aperto."),say(K,"Sono cinque. Siamo... eravamo sei."),say(N,"Com'erano?"),say(K,"Non lo so. Non li ho mai visti. Nessuno di noi si è mai visto."),th("Certo. Porta la benda da sempre. Li conosce solo dalle voci."),say(N,"Allora raccontameli come li senti tu. Io provo a disegnarli.")]);
+  const heard=[];
+  await picker("Amici disegnati","Tocca un nome: Kai lo descrive e Nayra lo disegna nel diario. Ascoltane almeno due.",FRIENDS.map((f,i)=>({t:`${f[0]} · ${f[1]}`,lines:[say(K,f[2])],fx:()=>heard.push(i)})),2,"Ho finito di disegnare");
+  S.f.heard=heard.slice();
+  const fa=await choose("friend","Di chi vuoi sapere di più?",FRIENDS.map(f=>({t:f[0]})));
+  S.f.friend=fa;bump("trust",4);
+  await panel({txt:"dark"},[say(K,FRIENDS[fa][3]),nar(`Nayra sottolinea il nome di ${FRIENDS[fa][0]} due volte.`)]);
+  await panel({txt:"dark"},[say(K,"Sono rimasti là. Per farmi uscire. E io sono qui a mangiare gofio.")]);
+  const b=await choose("promise","Cosa gli rispondi?",[{t:"«Li tireremo fuori.»",d:"Una promessa."},{t:"«Non è colpa tua.»"},{t:"«Devi riposare, ora.»"}]);
+  if(b===0){bump("trust",14,"Kai se ne ricorderà.");S.f.promise=true}
+  if(b===1)bump("trust",6);
+  if(b===2)await panel({txt:"dark"},[nar("Kai si gira verso il muro.")]);
+  if(S.f.leftSailor)await panel({txt:"dark"},[nar("Quella notte Nayra sogna il marinaio. Lui la guarda dalla spiaggia e non dice niente."),th("Anche io ho lasciato indietro qualcuno.")]);
+}],
+["La visita",async()=>{
+  await panel({txt:"dark"},[nar("16 ottobre, mattina.")]);
+  if(S.f.found){
+    await panel({img:"lookup"},[nar("Davanti al faro ci sono quattro uomini in nero. In mezzo a loro, il bambino dai capelli chiari. Sorride.")]);
+    await panel({img:"eco"},[say(U,"Buongiorno. Siamo tornati, come promesso."),say("Eco · con la voce di Nayra","Sono tornati, come promesso."),th("Ha la mia voce. Ha preso la mia voce."),say(U,"Il dottore è molto in pensiero per quel bambino. Permette che diamo un'occhiata?")]);
+    if(S.f.papaKnows&&S.papa>=60){await panel({txt:"dark"},[say(P,"Questo è un faro dello Stato. Se volete entrare, tornate con la Guardia Civil."),nar("Gli uomini si guardano. Poi se ne vanno. Eco fissa Nayra fino all'ultimo.")]);S.f.visit="refused";return}
+    await panel({txt:"dark"},[say(P,"Fate pure. Non abbiamo niente da nascondere. ...Vero, Nayra?")]);S.f.visit="search";return}
+  if(S.f.lamp){
+    await panel({img:"door"},[nar("Alla porta c'è un solo uomo in nero, gentilissimo, il cappello in mano."),say(U,"Un pescatore ha visto una luce scendere dal faro, la notte del naufragio. È stata lei, signorina?")]);
+    const a=await choose("light","Cosa rispondi?",[{t:"«Sì, cercavo superstiti. Non ho trovato nessuno.»"},{t:"«No, sarà stato il riflesso della lanterna.»"}]);
+    if(a===0){await panel({txt:"dark"},[say(U,"Che coraggio. Me lo segno, il suo nome."),nar("Se ne va. Ma il suo nome, adesso, è su un taccuino.")]);S.f.visit="noted";return}
+    await panel({txt:"dark"},[say(U,"Strano. La lanterna fa luce gialla."),nar("L'uomo sorride, e chiama gli altri.")]);S.f.visit="short";return}
+  await panel({txt:"paper"},[nar("Il mercato del porto. Nayra ha il cesto della spesa."),th("Nessuno è venuto al faro. Forse ce l'abbiamo fatta."),nar("Un uomo in nero attacca un foglio al muro: CERCASI BAMBINO MALATO FUGGITO DAL SANATORIO MARRAJO. PORTA UNA BENDA SUGLI OCCHI E UN BRACCIALETTO DI METALLO. RICOMPENSA: 500 PESETAS."),say("Pescivendola","Cinquecento pesetas! Con quei soldi mi compro la barca nuova.")]);
+  const a=await choose("market","Cosa fai?",[{t:"Strappi il foglio quando nessuno guarda"},{t:"Fai domande alla pescivendola"},{t:"Te ne vai subito"}]);
+  if(a===0){await panel({txt:"dark"},[nar("Nayra lo stacca e lo infila nel cesto, sotto le cipolle."),th("Sanno della benda. Allora sanno anche perché la porta.")]);clue("Il sanatorio sa della benda di Kai: sa cosa può fare",1);S.f.poster=true}
+  if(a===1){await panel({txt:"dark"},[say("Pescivendola","Quelli del sanatorio? Mai visti. I bambini non escono mai, nemmeno a messa. Neanche a Natale."),th("Un ospedale per bambini dove i bambini non escono mai.")]);clue("I bambini del sanatorio non escono mai, nemmeno a messa",1)}
+  if(a===2)await panel({img:"eco"},[nar("Sulla strada del ritorno, un bambino biondo le passa accanto."),say("Il bambino · con la voce di papà","Buongiorno, Nayra."),th("Non mi giro. Non mi giro.")]);
+  S.f.visit="none";
+}],
+["La perquisizione",async()=>{
+  if(S.f.visit!=="search"&&S.f.visit!=="short")return;
+  const full=S.f.visit==="search";
+  await panel({img:"listen"},[nar("Gli uomini entrano. Kai è in casa."),th("Devo spostarlo prima che arrivino a lui.")]);
+  let caught=await hideSeek(full?3:1);
+  if(!caught&&full){
+    await panel({img:"hide"},[nar("Nel corridoio, Eco si porta le mani alla bocca."),say("Eco · con la voce di Nayra","Uno! Sono io. Se ne sono andati, puoi uscire!"),th("«Uno». Io non lo chiamo mai così.")]);
+    if(S.trust>=60)await panel({txt:"dark"},[th("Lei mi chiama Kai. Sempre.",K),nar("Kai non si muove. Da lontano si sente Eco sbuffare.")]);
+    else{
+      await panel({txt:"dark"},[nar("Kai esita. Si sente un fruscio, un passo.")]);
+      const a=await choose("eco2","Kai sta per uscire!",[{t:"Fai cadere una pentola in cucina"},{t:"Tossisci forte"},{t:"Non fai niente"}],{t:1,def:2});
+      if(a===0){S.f.pot=true;await panel({txt:"dark"},[{t:"sfx",s:"CLANG"},nar("Tutti corrono in cucina. Kai torna al suo posto.")])}
+      else if(a===1){S.f.ecoKnows=true;await panel({txt:"dark"},[nar("Kai si ferma. Ma Eco si gira verso Nayra, e sorride: ha capito.")])}
+      else caught=true;
+    }
+  }
+  if(caught){
+    await panel({txt:"dark"},[nar("Eco si accovaccia davanti al nascondiglio di Kai. È a un palmo dalla sua benda."),say("Eco · sottovoce, con la sua voce","Ciao, Uno."),say(K,"...Ciao, Eco."),nar("Un lungo silenzio.")]);
+    await panel({img:"eco"},[say("Eco · ad alta voce","Qui niente! Andiamo."),say("Eco · a Kai, sottovoce","Mi devi un favore."),th("Perché l'ha lasciato andare?")]);
+    S.f.ecoDebt=true;
+  }else{
+    await panel({img:"door"},[say(U,"Grazie per la pazienza. Il dottore le manda i suoi saluti. E le ricorda che al sanatorio cercano sempre ragazze sveglie. Pagano bene."),th("Mi stanno offrendo un lavoro. O mi stanno dicendo che mi tengono d'occhio.")]);
+  }
+}],
+["Dopo",async()=>{
+  await panel({txt:"dark"},[nar("16 ottobre, sera.")]);
+  if(S.f.lie&&!S.f.forgot&&!S.f.papaKnows){
+    await panel({txt:"dark"},[nar("Bussa un vecchio pescatore, il berretto tra le mani."),say("Pepe, pescatore","Tomás, ho chiesto in giro ad Arguineguín. Nessuno ha perso un figlio. Nessuno."),say(P,"Grazie, Pepe. Grazie."),nar("Papà chiude la porta e si gira lentamente."),say(P,"Arguineguín, eh?")]);
+    const a=await choose("confront","Papà ti ha scoperta",[{t:"Gli dici finalmente la verità",d:S.kc?"Hai qualcosa da raccontargli.":"Non hai visto niente da raccontargli.",off:!S.kc},{t:"«Volevo proteggerlo. Anche da te.»"},{t:"Non dici niente"}]);
+    if(a===0){bump("papa",-4);S.f.papaKnows=true;await panel({img:"truth"},[nar("Papà ascolta tutto, fino alla fine."),say(P,"La prossima volta, la verità prima. Non dopo.")])}
+    if(a===1){bump("papa",-14,"Papà è ferito.");await panel({txt:"dark"},[say(P,"...Da me?"),nar("Papà resta in silenzio a lungo.")])}
+    if(a===2){bump("papa",-10);await panel({txt:"dark"},[say(P,"Quando vorrai parlarmi, sai dove trovarmi. In cima a un faro.")])}
+  }
+  if(S.f.pot){
+    await panel({txt:"paper"},[say(P,"La pentola di tua madre. Trent'anni e non si era mai ammaccata."),say(N,"Scusa, papà."),nar("Papà guarda Kai, poi lei."),say(P,"...L'hai fatto per lui, vero? Allora va bene. Era solo una pentola.")]);bump("papa",4)}
+  await panel({img:"naming"},[nar("Notte. Kai è seduto sul letto, una mano alzata a mezz'aria."),say(K,"Posso... sapere com'è la tua faccia? Con le mani. Non ho mai saputo com'è fatta la faccia di qualcuno.")]);
+  const b=await choose("face","Cosa rispondi?",[{t:"«Sì.»"},{t:"«Meglio di no.»"}]);
+  if(b===0){bump("trust",14,"Kai se ne ricorderà.");await panel({txt:"dark"},[nar("Kai le sfiora la fronte, le guance, il naso."),say(K,"Hai tanti puntini."),say(N,"Si chiamano lentiggini."),say(K,"Le conto, una sera.")])}
+  else await panel({txt:"dark"},[nar("Kai abbassa la mano."),say(K,"Va bene.")]);
+}],
+["L'annuncio",async()=>{
+  await panel({txt:"dark"},[nar("17 ottobre. Papà rientra dal paese con un foglio piegato e lo posa sul tavolo."),say(P,S.f.messa?"L'ha letto il prete, dopo la messa. Sì, ci sono andato. Non dirlo a nessuno.":"L'ha letto il prete, dopo la messa.")]);
+  await panel({txt:"paper"},[nar("IL SANATORIO MARRAJO CERCA UNA GIOVANE CHE SAPPIA LEGGERE E SCRIVERE, PER TENERE I REGISTRI DEI PICCOLI PAZIENTI. VITTO E ALLOGGIO."),th("Leggere e scrivere. È l'unica cosa che so fare meglio di chiunque altro sull'isola."),
+    th(S.f.logbook?"I registri dei pazienti. E un «laboratorio inferiore» che non compare da nessuna parte. Se c'è, sarà scritto lì.":S.f.poster?"Sanno della benda. Lì dentro qualcuno sa esattamente cos'è Kai.":"Gli altri cinque sono là dentro. Qualcuno deve pur entrarci.")]);
+  const a=await choose("job","Cosa decidi?",[
+    {t:"«Ci vado. Ci servono i soldi.»"},
+    {t:"«Ci vado per lui. Per gli altri bambini.»",d:S.f.papaKnows?"Papà sa la verità.":"Papà non sa la verità su Kai.",off:!S.f.papaKnows},
+    {t:"«Non ci vado. Ci entrerò di nascosto.»",d:"Senza lavoro e senza permesso."}]);
+  S.f.route=a===2?"sneak":"job";
+  if(a===0){if(S.f.papaKnows){bump("papa",-10,"Papà ha capito.");await panel({txt:"dark"},[say(P,"Soldi? Nayra. So perché ci vuoi andare. Non ti mando nella tana del lupo."),say(N,"Non mi mandi tu. Ci vado io.")])}
+    else await panel({txt:"dark"},[say(P,"Vitto e alloggio... Almeno mangerai meglio che qui.")])}
+  if(a===1){bump("papa",14);await panel({img:"truth"},[say(P,"...Tua madre avrebbe fatto lo stesso. Che Dio mi perdoni."),nar("Da oggi papà è dalla sua parte.")]);S.f.papaAlly=true}
+  if(a===2){await panel({txt:"dark"},[say(P,"Bene. Quel posto non mi è mai piaciuto."),th("Non ho detto che non ci vado. Ho detto che non ci vado da quella porta.")])}
+  await panel({img:"t1",crop:["4/3","50% 35%",1.3,"50% 30%"]},[nar("Tramonto, in cima al faro. Lontano, sul mare, c'è l'isoletta del sanatorio. Sulla vetta del vulcano spento brilla un filo di luce azzurra."),
+    ...(S.f.route==="sneak"?[say(K,"Dal lato nord, quando la marea è bassa, c'è una grotta. Va sotto. Ci arrivava l'odore del mare, di notte."),say(N,"Allora entrerò da lì.")]:[say(K,"Se vai là, sentirai l'odore. Ferro e vulcano."),say(N,"Me lo ricorderò.")]),
+    say(K,"Ricordati anche di loro. Brasa, Susurro, Niebla, Roca, Aleta."),
+    th("Li scrivo stanotte. Cinque nomi. Così non me li dimentico.")]);
+  ENDS.includes(S.f.route)||ENDS.push(S.f.route);store.set("ends",ENDS);
+}]);
 function stopRun(){if(abortRej)abortRej(ABORT);abortRej=null;hint.hidden=true}
 async function startGame(save){
   stopRun();abortP=new Promise((_,r)=>abortRej=r);abortP.catch(()=>{});
   S=save?JSON.parse(JSON.stringify(save)):fresh();col.innerHTML='';show('game');feed.scrollTop=0;
   try{
-    for(let i=S.scene;i<SCENES.length;i++){S.scene=i;store.set('save',S);$('sceneName').textContent='Cap. I · Scena 1 · '+SCENES[i][0];
-      const h=document.createElement('div');h.className='note';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i+1)+' · '+SCENES[i][0];col.appendChild(h);
+    for(let i=S.scene;i<SCENES.length;i++){S.scene=i;store.set('save',S);$('sceneName').textContent='Cap. I · Scena '+(i<SC1?1:2)+' · '+SCENES[i][0];if(i===SC1&&S.scene===i&&col.children.length){const c=document.createElement('div');c.className='endc';c.innerHTML='<h3>Fine della Scena 1</h3><p>Il gioco ha salvato. Si continua con la Scena 2.</p>';col.appendChild(c);reveal(c);await tap()}
+      const h=document.createElement('div');h.className='note';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i<SC1?i+1:i-SC1+1)+' · '+SCENES[i][0];col.appendChild(h);
       await SCENES[i][1]();}
     store.del('save');ending();
   }catch(e){if(e!==ABORT)console.error(e)}
@@ -811,7 +987,7 @@ async function startGame(save){
 function ending(){
   const n=NODES.filter(x=>(PATHS[x.id]||[]).length).length;
   const c=document.createElement('div');c.className='endc';
-  c.innerHTML=`<h3>Fine della Scena 1</h3><p>Percorsi scoperti: ${pathPct()}% · ${ENDS.length}/${ENDINGS.length} finali di scena</p><div class="prog"><i style="width:${pathPct()}%"></i></div>`;
+  c.innerHTML=`<h3>Fine della Scena 2</h3><p>Prossimamente: Parte 2, Il ragazzo senza volto.</p><p>Percorsi scoperti: ${pathPct()}% · ${ENDS.length}/${ENDINGS.length} finali di scena</p><div class="prog"><i style="width:${pathPct()}%"></i></div>`;
   const bt=document.createElement('div');bt.className='btns';
   [['Vedi i percorsi',()=>page('paths')],['Rigioca e scegli diverso',()=>startGame(null)],['Menu principale',buildMenu]].forEach(([t,f])=>{const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent=t;b.onclick=e=>{e.stopPropagation();f()};bt.appendChild(b)});
   c.appendChild(bt);col.appendChild(c);reveal(c);
