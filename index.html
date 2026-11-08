@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#09111d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Isla Brava">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Isla Brava</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700&family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Patrick+Hand&display=swap">
+<style>
+/* Layout: full-screen app with three screens (menu, sub-pages, game). The game is a vertical webtoon feed of watercolor panels on a deep-sea ground; brass marks what you can touch, ice-blue marks the ash and Kai. */
+:root{
+  --abyss:#09111d;   /* page ground, the sea at night */
+  --deep:#0f1a2b;    /* raised surfaces */
+  --tide:#1a2a42;    /* borders, tracks */
+  --brass:#cfa955;   /* lighthouse brass: interactive */
+  --brass-dim:#7d6633;
+  --ice:#86e0ff;     /* the blue ash */
+  --foam:#e8eef5;    /* text */
+  --mist:#8e9bb1;    /* muted text */
+  --bubble:#fbfcfd;  /* speech balloons */
+  --ink:#10151d;
+  --alarm:#e0564f;
+  --f-display:"Shippori Mincho B1","Hiragino Mincho ProN","Times New Roman",serif;
+  --f-ui:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;
+  --f-letter:"Patrick Hand","Comic Sans MS","Chalkboard SE",cursive;
+  --fs:1;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--abyss);color:var(--foam);font-family:var(--f-ui);overflow:hidden;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--abyss)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:40;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--ice);outline-offset:3px}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column}
+.screen[hidden]{display:none!important}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- main menu: full-bleed art, themed per chapter ---------- */
+#menu{overflow:hidden;background:var(--m-sky)}
+#menu{--m-sky:#1b2230;--m-t1:#f4efe4;--m-t2:#a9e6ff;--m-t2glow:rgba(134,224,255,.7);--m-sub:#e6dfd2;--m-card:rgba(14,20,30,.42);--m-line:rgba(255,255,255,.14);--m-accent:#a9e6ff}
+#menu[data-ch="2"]{--m-sky:#0d0d0f;--m-t1:#f2f2f0;--m-t2:#86e0ff;--m-t2glow:rgba(134,224,255,.5);--m-sub:#c9c9c9;--m-card:rgba(10,10,12,.6);--m-line:rgba(255,255,255,.16);--m-accent:#86e0ff}
+#menu[data-ch="3"]{--m-sky:#120a26;--m-t1:#f6eaff;--m-t2:#4ff3ff;--m-t2glow:rgba(79,243,255,.85);--m-sub:#d9c9f5;--m-card:rgba(30,10,60,.5);--m-line:rgba(255,79,216,.35);--m-accent:#ff7be3}
+.m-blur{position:absolute;inset:-30px;background-size:cover;background-position:50% 100%;filter:blur(18px) brightness(.55)}
+.m-art{position:absolute;inset:0;background-size:cover;background-position:56% 100%;transition:opacity .5s}
+.m-art.img{bottom:calc(132px + env(safe-area-inset-bottom,0px));-webkit-mask-image:linear-gradient(#000 96%,transparent);mask-image:linear-gradient(#000 96%,transparent)}
+.m-art.noir{background:radial-gradient(ellipse at 50% 110%,#2a2a30,transparent 60%),repeating-linear-gradient(90deg,#1a1a1d 0 18px,#0d0d0f 18px 30px,#222226 30px 64px,#0d0d0f 64px 78px);clip-path:polygon(0 70%,8% 70%,8% 58%,16% 58%,16% 74%,24% 74%,24% 52%,33% 52%,33% 66%,41% 66%,41% 56%,52% 56%,52% 72%,60% 72%,60% 48%,68% 48%,68% 62%,77% 62%,77% 54%,86% 54%,86% 68%,93% 68%,93% 60%,100% 60%,100% 100%,0 100%)}
+.m-art.neon{top:auto;height:40%;background:linear-gradient(transparent 40%,rgba(255,79,216,.35) 41%,transparent 43%),repeating-linear-gradient(90deg,transparent 0 46px,rgba(79,243,255,.35) 46px 47px),repeating-linear-gradient(0deg,transparent 0 30px,rgba(255,79,216,.3) 30px 31px),linear-gradient(#120a26,#2a0e48);transform:perspective(300px) rotateX(38deg);transform-origin:50% 100%}
+.m-veil{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,12,20,.55) 0%,rgba(8,12,20,0) 26%,rgba(8,12,20,0) 74%,rgba(8,12,20,.55) 100%)}
+.m-rain{position:absolute;inset:0;pointer-events:none;opacity:.18;background-image:repeating-linear-gradient(105deg,transparent 0 22px,rgba(220,235,255,.5) 22px 23px,transparent 23px 47px);background-size:200px 200px;animation:rain .45s linear infinite}
+@keyframes rain{to{background-position:-40px 200px}}
+#menu[data-ch="3"] .m-rain{opacity:.08}
+.m-body{position:relative;z-index:2;height:100%;box-sizing:border-box;display:flex;flex-direction:column;max-width:520px;width:100%;align-self:center;padding-block:max(22px,5vh) calc(14px + env(safe-area-inset-bottom,0px))}
+.logo{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.logo h1{margin:0;font-family:"Cinzel",var(--f-display);font-weight:500;font-size:clamp(30px,9.5vw,52px);line-height:1;letter-spacing:.1em;white-space:nowrap}
+.logo h1 .a{color:var(--m-t1);text-shadow:0 2px 14px rgba(0,0,0,.55)}
+.logo h1 .b{color:var(--m-t2);text-shadow:0 0 12px var(--m-t2glow),0 0 30px var(--m-t2glow)}
+#menu[data-ch="3"] .logo h1{font-family:var(--f-ui);font-weight:700;font-style:italic;letter-spacing:.02em}
+.logo .k{font-family:"Cinzel",var(--f-display);font-size:12px;letter-spacing:.34em;color:var(--m-sub);text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.logo .s{font-family:var(--f-display);font-size:15px;color:var(--m-sub);text-shadow:0 1px 6px rgba(0,0,0,.7)}
+.eras{display:flex;justify-content:center;gap:4px;margin-top:14px}
+.era{background:none;border:0;border-bottom:1.5px solid transparent;padding:4px 10px;font-family:"Cinzel",var(--f-display);font-size:13px;letter-spacing:.14em;color:var(--m-sub);opacity:.65;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.era.on{opacity:1;color:var(--m-t1);border-bottom-color:var(--m-accent)}
+.era .lk{display:block;font-family:var(--f-ui);font-size:9px;letter-spacing:.1em;opacity:.8}
+.m-card{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.m-list{display:flex;flex-direction:column;gap:8px}
+.m-main{display:flex;gap:8px}
+.m-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.m-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:52px;background:var(--m-card);border:1px solid var(--m-line);border-radius:12px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:6px 4px;color:var(--m-t1);font-family:var(--f-display);font-weight:700;font-size:13px;line-height:1.15;text-align:center;transition:background .15s}
+.m-item small{font-family:var(--f-ui);font-weight:500;font-size:10.5px;color:var(--m-sub);opacity:.85}
+.m-item.primary{flex:1;flex-direction:row;gap:10px;min-height:56px;font-size:20px;color:var(--m-accent);text-shadow:0 0 12px var(--m-t2glow);border-color:var(--m-accent);box-shadow:0 0 18px rgba(134,224,255,.18)}
+.m-item.primary small{font-size:11.5px}
+.m-item.alt{flex:0 0 auto;padding-inline:14px;font-size:14px}
+.m-item:active{background:rgba(255,255,255,.12)}
+.m-item[disabled]{opacity:.55}
+.m-foot{margin-top:6px;text-align:center;font-size:10px;letter-spacing:.04em;color:var(--m-sub);text-shadow:0 1px 4px #000;opacity:.6}
+/* ---------- sub pages ---------- */
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding-block:12px;background:var(--abyss);border-bottom:1px solid var(--tide)}
+.back{background:none;border:1px solid var(--tide);border-radius:999px;padding:6px 12px;font-size:13px}
+.top h2{margin:0;font-family:var(--f-display);font-size:20px;font-weight:700}
+.top .meta{margin-left:auto;font-size:12px;color:var(--mist);font-variant-numeric:tabular-nums}
+.sub-body{flex:1;overflow-y:auto;padding-block:18px calc(32px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.lead{margin:0;font-size:13.5px;line-height:1.6;color:var(--mist)}
+
+/* chapters */
+.chap{position:relative;border-radius:6px;overflow:hidden;min-height:132px;display:flex;align-items:flex-end;border:1px solid var(--tide);background:var(--deep)}
+.chap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.chap .in{position:relative;padding:14px;background:linear-gradient(transparent,rgba(9,17,29,.92));width:100%;box-sizing:border-box}
+.chap b{display:block;font-family:var(--f-display);font-size:19px}
+.chap span{font-size:12px;color:var(--mist)}
+.chap.locked{opacity:.5}
+.chap button{margin-top:10px}
+
+/* paths */
+.prog{height:6px;background:var(--tide);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--brass),var(--ice))}
+.route{display:flex;flex-direction:column}
+.rnode{position:relative;padding:0 0 18px 26px}
+.rnode::before{content:"";position:absolute;left:6px;top:6px;bottom:0;width:1px;background:var(--tide)}
+.rnode:last-child::before{display:none}
+.rnode::after{content:"";position:absolute;left:1px;top:3px;width:11px;height:11px;border-radius:50%;border:1.5px solid var(--brass);background:var(--abyss)}
+.rnode.done::after{background:var(--brass)}
+.rnode h4{margin:0 0 6px;font-family:var(--f-display);font-size:16px}
+.rnode .sc{font-size:11px;color:var(--mist);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.ropts{display:flex;flex-wrap:wrap;gap:6px}
+.ropt{font-size:12.5px;border:1px solid var(--tide);border-radius:999px;padding:4px 10px;color:var(--mist)}
+.ropt.on{border-color:var(--brass);color:var(--foam)}
+
+/* gallery */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gcell{position:relative;aspect-ratio:1;border-radius:4px;overflow:hidden;border:1px solid var(--tide);background:var(--deep);padding:0}
+.gcell img{width:100%;height:100%;object-fit:cover;display:block}
+.gcell.locked img{filter:blur(14px) brightness(.35)}
+.gcell span{position:absolute;left:8px;bottom:6px;font-size:11.5px;text-shadow:0 1px 3px #000}
+.lightbox{position:fixed;inset:0;z-index:50;background:rgba(5,9,15,.94);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lightbox[hidden]{display:none!important}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain}
+
+/* settings */
+.set{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--tide)}
+.set label,.set .l{font-family:var(--f-display);font-size:16px;font-weight:700}
+.set p{margin:0;font-size:12.5px;color:var(--mist);line-height:1.5}
+.seg{display:flex;border:1px solid var(--tide);border-radius:6px;overflow:hidden}
+.seg button{flex:1;background:none;border:0;padding:9px 6px;font-size:13px;color:var(--mist)}
+.seg button+button{border-left:1px solid var(--tide)}
+.seg button.on{background:var(--brass);color:var(--ink);font-weight:700}
+.code{width:100%;box-sizing:border-box;background:var(--abyss);color:var(--foam);border:1px solid var(--tide);border-radius:6px;padding:8px;font:11.5px/1.4 ui-monospace,Menlo,monospace;resize:vertical}
+.set .ghost{align-self:flex-start}
+#impMsg{color:var(--ice)}
+.danger{align-self:flex-start;background:none;border:1px solid var(--alarm);color:var(--alarm);border-radius:6px;padding:8px 14px;font-size:13px}
+.confirm{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px}
+.confirm[hidden]{display:none!important}
+
+/* ---------- game ---------- */
+.ghead{display:flex;align-items:center;gap:10px;padding-block:10px;background:rgba(9,17,29,.92);border-bottom:1px solid var(--tide);z-index:5}
+.ghead .t{font-family:var(--f-display);font-size:14px;font-weight:700}
+.ghead .t small{display:block;font-family:var(--f-ui);font-weight:400;font-size:11px;color:var(--mist)}
+.ghead .sp{margin-left:auto;display:flex;gap:8px}
+.chip{background:none;border:1px solid var(--tide);border-radius:999px;padding:6px 12px;font-size:12.5px}
+.chip.brass{border-color:var(--brass-dim);color:var(--brass)}
+#feed{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-block:16px 150px}
+#col{max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+
+.panel{position:relative;overflow:hidden;border-radius:3px;background:var(--deep);box-shadow:0 10px 30px rgba(0,0,0,.45);animation:rise .5s ease-out both}
+.panel>img{display:block;width:100%;height:auto}
+.panel.crop>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.panel.txt{padding:22px 16px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(160deg,#152238,#0c1524)}
+.panel.txt.paper{background:linear-gradient(160deg,#d9dee6,#c5ccd7);color:var(--ink)}
+.panel.shake{animation:rise .3s ease-out both,shake .5s .1s both}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes shake{0%,100%{translate:0}20%{translate:-8px 3px}40%{translate:7px -4px}60%{translate:-4px 2px}80%{translate:3px 0}}
+.lay{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:10px;pointer-events:none}
+.lay .stack{position:static}
+.stack{position:absolute;left:10px;right:10px;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.stack.t{top:10px}.stack.b{bottom:12px}
+.panel.txt .stack{position:static;left:auto;right:auto}
+
+.it{opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;max-width:80%}
+.it.on{opacity:1;transform:none}
+.it.r{align-self:flex-end}.it.c{align-self:center}
+.bub{position:relative;font-family:var(--f-letter);font-size:calc(18px*var(--fs));line-height:1.22;color:var(--ink);background:var(--bubble);border:2px solid var(--ink);border-radius:22px;padding:9px 15px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.bub .who{display:block;font-family:var(--f-ui);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#4a5566;margin-bottom:1px}
+.bub::after{content:"";position:absolute;bottom:-11px;left:22px;border:7px solid transparent;border-top:12px solid var(--ink)}
+.it.r .bub::after{left:auto;right:22px}
+.bub.off::after{display:none}
+.bub.off{border-style:dashed}
+.bub.shout{border-radius:6px;border-width:3px;font-size:calc(19px*var(--fs))}
+.bub.whisper{border-style:dotted;font-size:calc(16px*var(--fs))}
+.bub.kai{border-color:var(--ice);box-shadow:0 0 14px rgba(134,224,255,.45)}
+.mono{font-family:var(--f-display);font-size:calc(14.5px*var(--fs));line-height:1.55;font-style:italic;color:var(--foam);background:rgba(9,17,29,.78);border-left:2px solid var(--ice);padding:8px 12px;backdrop-filter:blur(2px)}
+.panel.txt.paper .mono{color:var(--ink);background:rgba(255,255,255,.55)}
+.cap{font-family:var(--f-display);font-size:calc(13.5px*var(--fs));line-height:1.5;background:rgba(9,17,29,.85);border:1px solid var(--brass-dim);color:var(--foam);padding:7px 11px}
+.sfx{font-family:var(--f-display);font-weight:800;font-size:56px;color:#fff;letter-spacing:.02em;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;transform:rotate(-8deg);text-shadow:0 6px 0 var(--ink)}
+
+/* tap hint */
+.hint{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));translate:-50% 0;z-index:8;font-size:12px;letter-spacing:.08em;color:var(--mist);background:rgba(15,26,43,.9);border:1px solid var(--tide);border-radius:999px;padding:7px 14px;animation:bob 1.8s ease-in-out infinite}
+.hint[hidden]{display:none!important}
+@keyframes bob{50%{translate:-50% -4px}}
+
+/* choices: compact, in the flow, under the panel */
+.choice{display:flex;flex-direction:column;gap:8px;padding:2px 0 4px;animation:rise .35s ease-out both}
+.choice .q{font-size:12px;letter-spacing:.06em;color:var(--brass);text-transform:uppercase}
+.choice .bar{height:2px;background:var(--tide);overflow:hidden;border-radius:1px}
+.choice .bar i{display:block;height:100%;background:var(--alarm);transform-origin:left}
+.ch{display:flex;gap:10px;align-items:baseline;text-align:left;background:rgba(15,26,43,.85);border:1px solid var(--tide);border-left:2px solid var(--brass);border-radius:4px;padding:10px 12px;font-family:var(--f-letter);font-size:calc(17.5px*var(--fs));line-height:1.25;color:var(--foam);transition:background .15s,border-color .15s}
+.ch small{display:block;font-family:var(--f-ui);font-size:12px;color:var(--mist);margin-top:2px}
+.ch:active{background:var(--tide)}
+.ch[disabled]{opacity:.35;cursor:default}
+.ch.picked{opacity:1;border-color:var(--ice);border-left-color:var(--ice);background:rgba(134,224,255,.12)}
+.ch .seen{font-family:var(--f-ui);font-size:10px;color:var(--brass);margin-left:auto;align-self:center;white-space:nowrap}
+
+/* toasts */
+.toast{position:fixed;left:50%;top:calc(60px + env(safe-area-inset-top,0px));translate:-50% -8px;z-index:20;max-width:calc(100% - 32px);font-size:13px;background:var(--deep);border:1px solid var(--tide);border-left:3px solid var(--ice);padding:9px 14px;box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;transition:opacity .25s,translate .25s;pointer-events:none}
+.toast.on{opacity:1;translate:-50% 0}
+
+/* telescope */
+.scope{position:relative;width:min(100%,340px);aspect-ratio:1;align-self:center;border-radius:50%;overflow:hidden;border:6px solid var(--brass);box-shadow:0 0 0 3px var(--brass-dim),inset 0 0 40px rgba(0,0,0,.9),0 12px 30px rgba(0,0,0,.6);touch-action:none;cursor:grab;background:#000}
+.scope img{position:absolute;left:0;top:0;width:280%;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.scope::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 60px 20px rgba(0,0,0,.85);pointer-events:none}
+.scope .cross{position:absolute;left:50%;top:50%;width:26px;height:26px;translate:-50% -50%;border:1px solid rgba(255,255,255,.4);border-radius:50%;z-index:2;pointer-events:none}
+.scope.lock{border-color:var(--ice);box-shadow:0 0 0 3px var(--ice),0 0 30px rgba(134,224,255,.6)}
+.note{font-size:12.5px;color:var(--mist);text-align:center}
+
+/* action */
+.act{display:flex;flex-direction:column;gap:10px;background:var(--deep);border:1px solid var(--tide);border-radius:6px;padding:14px;animation:rise .35s ease-out both}
+.act h3{margin:0;font-family:var(--f-display);font-size:17px}
+.meter{position:relative;height:16px;background:var(--abyss);border:1px solid var(--tide);border-radius:3px;overflow:hidden}
+.meter b{position:absolute;inset:0 auto 0 0;width:0;background:var(--brass)}
+.meter.w b{background:var(--alarm)}
+.meter span{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;letter-spacing:.12em;color:#fff;mix-blend-mode:difference}
+.big{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:.06em;background:var(--brass);color:var(--ink);border:0;border-radius:6px;padding:16px;touch-action:manipulation;user-select:none;-webkit-user-select:none;box-shadow:0 4px 0 var(--brass-dim)}
+.big:active{translate:0 3px;box-shadow:0 1px 0 var(--brass-dim)}
+.big[disabled]{opacity:.6}
+
+/* hotspots */
+.spot{position:absolute;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;border:2px solid var(--brass);background:rgba(207,169,85,.18);animation:ping 1.5s ease-out infinite;pointer-events:auto;padding:0}
+.spot.found{animation:none;border-color:var(--ice);background:rgba(134,224,255,.2)}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(207,169,85,.7)}100%{box-shadow:0 0 0 16px rgba(207,169,85,0)}}
+
+/* sound-sight */
+.sonar{position:relative;aspect-ratio:4/3;background:#000;border-radius:3px;overflow:hidden;animation:rise .4s ease-out both}
+.sonar canvas{position:absolute;inset:0;width:100%;height:100%}
+.sonar .lbl{position:absolute;max-width:44%;translate:-50% -50%;text-align:center;font-family:var(--f-letter);font-size:calc(15px*var(--fs));line-height:1.2;color:var(--ice);text-shadow:0 0 8px rgba(134,224,255,.8);opacity:0;transition:opacity .5s}
+.sonar .lbl.on{opacity:1}
+.sonar .tag{position:absolute;left:12px;top:10px;font-size:10.5px;letter-spacing:.2em;color:var(--mist)}
+
+/* overlays */
+.sheet{position:fixed;inset:0;z-index:45;background:rgba(5,9,15,.7);display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none!important}
+.sheet .in{width:100%;max-width:520px;max-height:84%;overflow-y:auto;box-sizing:border-box;background:var(--deep);border-top:1px solid var(--brass-dim);border-radius:14px 14px 0 0;padding-block:18px calc(24px + env(safe-area-inset-bottom,0px));padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.sheet h2{margin:0 0 2px;font-family:var(--f-display);font-size:22px}
+.sheet h4{margin:18px 0 8px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+.sheet ul{margin:0;padding-left:18px;font-family:var(--f-display);font-size:14px;line-height:1.75}
+.sheet .empty{font-size:13px;color:var(--mist)}
+.sheet .row{display:flex;gap:10px;justify-content:flex-end;margin-bottom:6px}
+.bond{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;font-size:13.5px;margin-bottom:8px}
+.bond .b{height:6px;background:var(--tide);border-radius:3px;overflow:hidden}
+.bond .b i{display:block;height:100%;background:var(--ice)}
+.bond em{grid-column:2;font-style:normal;font-size:12px;color:var(--mist);margin-top:-6px}
+.pause .opts{display:flex;flex-direction:column}
+.pause .opts button{background:none;border:0;border-top:1px solid var(--tide);text-align:left;padding:14px 2px;font-family:var(--f-display);font-size:18px;font-weight:700}
+
+.endc{display:flex;flex-direction:column;gap:14px;padding-top:10px;animation:rise .5s ease-out both}
+.endc h3{margin:0;text-align:center;font-family:var(--f-display);font-size:26px}
+.endc p{margin:0;text-align:center;color:var(--mist);font-size:13px}
+.endc .btns{display:flex;flex-direction:column;gap:8px}
+.ghost{background:none;border:1px solid var(--brass-dim);color:var(--brass);border-radius:6px;padding:11px;font-size:14px}
+
+.blk{display:flex;flex-direction:column;gap:12px}
+.panel.pic>img{display:block;width:100%;height:auto}
+.panel.pic.crop>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.talk{display:flex;flex-direction:column;gap:10px;padding:0 2px}
+.panel.txt .talk{padding:0}
+.it{opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;max-width:86%;min-width:0;overflow-wrap:anywhere}
+.it.on{opacity:1;transform:none}
+.it.l{align-self:flex-start}.it.r{align-self:flex-end}.it.full{align-self:stretch;max-width:100%}
+.it.thw{margin-bottom:16px}
+.it.l .bub::after{left:22px;right:auto}.it.r .bub::after{left:auto;right:22px}
+.th{position:relative;font-family:var(--f-display);font-style:italic;font-size:calc(15px*var(--fs));line-height:1.45;color:#0e2532;background:#e2f4fb;border:2px solid var(--ice);border-radius:26px;padding:9px 16px;box-shadow:0 0 14px rgba(134,224,255,.25)}
+.th .who{display:block;font-family:var(--f-ui);font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#2f7090;margin-bottom:2px}
+.th::before,.th::after{content:"";position:absolute;border-radius:50%;background:#e2f4fb;border:2px solid var(--ice)}
+.th::before{width:12px;height:12px;bottom:-15px;left:22px}.th::after{width:7px;height:7px;bottom:-25px;left:12px}
+.it.r .th::before{left:auto;right:22px}.it.r .th::after{left:auto;right:12px}
+.nar{font-family:var(--f-display);font-size:calc(14px*var(--fs));line-height:1.5;color:var(--foam);background:rgba(207,169,85,.1);border:1px solid var(--brass-dim);border-radius:2px;padding:8px 12px}
+.panel.txt.paper .nar{color:var(--ink);background:rgba(207,169,85,.2)}
+.sfx{display:inline-block}
+.how{margin:0;font-size:13.5px;line-height:1.5;color:var(--foam)}
+.how b{color:var(--brass)}
+.note.how{text-align:center;color:var(--mist)}
+.big.pulse{animation:pulse .55s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.04);box-shadow:0 4px 0 var(--brass-dim),0 0 22px rgba(207,169,85,.6)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body.nomotion *{animation:none!important;transition:none!important}
+</style>
+
+<!-- MAIN MENU -->
+<section class="screen" id="menu" data-ch="1">
+  <div class="m-blur" id="mBlur"></div>
+  <div class="m-art" id="mArt"></div>
+  <div class="m-rain"></div>
+  <div class="m-veil"></div>
+  <div class="m-body gut">
+    <div class="logo">
+      <h1><span class="a">ISLA</span> <span class="b">BRAVA</span></h1>
+      <div class="k" id="mEra">ISOLE CANARIE · 1893</div>
+      <div class="s" id="mSub">Capitolo I — La notte del naufragio</div>
+    </div>
+    <div class="eras" id="eras"></div>
+    <nav class="m-card" id="mlist"></nav>
+    <div class="m-foot">Demo · Le scelte restano su questo dispositivo</div>
+  </div>
+</section>
+
+<!-- SUB PAGES -->
+<section class="screen" id="sub" hidden>
+  <div class="top gut"><button class="back" id="subBack" type="button">← Menu</button><h2 id="subTitle"></h2><span class="meta" id="subMeta"></span></div>
+  <div class="sub-body gut"><div class="wrap" id="subBody"></div></div>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="game" hidden>
+  <div class="ghead gut">
+    <div class="t">Isla Brava<small id="sceneName">Capitolo I · Scena 1</small></div>
+    <div class="sp"><button class="chip brass" id="btnDiary" type="button">Diario</button><button class="chip" id="btnPause" type="button">Menu</button></div>
+  </div>
+  <main id="feed" class="gut"><div id="col"></div></main>
+</section>
+
+<div class="hint" id="hint" hidden>Tocca per continuare</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="lightbox" id="lightbox" hidden><img alt="" id="lbImg"></div>
+<div class="sheet" id="diary" hidden><div class="in" role="dialog" aria-label="Diario di Nayra"><div class="row"><button class="chip" data-close type="button">Chiudi</button></div><h2>Diario di Nayra</h2><div id="diaryBody"></div></div></div>
+<div class="sheet pause" id="pause" hidden><div class="in" role="dialog" aria-label="Pausa"><h2>Pausa</h2><p class="lead" style="margin:4px 0 10px">Il gioco salva all'inizio di ogni parte della scena.</p>
+  <div class="opts"><button type="button" data-close>Riprendi</button><button type="button" id="pDiary">Diario</button><button type="button" id="pSettings">Impostazioni</button><button type="button" id="pMenu">Torna al menu principale</button></div></div></div>
+
+<script>
+/* ---------- storage ---------- */
+const store={get(k,d){try{const v=localStorage.getItem('ib_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('ib_'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('ib_'+k)}catch(e){}}};
+let SET=Object.assign({size:'m',timer:'norm',adv:'tap',motion:'on'},store.get('settings',{}));
+let PATHS=store.get('paths',{});      // nodeId -> [option indices ever picked]
+let GAL=store.get('gallery',[]);      // unlocked image ids
+let ENDS=store.get('ends',[]);
+function applySettings(){document.documentElement.style.setProperty('--fs',{s:.9,m:1,l:1.15}[SET.size]);document.body.classList.toggle('nomotion',SET.motion==='off');store.set('settings',SET)}
+applySettings();
+
+const $=id=>document.getElementById(id);
+const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp'};
+const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['papa','Le scale'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['t4','Sulla riva'],['hands','Soggetto Uno'],['sailor','Il marinaio'],['night','Le orme'],['cat','Pimienta'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['eco','Eco'],['doctor','Il dottor Marrajo']];
+function unlock(id){if(!GAL.includes(id)){GAL.push(id);store.set('gallery',GAL)}}
+
+/* all decision points, for the route map */
+const NODES=[
+ {id:'papa1',sc:'Il faro',q:'Papà e la lente',o:['Prometti di pulirla','La battuta sulla messa','Torni al diario']},
+ {id:'lamp',sc:'La nave',q:'Come scendi alla riva',o:['Con la lanterna','Al buio']},
+ {id:'pull',sc:'La riva',q:'Il salvataggio',o:['Lo tiri fuori in tempo','L\'onda lo colpisce']},
+ {id:'sailor',sc:'Il marinaio',q:'Le lanterne si avvicinano',o:['Resti con il marinaio','Porti via il bambino','Resti paralizzata']},
+ {id:'hide',sc:'Il faro',q:'Il nascondiglio',o:['La lanterna','La cantina','La grotta']},
+ {id:'tell',sc:'Il faro',q:'Convincere papà',o:['La verità','La bugia','La supplica']},
+ {id:'words',sc:'Kai',q:'Le prime parole',o:['Dolce','Curiosa','Diffidente']},
+ {id:'eco',sc:'L\'alba',q:'La voce di papà',o:['Rispondi','Resti in silenzio','Esiti']},
+ {id:'band',sc:'La benda',q:'Papà e la benda',o:['Lo fermi','Lasci fare','Esiti']}];
+const ENDINGS=[['found','Ti hanno trovata','Eco sa dove sei'],['hidden','Nel silenzio','Gli uomini in nero non sanno niente']];
+function markPath(id,i){if(i==null)return;const a=PATHS[id]||[];if(!a.includes(i)){a.push(i);PATHS[id]=a;store.set('paths',PATHS)}}
+function pathPct(){let tot=0,got=0;NODES.forEach(n=>{tot+=n.o.length;got+=(PATHS[n.id]||[]).length});return Math.round(got/tot*100)}
+
+/* ---------- screens ---------- */
+function show(id){['menu','sub','game'].forEach(s=>$(s).hidden=s!==id)}
+const ERAS=[
+ {n:1,y:'1893',k:'ISOLE CANARIE · 1893',s:'Capitolo I — La notte del naufragio',art:'img/menu1893.webp',open:true},
+ {n:2,y:'2026',k:'GRAN CANARIA · 2026',s:'Capitolo II — Bloccato',art:'noir'},
+ {n:3,y:'2079',k:'ISLA BRAVA S.p.A. · 2079',s:'Capitolo III — Bloccato',art:'neon'}];
+let ERA=1;
+function setEra(n){ERA=n;const e=ERAS[n-1],m=$('menu'),a=$('mArt');m.dataset.ch=n;$('mEra').textContent=e.k;$('mSub').textContent=e.s;
+  const bl=$('mBlur');a.className='m-art';a.style.backgroundImage='';bl.style.backgroundImage='';if(e.art.endsWith('.webp')){a.style.backgroundImage=bl.style.backgroundImage=`url(${e.art})`;a.classList.add('img')}else a.classList.add(e.art);
+  $('eras').querySelectorAll('.era').forEach(b=>b.classList.toggle('on',+b.dataset.n===n));fillMenu()}
+function buildMenu(){
+  $('eras').innerHTML=ERAS.map(e=>`<button type="button" class="era" data-n="${e.n}">${e.y}${e.open?'':'<span class="lk">bloccato</span>'}</button>`).join('');
+  $('eras').querySelectorAll('.era').forEach(b=>b.onclick=()=>setEra(+b.dataset.n));
+  setEra(ERA);show('menu');
+}
+function fillMenu(){
+  const save=store.get('save',null),l=$('mlist'),open=ERAS[ERA-1].open;l.innerHTML='';
+  const main=document.createElement('div');main.className='m-main';const grid=document.createElement('div');grid.className='m-grid';l.append(main,grid);
+  const add=(box,cls,t,sub,fn,off)=>{const b=document.createElement('button');b.type='button';b.className='m-item '+cls;b.innerHTML=`<span>${t}</span>${sub?`<small>${sub}</small>`:''}`;b.onclick=fn;if(off)b.disabled=true;box.appendChild(b)};
+  if(!open)add(main,'primary','Bloccato','finisci il capitolo prima',null,true);
+  else if(save){add(main,'primary','Continua →','parte '+(save.scene+1)+'/8',()=>startGame(save));add(main,'alt','Nuova','',()=>startGame(null))}
+  else add(main,'primary','Nuova partita →','',()=>startGame(null));
+  add(grid,'','Capitoli','1/3',()=>page('chapters'));
+  add(grid,'','Percorsi',pathPct()+'%',()=>page('paths'));
+  add(grid,'','Galleria',GAL.length+'/'+GALLERY.length,()=>page('gallery'));
+  add(grid,'','Opzioni','',()=>page('settings'));
+  requestAnimationFrame(fitArt);
+}
+function fitArt(){const m=$('menu'),c=$('mlist'),a=$('mArt');if(m.hidden||!a.classList.contains('img'))return;
+  const gap=m.getBoundingClientRect().bottom-c.getBoundingClientRect().top;a.style.bottom=Math.max(0,gap+4)+'px'}
+addEventListener('resize',fitArt);
+let subReturn='menu';
+$('subBack').onclick=()=>{if(subReturn==='game'){show('game')}else buildMenu()};
+function page(kind,from){
+  subReturn=from||'menu';$('subBack').textContent=from==='game'?'← Gioco':'← Menu';
+  const b=$('subBody');b.innerHTML='';$('subMeta').textContent='';
+  if(kind==='chapters'){$('subTitle').textContent='Capitoli';
+    b.innerHTML=`<p class="lead">Tre epoche, la stessa isola. Le scelte di un capitolo cambiano chi esiste nel successivo.</p>
+    <div class="chap"><img src="${IMG.t1}" alt=""><div class="in"><b>I · 1893 — La notte del naufragio</b><span>Nayra trova un bambino bendato sugli scogli.</span><br><button class="ghost" type="button" id="chPlay">Gioca la Scena 1</button></div></div>
+    <div class="chap locked"><div class="in"><b>II · 2026</b><span>Bloccato. I super esistono, ma nessuno li vuole.</span></div></div>
+    <div class="chap locked"><div class="in"><b>III · 2079</b><span>Bloccato. Il sangue originale vale più di qualsiasi cosa.</span></div></div>`;
+    $('chPlay').onclick=()=>startGame(null);}
+  if(kind==='paths'){$('subTitle').textContent='Percorsi';$('subMeta').textContent=pathPct()+'% scoperto';
+    b.innerHTML=`<div class="prog"><i style="width:${pathPct()}%"></i></div><p class="lead">Ogni bivio della Scena 1. Le scelte che non hai mai fatto restano nascoste: rigioca per scoprirle.</p>
+    <div class="route">${NODES.map(n=>{const g=PATHS[n.id]||[];return `<div class="rnode ${g.length?'done':''}"><div class="sc">${n.sc}</div><h4>${g.length?n.q:'???'}</h4><div class="ropts">${n.o.map((o,i)=>`<span class="ropt ${g.includes(i)?'on':''}">${g.includes(i)?o:'???'}</span>`).join('')}</div></div>`}).join('')}</div>
+    <h4 style="margin:4px 0 0;font-family:var(--f-display)">Finali della scena</h4>
+    <div class="ropts">${ENDINGS.map(e=>`<span class="ropt ${ENDS.includes(e[0])?'on':''}">${ENDS.includes(e[0])?e[1]+' · '+e[2]:'??? '}</span>`).join('')}</div>`;}
+  if(kind==='gallery'){$('subTitle').textContent='Galleria';$('subMeta').textContent=GAL.length+'/'+GALLERY.length;
+    b.innerHTML=`<p class="lead">Le tavole si sbloccano quando le incontri giocando.</p><div class="grid">${GALLERY.map(([id,n])=>{const ok=GAL.includes(id);return `<button type="button" class="gcell ${ok?'':'locked'}" data-g="${id}"><img src="${IMG[id]}" alt="${ok?n:'Bloccata'}"><span>${ok?n:'Bloccata'}</span></button>`}).join('')}</div>`;
+    b.querySelectorAll('.gcell').forEach(c=>c.onclick=()=>{if(c.classList.contains('locked'))return;$('lbImg').src=IMG[c.dataset.g];$('lightbox').hidden=false});}
+  if(kind==='settings'){$('subTitle').textContent='Impostazioni';
+    const seg=(key,label,desc,opts)=>`<div class="set"><div class="l">${label}</div><p>${desc}</p><div class="seg" data-k="${key}">${opts.map(([v,t])=>`<button type="button" data-v="${v}" class="${SET[key]===v?'on':''}">${t}</button>`).join('')}</div></div>`;
+    b.innerHTML=seg('size','Dimensione del testo','Balloon, pensieri e scelte.',[['s','Piccolo'],['m','Medio'],['l','Grande']])+
+      seg('timer','Scelte a tempo','Quanto tempo hai nei momenti di tensione.',[['norm','5 secondi'],['relax','10 secondi'],['off','Senza timer']])+
+      seg('adv','Avanzamento','Con "Automatico" i balloon scorrono da soli.',[['tap','Al tocco'],['auto','Automatico']])+
+      seg('motion','Animazioni','Scosse, fasci di luce e comparse.',[['on','Attive'],['off','Ridotte']])+
+      `<div class="set"><div class="l">Trasferisci i progressi</div><p>Copia questo codice e incollalo nel gioco sull'altro telefono per continuare da lì.</p><textarea id="codeOut" class="code" rows="3" readonly></textarea><button type="button" class="ghost" id="cpy">Copia codice</button><textarea id="codeIn" class="code" rows="3" placeholder="Incolla qui il codice dell'altro dispositivo"></textarea><button type="button" class="ghost" id="imp">Carica codice</button><p id="impMsg"></p></div>`+
+      `<div class="set" style="border:0"><div class="l">Progressi</div><p>Cancella salvataggio, percorsi scoperti e galleria.</p><button type="button" class="danger" id="wipe">Cancella tutto</button><div class="confirm" id="wipeC" hidden>Sicuro? Non si può annullare. <button type="button" class="danger" id="wipeY">Sì, cancella</button><button type="button" class="chip" id="wipeN">No</button></div></div>`;
+    b.querySelectorAll('.seg').forEach(s=>s.querySelectorAll('button').forEach(x=>x.onclick=()=>{SET[s.dataset.k]=x.dataset.v;applySettings();s.querySelectorAll('button').forEach(y=>y.classList.toggle('on',y===x))}));
+    $('wipe').onclick=()=>$('wipeC').hidden=false;
+    const pack=()=>'ISLA1-'+btoa(unescape(encodeURIComponent(JSON.stringify({save:store.get('save',null),paths:PATHS,gal:GAL,ends:ENDS,set:SET}))));
+    $('codeOut').value=pack();
+    $('cpy').onclick=async()=>{try{await navigator.clipboard.writeText($('codeOut').value);toast('Codice copiato.')}catch(e){$('codeOut').select();toast('Tieni premuto sul codice e scegli Copia.')}};
+    $('imp').onclick=()=>{try{const raw=$('codeIn').value.trim().replace(/^ISLA1-/,'');const d=JSON.parse(decodeURIComponent(escape(atob(raw))));
+      if(d.save)store.set('save',d.save);else store.del('save');PATHS=d.paths||{};GAL=d.gal||[];ENDS=d.ends||[];store.set('paths',PATHS);store.set('gallery',GAL);store.set('ends',ENDS);if(d.set){SET=Object.assign(SET,d.set);applySettings()}
+      $('impMsg').textContent='Progressi caricati. Torna al menu e tocca Continua.';$('codeOut').value=pack()}catch(e){$('impMsg').textContent='Codice non valido: controlla di averlo copiato tutto.'}};$('wipeN').onclick=()=>$('wipeC').hidden=true;
+    $('wipeY').onclick=()=>{['save','paths','gallery','ends'].forEach(k=>store.del(k));PATHS={};GAL=[];ENDS=[];$('wipeC').hidden=true;toast('Progressi cancellati.')};}
+  show('sub');$('subBody').parentElement.scrollTop=0;
+}
+$('lightbox').onclick=()=>$('lightbox').hidden=true;
+
+/* ---------- engine ---------- */
+const feed=$('feed'),col=$('col'),hint=$('hint');
+const ABORT={};let abortRej=null,abortP=null;
+const race=p=>Promise.race([p,abortP]);
+const wait=ms=>race(new Promise(r=>setTimeout(r,ms)));
+let S;
+function fresh(){return{scene:0,trust:50,papa:50,clues:[],log:[],f:{}}}
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2700)}
+function clue(c){if(!S.clues.includes(c)){S.clues.push(c);toast('Nel diario: '+c)}}
+function bump(k,v,msg){S[k]=Math.max(0,Math.min(100,S[k]+v));if(msg)toast(msg)}
+function reveal(el){requestAnimationFrame(()=>el.scrollIntoView({behavior:SET.motion==='off'?'auto':'smooth',block:'nearest'}))}
+function tap(len=40){
+  if(SET.adv==='auto')return wait(1100+len*38);
+  return race(new Promise(res=>{hint.hidden=false;
+    const go=e=>{if(e.target.closest('button,.scope,.sheet'))return;feed.removeEventListener('click',go);hint.hidden=true;res()};
+    setTimeout(()=>feed.addEventListener('click',go),150);}));
+}
+function itemEl(it){
+  let t=it.t;if(t==='b')t='say';if(t==='mono')t='th';if(t==='cap')t='nar';
+  const w=document.createElement('div');let who=it.who||(t==='th'?N:'');
+  const nay=who.toUpperCase().startsWith('NAYRA');
+  if(t==='nar'||t==='sfx')w.className='it full';else w.className='it '+(nay?'l':'r')+(t==='th'?' thw':'');
+  if(t==='nar')w.innerHTML=`<div class="nar">${it.s}</div>`;
+  else if(t==='sfx')w.innerHTML=`<div class="sfx">${it.s}</div>`;
+  else if(t==='th')w.innerHTML=`<div class="th"><span class="who">${who} · pensa</span>${it.s}</div>`;
+  else w.innerHTML=`<div class="bub ${it.c||''}">${who?`<span class="who">${who}</span>`:''}${it.s}</div>`;
+  return w;
+}
+/* panel({img,crop:[ratio,pos,zoom,origin],txt:'dark'|'paper',shake},items) — the picture stays clean, lettering runs below it */
+async function panel(o,items=[]){
+  const blk=document.createElement('div');blk.className='blk';let talk;
+  if(o.img){unlock(o.img);const p=document.createElement('div');p.className='panel pic'+(o.shake?' shake':'');const im=document.createElement('img');im.src=IMG[o.img];im.alt='';
+    if(o.crop){p.classList.add('crop');p.style.aspectRatio=o.crop[0];im.style.objectPosition=o.crop[1]||'50% 50%';if(o.crop[2]){im.style.transform=`scale(${o.crop[2]})`;im.style.transformOrigin=o.crop[3]||o.crop[1]}}
+    p.appendChild(im);blk.appendChild(p);talk=document.createElement('div');talk.className='talk';blk.appendChild(talk);}
+  else{const p=document.createElement('div');p.className='panel txt'+(o.txt==='paper'?' paper':'');talk=document.createElement('div');talk.className='talk';p.appendChild(talk);blk.appendChild(p);}
+  col.appendChild(blk);reveal(blk);await wait(320);
+  if(!items.length)await tap();
+  for(const it of items){const e=itemEl(it);talk.appendChild(e);requestAnimationFrame(()=>e.classList.add('on'));reveal(e);if(it.t==='sfx'){await wait(800);continue}await tap(it.s.length)}
+  return blk;
+}
+const timed=()=>SET.timer==='off'?0:SET.timer==='relax'?10:5;
+function choose(id,q,opts,{t=0,def=null}={}){
+  return race(new Promise(res=>{
+    const c=document.createElement('div');c.className='choice';const secs=t?timed():0;
+    c.innerHTML=`<div class="q">${q}${secs?` · hai ${secs} secondi`:''}</div>${secs?'<div class="bar"><i></i></div>':''}`;
+    const seen=PATHS[id]||[];
+    const bs=opts.map((o,i)=>{const b=document.createElement('button');b.type='button';b.className='ch';
+      b.innerHTML=`<span>${o.t}${o.d?`<small>${o.d}</small>`:''}</span>${seen.includes(i)?'<span class="seen">già scelta</span>':''}`;
+      if(o.off)b.disabled=true;c.appendChild(b);return b});
+    col.appendChild(c);reveal(c);hint.hidden=true;let done=false,raf;
+    const fin=i=>{if(done)return;done=true;cancelAnimationFrame(raf);bs.forEach((b,j)=>{b.disabled=true;if(j===i)b.classList.add('picked')});
+      const idx=i==null?(def==null?opts.length:def):i;markPath(id,i==null&&def==null?NODES.find(n=>n.id===id).o.length-1:idx);
+      S.log.push({id,i:idx});setTimeout(()=>res(i),380)};
+    bs.forEach((b,i)=>b.onclick=e=>{e.stopPropagation();fin(i)});
+    if(secs){const bar=c.querySelector('.bar i'),t0=performance.now();const step=n=>{const k=1-(n-t0)/(secs*1000);bar.style.transform=`scaleX(${Math.max(0,k)})`;if(k<=0)fin(def);else raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)}
+  }));
+}
+
+/* telescope: drag to find the ship */
+function telescope(){
+  return race(new Promise(res=>{
+    const w=document.createElement('div');w.style.cssText='display:flex;flex-direction:column;gap:8px';
+    w.innerHTML=`<div class="scope"><img src="${IMG.t2}" alt="Il mare in tempesta visto nel cannocchiale"><div class="cross"></div></div><div class="note how">Tieni il dito sul cannocchiale e trascinalo per guardarti intorno. Cerca la luce sul mare.</div>`;
+    col.appendChild(w);reveal(w);unlock('t2');
+    const sc=w.querySelector('.scope'),im=sc.querySelector('img');const S2=2.8,T=[.47,.57];
+    let W=sc.clientWidth,tx=-W*S2*.12,ty=-W*S2*.1,drag=null,done=false;
+    const clamp=()=>{W=sc.clientWidth;const m=W-W*S2;tx=Math.min(0,Math.max(m,tx));ty=Math.min(0,Math.max(m,ty))};
+    const draw=()=>{clamp();im.style.transform=`translate(${tx}px,${ty}px)`;
+      const cx=(W/2-tx)/(W*S2),cy=(W/2-ty)/(W*S2);
+      if(!done&&Math.hypot(cx-T[0],cy-T[1])<.07){done=true;sc.classList.add('lock');w.querySelector('.note').textContent='Eccola.';setTimeout(res,900)}};
+    draw();
+    sc.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,tx,ty};sc.setPointerCapture(e.pointerId)});
+    sc.addEventListener('pointermove',e=>{if(!drag)return;tx=drag.tx+(e.clientX-drag.x);ty=drag.ty+(e.clientY-drag.y);draw()});
+    sc.addEventListener('pointerup',()=>drag=null);sc.addEventListener('pointercancel',()=>drag=null);
+  }));
+}
+/* action: pull him out */
+function pull(){
+  return race(new Promise(res=>{
+    const c=document.createElement('div');c.className='act';
+    c.innerHTML=`<h3>Tiralo fuori prima dell'onda!</h3><p class="how">Tocca <b>TIRA</b> tante volte, più veloce che puoi. Se la barra rossa arriva in fondo prima di quella dorata, l'onda se lo porta via.</p><div class="meter"><b></b><span>NAYRA</span></div><div class="meter w"><b></b><span>L'ONDA</span></div>`;
+    const b=document.createElement('button');b.type='button';b.className='big';b.disabled=true;b.textContent='PRONTI…';c.appendChild(b);col.appendChild(c);reveal(c);
+    const [pb,wb]=c.querySelectorAll('.meter b');let p=0,w=0,done=false,raf,taps=0;const sp=S.f.lamp?.32:.45;
+    const end=ok=>{if(done)return;done=true;cancelAnimationFrame(raf);b.disabled=true;b.classList.remove('pulse');b.textContent=ok?'PRESO!':'L\'ONDA…';setTimeout(()=>res(ok),700)};
+    const tick=()=>{w+=sp;wb.style.width=Math.min(100,w)+'%';if(w>=100)end(false);else raf=requestAnimationFrame(tick)};
+    let n=3;const cd=()=>{if(n>0){b.textContent=n;n--;setTimeout(cd,650)}else{b.disabled=false;b.classList.add('pulse');b.textContent='TIRA!';raf=requestAnimationFrame(tick)}};setTimeout(cd,500);
+    b.onclick=e=>{e.stopPropagation();if(done)return;taps++;p+=7;pb.style.width=Math.min(100,p)+'%';b.textContent='TIRA! ×'+taps;if(p>=100)end(true)};
+  }));
+}
+/* investigation on the debris */
+function investigate(){
+  return race(new Promise(res=>{
+    const blk=document.createElement('div');blk.className='blk';
+    const p=document.createElement('div');p.className='panel crop';p.style.aspectRatio='4/3';
+    p.innerHTML=`<img src="${IMG.t4}" alt="Rottami tra le rocce" style="object-position:100% 70%;transform:scale(1.35);transform-origin:88% 62%">`;
+    const spots=[[24,62,'Una cassa con uno squalo dipinto e la scritta MARRAJO','Lo squalo. Il simbolo del dottore. Che ci fa su una nave che porta provviste?'],
+      [58,78,'Una bottiglia di Tonico rotta, che brilla sui sassi','La stessa bottiglietta di papà. Lo stesso azzurro del mare stanotte.'],
+      [80,46,'Un registro di bordo: "Carico per il laboratorio inferiore, NON per il sanatorio"','Laboratorio inferiore. Sotto il sanatorio c\'è qualcos\'altro.']];
+    const talk=document.createElement('div');talk.className='talk';let found=0;
+    spots.forEach(s=>{const d=document.createElement('button');d.type='button';d.className='spot';d.setAttribute('aria-label','Esamina');d.style.left=s[0]+'%';d.style.top=s[1]+'%';p.appendChild(d);
+      d.onclick=e=>{e.stopPropagation();if(d.classList.contains('found'))return;d.classList.add('found');found++;clue(s[2]);q.textContent=`Oggetti esaminati: ${found} di 3`;
+        talk.innerHTML='';const it=itemEl({t:'th',s:s[3]});talk.appendChild(it);requestAnimationFrame(()=>it.classList.add('on'))}});
+    blk.append(p,talk);col.appendChild(blk);
+    const c=document.createElement('div');c.className='choice';c.innerHTML='<p class="how">Le lanterne sono ancora lontane. Tocca i <b>cerchi dorati</b> sulla tavola per esaminare gli oggetti, poi il pulsante qui sotto.</p><div class="q"></div>';
+    const q=c.querySelector('.q');q.textContent='Oggetti esaminati: 0 di 3';
+    const b=document.createElement('button');b.type='button';b.className='ch';b.innerHTML='<span>Basta, devo andare</span>';c.appendChild(b);col.appendChild(c);reveal(p);
+    b.onclick=e=>{e.stopPropagation();b.disabled=true;b.classList.add('picked');res()};
+  }));
+}
+/* Kai's sound-sight */
+function sonar(){
+  return race(new Promise(res=>{
+    const box=document.createElement('div');box.className='sonar';box.innerHTML='<canvas></canvas><div class="tag">KAI · BUIO</div>';
+    const snd=[[.5,.52,'Un cuore. Batte veloce.'],[.27,.24,'Il mare. Più forte di quello dell\'isola.'],[.72,.8,'Qualcosa di caldo sulla pancia. Vibra.']];
+    snd.forEach(s=>{const l=document.createElement('div');l.className='lbl';l.textContent=s[2];l.style.left=s[0]*100+'%';l.style.top=s[1]*100+'%';box.appendChild(l);s.el=l});
+    const c=document.createElement('div');c.className='choice';c.innerHTML='<p class="how">Ora sei <b>Kai</b>. Non vedi niente: tocca <b>ASCOLTA</b>, ogni suono disegna un pezzo della stanza.</p><div class="q">Suoni: 0 di 3</div>';
+    const b=document.createElement('button');b.type='button';b.className='big';b.textContent='ASCOLTA';c.appendChild(b);
+    col.appendChild(box);col.appendChild(c);reveal(c);
+    const cv=box.querySelector('canvas'),x=cv.getContext('2d');let rings=[],n=0,on=true;const dpr=devicePixelRatio||1;
+    cv.width=box.clientWidth*dpr;cv.height=box.clientHeight*dpr;
+    const loop=()=>{if(!on)return;x.fillStyle='rgba(0,0,0,.16)';x.fillRect(0,0,cv.width,cv.height);rings=rings.filter(r=>r.a>0);
+      rings.forEach(r=>{x.beginPath();x.arc(r.x*cv.width,r.y*cv.height,r.r,0,7);x.strokeStyle=`rgba(134,224,255,${r.a})`;x.lineWidth=2*dpr;x.stroke();r.r+=2.6*dpr;r.a-=.009});requestAnimationFrame(loop)};loop();
+    b.onclick=e=>{e.stopPropagation();if(n<3){const s=snd[n];for(let k=0;k<3;k++)rings.push({x:s[0],y:s[1],r:k*12*dpr,a:.9-k*.22});s.el.classList.add('on');n++;c.querySelector('.q').textContent=`Suoni: ${n} di 3`;if(n===3)b.textContent='CONTINUA'}else{b.disabled=true;setTimeout(()=>on=false,3000);res()}};
+  }));
+}
+
+/* ---------- diary & pause ---------- */
+function openDiary(){
+  const word=v=>v>=75?'si fida di te':v>=60?'comincia a fidarsi':v>=40?'non sa cosa pensare':'ha paura di te';
+  const pw=v=>v>=60?'è dalla tua parte':v>=45?'ti guarda di traverso':'è arrabbiato';
+  $('diaryBody').innerHTML=`<h4>Rapporti</h4>
+    <div class="bond"><span>${S.f.named?'Kai':'Il bambino'}</span><span class="b"><i style="width:${S.trust}%"></i></span><em>${S.scene>=5?word(S.trust):'Non lo conosci ancora.'}</em></div>
+    <div class="bond"><span>Papà Tomás</span><span class="b"><i style="width:${S.papa}%"></i></span><em>${pw(S.papa)}</em></div>
+    <h4>Indizi</h4>${S.clues.length?`<ul>${S.clues.map(c=>`<li>${c}</li>`).join('')}</ul>`:'<p class="empty">Ancora niente.</p>'}`;
+  $('diary').hidden=false;
+}
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.sheet').hidden=true);
+document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)s.hidden=true}));
+$('btnDiary').onclick=openDiary;$('btnPause').onclick=()=>$('pause').hidden=false;
+$('pDiary').onclick=()=>{$('pause').hidden=true;openDiary()};
+$('pSettings').onclick=()=>{$('pause').hidden=true;page('settings','game')};
+$('pMenu').onclick=()=>{$('pause').hidden=true;stopRun();buildMenu()};
+
+/* ---------- the script ---------- */
+const P='Papà',N='Nayra',K='Kai',B='Il bambino';
+const say=(who,s,c)=>({t:'say',who,s,c}),th=(s,who)=>({t:'th',who:who||N,s}),nar=s=>({t:'nar',s});
+async function convince(when){
+  await panel({txt:'dark'},[
+    say(P,when+' lo porto al sanatorio. Il dottor Marrajo saprà cosa fare. È un sant\'uomo.'),
+    say(N,'No!','shout'),
+    th('Perché ho urlato? Lo squalo sulla cassa. "Non togliergli la benda". Come glielo spiego senza sembrare pazza?')]);
+  const a=await choose('tell','Come convinci papà?',[
+    {t:'Gli racconti quello che hai visto',d:S.clues.length?'Hai degli indizi.':'Ti serve almeno un indizio.',off:!S.clues.length},
+    {t:'«È il figlio di un pescatore di Arguineguín. Lo riporto io.»',d:'Una bugia.'},
+    {t:'«Solo un giorno, papà. Ti prego.»'}]);
+  if(a===0){bump('papa',14,'Papà ti crede.');await panel({txt:'dark'},[nar('Papà ascolta senza dire niente. Poi guarda la bottiglietta a lungo, e la rimette in tasca senza bere.'),say(P,'Aspettiamo. Finché non capiamo.')])}
+  if(a===1){S.f.lie=true;toast('Papà ci crede a metà. La bugia tornerà a galla.')}
+  if(a===2)bump('papa',-8,'Papà cede, ma è preoccupato.');
+  if(S.f.messa&&a!==0)await panel({txt:'dark'},[say(P,'Va bene. Ma se il dottore chiede, a messa ci vado tutte le domeniche.')]);
+}
+const SCENES=[
+['Il faro',async()=>{
+  if(!S.f.legend){S.f.legend=1;await panel({txt:'dark'},[nar('Come si legge Isla Brava'),say(N,'Balloon bianco: qualcuno parla ad alta voce.'),th('Nuvoletta azzurra: qualcuno pensa. Gli altri non lo sentono.'),nar('Riquadro dorato: il narratore.')])}
+  unlock('nayra');unlock('tomas');
+  await panel({img:'t1'},[
+    nar('Isla Brava, 14 ottobre 1893. Il faro di Punta Negra.'),
+    th('Diario, 14 ottobre. Il vento si è preso il tetto del pollaio. Di nuovo. Le galline ora dormono in cucina, e papà fa finta di non saperlo.'),
+    say(P+' · dalle scale','Nayra! La lente l\'hai pulita?','off'),
+    say(N,'Sì, papà!'),
+    th('No.')]);
+  await panel({img:'papa'},[
+    nar('Papà sale le scale col fiatone, una mano sulla schiena. Tira fuori la solita bottiglietta.'),
+    say(P,'Pulita, eh? Vedo le ditate da qui.'),
+    say(N,'Sono... decorazioni.'),
+    say(P,'Tua madre la teneva come uno specchio, quella lente.'),
+    say(N,'La mamma aveva pazienza.'),
+    say(P,'Tua madre aveva me. Per forza aveva pazienza.')]);
+  await panel({img:'tonic'},[
+    say(N,'Ancora quella roba?'),
+    say(P,'Me l\'ha data il dottor Marrajo. Dice che la schiena di un guardiano va oliata come la lanterna.'),
+    th('"Il dottor Marrajo dice." Mezza isola parla così.')]);
+  const a=await choose('papa1','Cosa rispondi a papà?',[{t:'«Domani la pulisco. Giuro.»'},{t:'«E sulla messa il dottore cosa dice? Ci vai?»'},{t:'Torni al diario senza rispondere.'}]);
+  if(a===0)bump('papa',8,'Papà sbuffa, ma sorride.');
+  if(a===1){bump('papa',14,'Papà se ne ricorderà.');S.f.messa=true;await panel({txt:'dark'},[say(P,'Il Signore sa dove trovarmi. In cima a un faro, per esempio.')])}
+  if(a===2)clue('Papà beve il Tonico sempre più spesso');
+  await panel({txt:'dark'},[
+    say(P,'E smettila di scrivere tutto. Un giorno qualcuno legge quel quaderno e scopre che russo.'),
+    say(N,'Papà, lo sanno pure a Las Palmas.')]);
+}],
+['La nave',async()=>{
+  await panel({img:'window'},[nar('Papà si ferma davanti al vetro.'),say(P,'C\'è una luce. Là fuori.'),th('Il cannocchiale. Dove l\'ho messo...')]);
+  await telescope();
+  await panel({img:'t2'},[say(N,'Papà... va controvento.'),say(P,'Nessuna nave va controvento.'),say(N,'Questa sì. E l\'acqua... è azzurra.')]);
+  await panel({txt:'dark'},[
+    nar('Papà stringe gli occhi. La mano va alla tasca, alla bottiglietta, senza che se ne accorga.'),
+    say(P,'È il riflesso della lanterna.'),
+    th('La lanterna fa luce gialla. E lui lo sa.')]);
+  await panel({img:'t3',shake:1},[{t:'sfx',s:'KRAAASH'},
+    say(P,'Vado a suonare la campana per i pescatori. Tu resti qui.'),
+    say(N,'Certo, papà.'),th('Neanche per sogno.')]);
+  const a=await choose('lamp','Scendi alla riva',[{t:'Prendo la lanterna',d:'Vedi meglio. Ma da lontano qualcuno vedrà la tua luce.'},{t:'Scendo al buio',d:'Più lenta sulla riva. Nessuno ti vede.'}]);
+  S.f.lamp=a===0;
+}],
+['La riva',async()=>{
+  await panel({img:'run'},[
+    nar('La spiaggia è piena di assi, corde, casse sfondate. Nessuno si muove.'),
+    th('Lo scoglio del Fraile. La corrente porta tutto lì.'),
+    nar('Dietro lo scoglio, una sagoma piccola. Ogni onda la tira un po\' più al largo.')]);
+  const ok=await pull();markPath('pull',ok?0:1);S.log.push({id:'pull',i:ok?0:1});
+  if(!ok){await panel({txt:'dark'},[nar('L\'onda lo sbatte contro la roccia. Quando Nayra lo riprende, ha la fronte aperta.'),th('Un minuto. Ho contato. Un minuto e il taglio non c\'è più.')]);clue('La ferita del bambino si è chiusa da sola')}
+  unlock('kai');
+  await panel({img:'t4'},[say(N,'Ehi. Ehi! Respira. Ti prego, respira.')]);
+  await panel({img:'t4',crop:['4/3','28% 42%',1.8,'28% 42%']},[
+    say(B,'Soggetto Uno... non ha guardato. Non ha guardato nessuno.','whisper kai'),
+    say(N,'Chi? Chi è Soggetto Uno?')]);
+  await panel({img:'hands'},[
+    nar('Sviene di nuovo. Ma le mani restano premute sulla benda.'),
+    th('Una benda stretta così. Un braccialetto senza chiusura. Qualcuno non voleva che se li togliesse.')]);
+}],
+['Il marinaio',async()=>{
+  await panel({img:'sailor'},[
+    nar('Una voce, da sotto un\'asse spezzata.'),
+    say('Marinaio','Ragazza... il bambino. È vivo?'),
+    nar('In fondo alla spiaggia si accendono delle lanterne. Qualcuno sta arrivando.')]);
+  const a=await choose('sailor','Le lanterne si avvicinano',[{t:'Resto con il marinaio',d:'Senti cosa sa. Ma il tempo passa.'},{t:'Porto via il bambino',d:'Sei al sicuro. Lui resta solo.'}],{t:1,def:null});
+  if(a===1){toast('Il marinaio muore da solo. Nayra ci ripenserà.');S.f.leftSailor=true;return}
+  await panel({txt:'dark'},[say('Marinaio','Non togliergli la benda. Mai. Qualunque cosa ti dicano.')]);
+  if(a==null){await panel({txt:'dark'},[nar('Nayra non riesce a muoversi. Quando ritrova il fiato, il marinaio ha già chiuso gli occhi.')]);clue('"Non togliergli la benda. Mai."');return}
+  await panel({txt:'dark'},[
+    say(N,'Perché? Da dove venite?'),
+    say('Marinaio','Dall\'isola del sanatorio. Portiamo le provviste. Lui si era nascosto nella stiva...'),
+    say('Marinaio','Abbiamo provato a tornare indietro. Ma la nave non girava. Sulla riva c\'erano dei bambini, in fila. Guardavano la nave. E la nave andava.'),
+    nar('Il marinaio non dice altro.'),
+    th('Bambini che spostano una nave guardandola. Va bene. Sto sognando. Per forza.')]);
+  clue('Dei bambini sull\'isola del sanatorio hanno spinto la nave');
+  await investigate();
+}],
+['Di nuovo al faro',async()=>{
+  const h=await choose('hide','Dove nascondi il bambino?',[{t:'In cima, nella stanza della lanterna',d:'Calda e asciutta. Il primo posto dove guarderebbe chiunque.'},{t:'In cantina, tra le botti',d:'Buia. Ma papà ci scende ogni sera per il vino.'},{t:'Nella grotta sotto gli scogli',d:'Nessuno la conosce. Con l\'alta marea si allaga.'}]);
+  S.f.hide=h;
+  if(h===2){
+    await panel({txt:'dark'},[
+      nar('Nella grotta. Nayra lo avvolge in due coperte e gli lascia una candela.'),
+      say(N,'Torno presto. Non muoverti.'),
+      nar('Un\'ora dopo, in cucina. Papà rientra fradicio e si lascia cadere sulla sedia.'),
+      say(P,'Niente. Nessun superstite. Una nave senza nome, senza bandiera.'),
+      say(N,'Che peccato.'),
+      say(P,'...«Che peccato»? Ti senti bene?'),
+      th('Stanotte papà non deve sapere niente. Domani ci penso.')]);
+    S.f.secret=true;return}
+  await panel({img:'night'},[
+    nar('Un\'ora dopo. Papà rientra fradicio e si lascia cadere sulla sedia.'),
+    say(P,'Niente. Nessun superstite. Una nave senza nome, senza bandiera.'),
+    nar(h===0?'Poi guarda per terra. Orme bagnate. Piccole. Salgono verso la scala della lanterna.':'Poi guarda per terra. Orme bagnate. Piccole. Scendono verso la cantina.'),
+    say(P,'Nayra.'),say(N,'Sì, papà?'),
+    say(P,'Dimmi che è un\'altra gallina.'),
+    nar(h===0?'Papà sale. Nayra gli corre dietro. Il bambino è lì, rannicchiato accanto alla lente.':'Papà scende. Nayra gli corre dietro. Il bambino è lì, tra le botti, che trema.')]);
+  await convince('Domattina');
+}],
+['Kai',async()=>{
+  await sonar();
+  await panel(S.f.hide===2?{txt:'dark'}:{img:'cat'},[...(S.f.hide===2?[nar('Nella grotta, alla luce della candela. Pimienta ha seguito Nayra fin quaggiù.')]:[]),
+    say(B,'C\'è... qualcosa. Sulla pancia. Vibra.'),
+    say(N,'È Pimienta, la gatta. Sta facendo le fusa.'),
+    say(B,'Morde?'),
+    say(N,'Solo papà.')]);
+  await panel({txt:'dark'},[say(B,'Fa sempre così?'),say(N,'Solo con chi le piace.'),th('A me non piace niente. Di solito sono io che non piaccio.',B)]);
+  const a=await choose('words','Cosa gli dici?',[{t:'«Sei al sicuro. Io sono Nayra.»'},{t:'«Soggetto Uno... sei tu?»'},{t:'«Chi ti ha mandato qui?»'}]);
+  if(a===0)bump('trust',20,'Il bambino se ne ricorderà.');
+  if(a===1){bump('trust',6);clue('Il bambino non ha un nome, solo un numero')}
+  if(a===2)bump('trust',-20,'Il suo cuore accelera. Sente che anche il tuo accelera.');
+  await panel({txt:'dark'},[
+    say(B,'La nave... è colpa mia.'),say(N,'Cosa?'),
+    say(B,'Era pesante. Gli altri hanno spinto troppo forte. Non volevano. Volevano solo che arrivassi.'),
+    say(N,'Arrivassi dove?'),say(B,'Fuori.')]);
+  await panel({img:'kai',crop:['1/1','80% 30%',1.7,'78% 32%']},[
+    say(N,'Come ti chiami?'),say(B,'Uno.'),
+    say(N,'Uno non è un nome. È un numero.'),
+    say(B,'Lì non c\'erano nomi.'),
+    say(N,'Allora te ne do uno io. Kai. La mamma diceva che vuol dire "mare".'),
+    say(K,'Kai.'),
+    th('L\'ha ripetuto piano. Come se avesse paura di romperlo.')]);
+  S.f.named=true;
+}],
+['L\'alba',async()=>{
+  if(S.f.secret){
+    await panel({txt:'dark'},[
+      nar('Alba. La marea sale. L\'acqua entra nella grotta e arriva alle caviglie.'),
+      say(K,'Nayra. L\'acqua.','whisper kai'),
+      th('L\'alta marea. Me n\'ero dimenticata. Lo porto su, finché papà è fuori.')]);
+    S.f.secret='up'}
+  await panel({img:'t6'},[
+    nar('Alba. Uomini in nero tra i rottami. Una carrozza con uno squalo dipinto sulla portiera.'),
+    th('Il dottor Marrajo. Di persona. Alle sei del mattino. Per una nave "senza nome".'),
+    nar('Papà scende a parlare con loro. Lo sentono tutti, da quanto urla. Poi si avvia verso il porto, a chiamare la Guardia Civil.')]);
+  if(S.f.lamp)await panel({txt:'dark'},[say('Uomo in nero · dalla spiaggia','Un pescatore dice di aver visto una luce scendere dal faro, stanotte.','off')]);
+  await panel({txt:'dark'},[say('Voce di papà · dalla spiaggia','NAYRA! Scendi, presto! Ho bisogno di te!','shout off'),th('È la voce di papà. Ma papà è andato al porto.')]);
+  if(S.trust>=60)await panel({img:'hide'},[say(K,'Non è lui. Quel cuore batte piano. Si sta divertendo. È Eco: imita tutti. Se rispondi, sa dove sei.','whisper kai')]);
+  const a=await choose('eco','La voce di tuo padre ti chiama',[{t:'«Arrivo, papà!»'},{t:'Resti in silenzio'}],{t:1,def:null});
+  if(a===0){ENDS.includes('found')||ENDS.push('found');S.f.found=true;await panel({txt:'dark'},[nar('Gli uomini in nero alzano la testa verso il faro. Adesso sanno dove sei.')]);toast('Il sospetto di Grau è salito.')}
+  else{ENDS.includes('hidden')||ENDS.push('hidden');if(a==null){bump('trust',5);await panel({txt:'dark'},[nar('Il cuore di Nayra batte così forte che Kai le mette una mano sulla bocca.')])}
+    await panel({img:'eco'},[nar('Dalla spiaggia sale una risata di bambino. Poi più niente.')]);clue('Qualcuno sa imitare le voci alla perfezione')}
+  store.set('ends',ENDS);
+  await panel({img:'doctor',crop:['3/4','50% 30%']},[say('Dottor Marrajo · tra sé','Dove sei andato, piccolo mio?','whisper')]);
+}],
+['La benda',async()=>{
+  if(S.f.found){
+    await panel({txt:'dark'},[
+      nar('Poco dopo, qualcuno bussa alla porta. Due uomini in nero.'),
+      say('Uomo in nero','Buongiorno, signorina. Cerchiamo un bambino della nave. È molto malato, il dottore è preoccupato.'),
+      th('Malato. Certo.'),
+      nar('Kai è sotto il letto, immobile. Non respira nemmeno.'),
+      say(N,'Qui non c\'è nessun bambino.'),
+      say('Uomo in nero','Allora torneremo a trovarla. Così, per sicurezza.')]);
+    S.f.watched=true}
+  if(S.f.secret==='up'){
+    await panel({txt:'dark'},[
+      nar('A metà mattina papà torna dal porto. Apre la porta della cucina e si blocca.'),
+      say(P,'Nayra. Perché c\'è un bambino nella mia cucina?')]);
+    bump('papa',-6,'Papà non è contento che gliel\'hai nascosto.');S.f.secret=false;
+    await convince('Oggi stesso');
+  }
+  await panel({img:'band'},[
+    nar('Più tardi. Papà si inginocchia davanti al bambino con una ciotola d\'acqua.'),
+    say(P,'Hai del sangue sulla benda, ragazzo. Fammi dare un\'occhiata.'),
+    nar('Le dita di papà sono già sul nodo. Kai si irrigidisce.')]);
+  const a=await choose('band','Papà sta per togliergli la benda',[{t:'«Papà, fermo!»'},{t:'Lasci fare a papà'}],{t:1,def:null});
+  if(a===0){bump('trust',15,'Kai se ne ricorderà.');bump('papa',-6);
+    await panel({txt:'paper'},[say(P,'Ehi! Volevo solo pulirgli la faccia!'),say(N,'Lo so. Ma non vuole. Vero, Kai?'),say(K,'...Grazie.')]);
+    if(S.trust>=60)await panel({txt:'dark'},[th('Il suo cuore ha fatto un salto. Per me.',K)]);
+    return}
+  await panel({img:'t5',shake:1},[say(K,'Scusa. Scusa. Scusa.','whisper kai')]);
+  await panel({txt:'paper'},[say(P,'...Che occhi strani. Vabbè, almeno non sei ferito.')]);
+  await panel({img:'kitchen'},[
+    nar('Il giorno dopo. Papà vede Kai seduto a tavola e gli cade la tazza.'),
+    say(P,'Nayra. Chi è questo bambino?'),
+    say(N,'Papà... ieri gli hai pulito la faccia.'),
+    say(P,'Io? Mai visto in vita mia.'),
+    say(K,'Succede sempre. Con tutti quelli che mi guardano.')]);
+  await panel({img:'t1',crop:['1/1','60% 70%',1.5,'62% 55%']},[th('Se papà l\'ha dimenticato in una notte, posso dimenticarlo anch\'io. Allora lo scrivo. Si chiama Kai. È arrivato dal mare. Ha paura dei gatti. Chiede scusa per tutto.')]);
+  clue('Chi guarda Kai negli occhi si dimentica di lui');
+}]];
+function stopRun(){if(abortRej)abortRej(ABORT);abortRej=null;hint.hidden=true}
+async function startGame(save){
+  stopRun();abortP=new Promise((_,r)=>abortRej=r);abortP.catch(()=>{});
+  S=save?JSON.parse(JSON.stringify(save)):fresh();col.innerHTML='';show('game');feed.scrollTop=0;
+  try{
+    for(let i=S.scene;i<SCENES.length;i++){S.scene=i;store.set('save',S);$('sceneName').textContent='Cap. I · Scena 1 · '+SCENES[i][0];
+      const h=document.createElement('div');h.className='note';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i+1)+' · '+SCENES[i][0];col.appendChild(h);
+      await SCENES[i][1]();}
+    store.del('save');ending();
+  }catch(e){if(e!==ABORT)console.error(e)}
+}
+function ending(){
+  const n=NODES.filter(x=>(PATHS[x.id]||[]).length).length;
+  const c=document.createElement('div');c.className='endc';
+  c.innerHTML=`<h3>Fine della Scena 1</h3><p>Percorsi scoperti: ${pathPct()}% · ${ENDS.length}/${ENDINGS.length} finali di scena</p><div class="prog"><i style="width:${pathPct()}%"></i></div>`;
+  const bt=document.createElement('div');bt.className='btns';
+  [['Vedi i percorsi',()=>page('paths')],['Rigioca e scegli diverso',()=>startGame(null)],['Menu principale',buildMenu]].forEach(([t,f])=>{const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent=t;b.onclick=e=>{e.stopPropagation();f()};bt.appendChild(b)});
+  c.appendChild(bt);col.appendChild(c);reveal(c);
+}
+buildMenu();
+</script>
+
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+</body>
+</html>
