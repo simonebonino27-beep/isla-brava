@@ -338,8 +338,8 @@ function applySettings(){document.documentElement.style.setProperty('--fs',{s:.9
 applySettings();
 
 const $=id=>document.getElementById(id);
-const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp',naming:'img/naming.webp',argue:'img/argue.webp',door:'img/door.webp',lantern:'img/lantern.webp',truth:'img/truth.webp',cellar:'img/cellar.webp',cave:'img/cave.webp',coffee:'img/coffee.webp',bed:'img/bed.webp',flood:'img/flood.webp',run_dark:'img/run_dark.webp',shore:'img/shore.webp',debris:'img/debris.webp',heal:'img/heal.webp',flee:'img/flee.webp',grip:'img/grip.webp',pocket:'img/pocket.webp',shout:'img/shout.webp',guilt:'img/guilt.webp',cave_wrap:'img/cave_wrap.webp',innocent:'img/innocent.webp',listen:'img/listen.webp',lookup:'img/lookup.webp',diary:'img/diary.webp',smudges:'img/smudges.webp',s2_1:'img/s2_1.webp',s2_2:'img/s2_2.webp',s2_3:'img/s2_3.webp',s2_4:'img/s2_4.webp',s2_5:'img/s2_5.webp',s2_6:'img/s2_6.webp',s2_7:'img/s2_7.webp',s2_8:'img/s2_8.webp',s2_9:'img/s2_9.webp',s2_10:'img/s2_10.webp',s2_11:'img/s2_11.webp',s2_12:'img/s2_12.webp',s2_13:'img/s2_13.webp',s2_14:'img/s2_14.webp',s2_15:'img/s2_15.webp',s2_16:'img/s2_16.webp',s2_17:'img/s2_17.webp',s2_18:'img/s2_18.webp',s2_20:'img/s2_20.webp',s2_21:'img/s2_21.webp'};
-const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['pocket','La bottiglietta'],['papa','Le scale'],['smudges','Le ditate'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['run_dark','Al buio'],['heal','La ferita'],['t4','Sulla riva'],['shore','Soggetto Uno'],['sailor','Il marinaio'],['grip','L\'avvertimento'],['flee','La fuga'],['debris','I rottami'],['innocent','Che peccato'],['lantern','Nella lanterna'],['cellar','In cantina'],['cave_wrap','Nella grotta'],['cave','Pimienta nella grotta'],['shout','No!'],['truth','La verità'],['cat','Pimienta'],['guilt','La colpa'],['naming','Un nome'],['flood','La marea'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['listen','La voce'],['eco','Eco'],['lookup','Verso il faro'],['argue','Papà e gli uomini in nero'],['door','Alla porta'],['bed','Sotto il letto'],['coffee','Il caffè'],['diary','Il diario'],['doctor','Il dottor Marrajo'],['s2_3','Il gofio'],['s2_4','L\'oliva'],['s2_6','I cinque amici'],['s2_8','Eco torna'],['s2_9','Il faro dello Stato'],['s2_11','Il mercato'],['s2_14','Il corridoio'],['s2_15','La pentola'],['s2_16','Ciao, Uno'],['s2_17','Arguineguín'],['s2_21','Il tramonto']];
+const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp',naming:'img/naming.webp',argue:'img/argue.webp',door:'img/door.webp',lantern:'img/lantern.webp',truth:'img/truth.webp',cellar:'img/cellar.webp',cave:'img/cave.webp',coffee:'img/coffee.webp',bed:'img/bed.webp',flood:'img/flood.webp',run_dark:'img/run_dark.webp',shore:'img/shore.webp',debris:'img/debris.webp',heal:'img/heal.webp',flee:'img/flee.webp',grip:'img/grip.webp',pocket:'img/pocket.webp',shout:'img/shout.webp',guilt:'img/guilt.webp',cave_wrap:'img/cave_wrap.webp',innocent:'img/innocent.webp',listen:'img/listen.webp',lookup:'img/lookup.webp',diary:'img/diary.webp',smudges:'img/smudges.webp',s2_1:'img/s2_1.webp',s2_2:'img/s2_2.webp',s2_3:'img/s2_3.webp',s2_4:'img/s2_4.webp',s2_5:'img/s2_5.webp',s2_6:'img/s2_6.webp',s2_7:'img/s2_7.webp',s2_8:'img/s2_8.webp',s2_9:'img/s2_9.webp',s2_10:'img/s2_10.webp',s2_11:'img/s2_11.webp',s2_12:'img/s2_12.webp',s2_13:'img/s2_13.webp',s2_14:'img/s2_14.webp',s2_15:'img/s2_15.webp',s2_16:'img/s2_16.webp',s2_17:'img/s2_17.webp',s2_18:'img/s2_18.webp',s2_20:'img/s2_20.webp',s2_21:'img/s2_21.webp',s2_19:'img/s2_19.webp',s2_22:'img/s2_22.webp',s2_23:'img/s2_23.webp',s2_24:'img/s2_24.webp',s2_25:'img/s2_25.webp',s2_26:'img/s2_26.webp',s2_27:'img/s2_27.webp',s2_28:'img/s2_28.webp',s2_29:'img/s2_29.webp'};
+const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['pocket','La bottiglietta'],['papa','Le scale'],['smudges','Le ditate'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['run_dark','Al buio'],['heal','La ferita'],['t4','Sulla riva'],['shore','Soggetto Uno'],['sailor','Il marinaio'],['grip','L\'avvertimento'],['flee','La fuga'],['debris','I rottami'],['innocent','Che peccato'],['lantern','Nella lanterna'],['cellar','In cantina'],['cave_wrap','Nella grotta'],['cave','Pimienta nella grotta'],['shout','No!'],['truth','La verità'],['cat','Pimienta'],['guilt','La colpa'],['naming','Un nome'],['flood','La marea'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['listen','La voce'],['eco','Eco'],['lookup','Verso il faro'],['argue','Papà e gli uomini in nero'],['door','Alla porta'],['bed','Sotto il letto'],['coffee','Il caffè'],['diary','Il diario'],['doctor','Il dottor Marrajo'],['s2_3','Il gofio'],['s2_4','L\'oliva'],['s2_6','I cinque amici'],['s2_8','Eco torna'],['s2_9','Il faro dello Stato'],['s2_11','Il mercato'],['s2_14','Il corridoio'],['s2_15','La pentola'],['s2_16','Ciao, Uno'],['s2_17','Arguineguín'],['s2_19','Le lentiggini'],['s2_26','Nessuno, qui'],['s2_21','Il tramonto'],['s2_29','La grotta del nord']];
 function unlock(id){if(!GAL.includes(id)){GAL.push(id);store.set('gallery',GAL)}}
 
 /* all decision points, for the route map */
@@ -847,7 +847,7 @@ function hideSeek(rounds){
       kai=pick;
       if(ally&&r===1){await panel({txt:"dark"},[say(P,"Signori, un caffè? Con questo freddo..."),nar("Uno degli uomini si ferma a bere. La stanza che voleva controllare resta chiusa.")]);continue}
       if(kai===target){caught=true;break}
-      await panel({txt:"dark"},[nar(`Gli uomini rovistano ${IN[target]}. Niente.`)]);
+      await panel({img:["s2_22","s2_23","s2_24","s2_25"][target]},[nar(`Gli uomini rovistano ${IN[target]}. Niente.`)]);
     }
     S.f.kaiRoom=kai;res(caught);
   }));
@@ -863,7 +863,7 @@ SCENES.push(
       {t:"«Non lo so nemmeno io, papà. Ma ha bisogno di noi.»"}]);
     if(a===0){bump("papa",14,"Papà ti crede.");S.f.papaKnows=true}
     if(a===2)bump("papa",8);
-    await panel({txt:"dark"},[say(P,"E perché porta quella benda?"),say(N,"Ha gli occhi malati. La luce gli fa male."),th("Questa è la bugia che terrò per sempre. La verità gli costerebbe la memoria.")]);
+    await panel({img:"s2_27"},[say(P,"E perché porta quella benda?"),say(N,"Ha gli occhi malati. La luce gli fa male."),th("Questa è la bugia che terrò per sempre. La verità gli costerebbe la memoria.")]);
   }else{
     await panel({img:"s2_2"},[nar("Papà guarda Kai che tasta il bordo del tavolo con le dita."),say(P,"Non tocca niente senza prima toccarlo. Come i ciechi."),say(N,"Lo è. Più o meno."),say(P,"«Più o meno» non esiste, Nayra. O ci vedi o non ci vedi."),say(K,"Io sento."),say(P,"...Cosa senti?"),say(K,"Che lei ha fame. Le brontola la pancia da un'ora."),nar("Papà ride. È la prima volta da giorni."),say(P,"Questo lo sento anch'io.")]);
   }
@@ -931,7 +931,7 @@ SCENES.push(
     }
   }
   if(caught&&!full){
-    await panel({txt:"dark"},[nar("L'uomo apre la porta. Kai è lì, immobile, schiacciato contro il muro."),nar("L'uomo lo guarda a lungo. Poi richiude la porta, piano."),say(U,"Nessuno, qui."),th("Perché non l'ha preso? Cosa vuole?")]);
+    await panel({img:"s2_26"},[nar("L'uomo apre la porta. Kai è lì, immobile, schiacciato contro il muro."),nar("L'uomo lo guarda a lungo. Poi richiude la porta, piano."),say(U,"Nessuno, qui."),th("Perché non l'ha preso? Cosa vuole?")]);
     S.f.seen=true;caught=false;
     await panel({img:"s2_10"},[say(U,"Il dottore le manda i suoi saluti, signorina. E le ricorda che al sanatorio cercano ragazze sveglie. Pagano bene."),th("Ha visto Kai. E mi sta offrendo un lavoro.")]);return}
   if(caught){
@@ -955,7 +955,7 @@ SCENES.push(
     await panel({img:"s2_18"},[say(P,"La pentola di tua madre. Trent'anni e non si era mai ammaccata."),say(N,"Scusa, papà."),nar("Papà guarda Kai, poi lei."),say(P,"...L'hai fatto per lui, vero? Allora va bene. Era solo una pentola.")]);bump("papa",4)}
   await panel({img:"naming"},[nar("Notte. Kai è seduto sul letto, una mano alzata a mezz'aria."),say(K,"Posso... sapere com'è la tua faccia? Con le mani. Non ho mai saputo com'è fatta la faccia di qualcuno.")]);
   const b=await choose("face","Cosa rispondi?",[{t:"«Sì.»"},{t:"«Meglio di no.»"}]);
-  if(b===0){bump("trust",14,"Kai se ne ricorderà.");await panel({txt:"dark"},[nar("Kai le sfiora la fronte, le guance, il naso."),say(K,"Hai tanti puntini."),say(N,"Si chiamano lentiggini."),say(K,"Le conto, una sera.")])}
+  if(b===0){bump("trust",14,"Kai se ne ricorderà.");await panel({img:"s2_19"},[nar("Kai le sfiora la fronte, le guance, il naso."),say(K,"Hai tanti puntini."),say(N,"Si chiamano lentiggini."),say(K,"Le conto, una sera.")])}
   else await panel({txt:"dark"},[nar("Kai abbassa la mano."),say(K,"Va bene.")]);
 }],
 ["L'annuncio",async()=>{
@@ -967,11 +967,11 @@ SCENES.push(
     {t:"«Ci vado per lui. Per gli altri bambini.»",d:S.f.papaKnows?"Papà sa la verità.":"Papà non sa la verità su Kai.",off:!S.f.papaKnows},
     {t:"«Non ci vado. Ci entrerò di nascosto.»",d:"Senza lavoro e senza permesso."}]);
   S.f.route=a===2?"sneak":"job";
-  if(a===0){if(S.f.papaKnows){bump("papa",-10,"Papà ha capito.");await panel({txt:"dark"},[say(P,"Soldi? Nayra. So perché ci vuoi andare. Non ti mando nella tana del lupo."),say(N,"Non mi mandi tu. Ci vado io.")])}
+  if(a===0){if(S.f.papaKnows){bump("papa",-10,"Papà ha capito.");await panel({img:"s2_28"},[say(P,"Soldi? Nayra. So perché ci vuoi andare. Non ti mando nella tana del lupo."),say(N,"Non mi mandi tu. Ci vado io.")])}
     else await panel({txt:"dark"},[say(P,"Vitto e alloggio... Almeno mangerai meglio che qui.")])}
   if(a===1){bump("papa",14);await panel({img:"truth"},[say(P,"...Tua madre avrebbe fatto lo stesso. Che Dio mi perdoni."),nar("Da oggi papà è dalla sua parte.")]);S.f.papaAlly=true}
   if(a===2){await panel({txt:"dark"},[say(P,"Bene. Quel posto non mi è mai piaciuto."),th("Non ho detto che non ci vado. Ho detto che non ci vado da quella porta.")])}
-  await panel({img:"s2_21"},[nar("Tramonto, in cima al faro. Lontano, sul mare, c'è l'isoletta del sanatorio. Sulla vetta del vulcano spento brilla un filo di luce azzurra."),
+  await panel({img:S.f.route==="sneak"?"s2_29":"s2_21"},[nar(S.f.route==="sneak"?"Notte, in cima al faro. Lontano, sul mare, c'è l'isoletta del sanatorio. Kai alza il braccio e la indica, come se la vedesse.":"Tramonto, in cima al faro. Lontano, sul mare, c'è l'isoletta del sanatorio. Sulla vetta del vulcano spento brilla un filo di luce azzurra."),
     ...(S.f.route==="sneak"?[say(K,"Dal lato nord, quando la marea è bassa, c'è una grotta. Va sotto. Ci arrivava l'odore del mare, di notte."),say(N,"Allora entrerò da lì.")]:[say(K,"Se vai là, sentirai l'odore. Ferro e vulcano."),say(N,"Me lo ricorderò.")]),
     say(K,"Ricordati anche di loro. Brasa, Susurro, Niebla, Roca, Aleta."),
     th("Li scrivo stanotte. Cinque nomi. Così non me li dimentico.")]);
