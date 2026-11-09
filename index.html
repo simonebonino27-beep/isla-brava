@@ -283,6 +283,8 @@ button:focus-visible{outline:2px solid var(--ice);outline-offset:3px}
 .note.how{text-align:center;color:var(--mist)}
 .big.pulse{animation:pulse .55s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.04);box-shadow:0 4px 0 var(--brass-dim),0 0 22px rgba(207,169,85,.6)}}
+.blk:not([hidden]),.act:not([hidden]),.sonar:not([hidden]){animation:slidein .35s ease-out both}
+@keyframes slidein{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 body.nomotion *{animation:none!important;transition:none!important}
 </style>
@@ -320,7 +322,7 @@ body.nomotion *{animation:none!important;transition:none!important}
   <main id="feed" class="gut"><div id="col"></div></main>
 </section>
 
-<div class="hint" id="hint" hidden>Tocca per continuare ▾</div>
+<div class="hint" id="hint" hidden>Tocca o scorri per continuare ›</div>
 <div class="toast" id="toast" role="status"></div>
 <div class="lightbox" id="lightbox" hidden><img alt="" id="lbImg"></div>
 <div class="sheet" id="diary" hidden><div class="in" role="dialog" aria-label="Diario di Nayra"><div class="row"><button class="chip" data-close type="button">Chiudi</button></div><h2>Diario di Nayra</h2><div id="diaryBody"></div></div></div>
@@ -330,7 +332,7 @@ body.nomotion *{animation:none!important;transition:none!important}
 <script>
 /* ---------- storage ---------- */
 const store={get(k,d){try{const v=localStorage.getItem('ib_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('ib_'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('ib_'+k)}catch(e){}}};
-let SET=Object.assign({size:'m',timer:'norm',adv:'tap',motion:'on'},store.get('settings',{}));
+let SET=Object.assign({size:'m',timer:'norm',adv:'tap',motion:'on',read:'page'},store.get('settings',{}));
 let PATHS=store.get('paths',{});      // nodeId -> [option indices ever picked]
 let GAL=store.get('gallery',[]);      // unlocked image ids
 let ENDS=store.get('ends',[]);
@@ -421,6 +423,7 @@ function page(kind,from){
     const seg=(key,label,desc,opts)=>`<div class="set"><div class="l">${label}</div><p>${desc}</p><div class="seg" data-k="${key}">${opts.map(([v,t])=>`<button type="button" data-v="${v}" class="${SET[key]===v?'on':''}">${t}</button>`).join('')}</div></div>`;
     b.innerHTML=seg('size','Dimensione del testo','Balloon, pensieri e scelte.',[['s','Piccolo'],['m','Medio'],['l','Grande']])+
       seg('timer','Scelte a tempo','Quanto tempo hai nei momenti di tensione.',[['norm','5 secondi'],['relax','10 secondi'],['off','Senza timer']])+
+      seg('read','Lettura','«A pagine» mostra una vignetta alla volta, come le slide. «Scorrimento» le mette tutte in colonna.',[['page','A pagine'],['scroll','Scorrimento']])+
       seg('adv','Avanzamento','Con "Automatico" i balloon scorrono da soli.',[['tap','Al tocco'],['auto','Automatico']])+
       seg('motion','Animazioni','Scosse, fasci di luce e comparse.',[['on','Attive'],['off','Ridotte']])+
       `<div class="set"><div class="l">Trasferisci i progressi</div><p>Copia questo codice e incollalo nel gioco sull'altro telefono per continuare da lì.</p><textarea id="codeOut" class="code" rows="3" readonly></textarea><button type="button" class="ghost" id="cpy">Copia codice</button><textarea id="codeIn" class="code" rows="3" placeholder="Incolla qui il codice dell'altro dispositivo"></textarea><button type="button" class="ghost" id="imp">Carica codice</button><p id="impMsg"></p></div>`+
@@ -449,25 +452,47 @@ function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');cl
 function clue(c,key){if(!S.clues.includes(c)){S.clues.push(c);if(key){S.kc=(S.kc||0)+1;toast('Indizio importante: '+c)}else toast('Nel diario: '+c)}}
 function bump(k,v,msg){S[k]=Math.max(0,Math.min(100,S[k]+v));if(msg)toast(msg)}
 function reveal(el){requestAnimationFrame(()=>el.scrollIntoView({behavior:SET.motion==='off'?'auto':'smooth',block:'nearest'}))}
+function turn(){
+  if(SET.read!=='page')return;
+  const last=col.lastElementChild;[...col.children].forEach(c=>{if(c!==hint&&!(c===last&&c.classList.contains('shead')))c.hidden=true});
+  feed.scrollTop=0;
+}
 function tap(len=40){
   if(SET.adv==='auto')return wait(1100+len*38);
   return race(new Promise(res=>{col.appendChild(hint);hint.hidden=false;reveal(hint);
-    const go=e=>{if(e.target.closest('button,.scope,.sheet'))return;feed.removeEventListener('click',go);hint.hidden=true;res()};
-    setTimeout(()=>feed.addEventListener('click',go),150);}));
+    let sx=null;
+    const done=()=>{feed.removeEventListener('click',go);feed.removeEventListener('touchstart',ts);feed.removeEventListener('touchend',te);hint.hidden=true;res()};
+    const go=e=>{if(e.target.closest('button,.scope,.sheet'))return;done()};
+    const ts=e=>{sx=e.touches[0].clientX};
+    const te=e=>{if(sx!==null&&sx-e.changedTouches[0].clientX>50&&!e.target.closest('button,.scope'))done();sx=null};
+    setTimeout(()=>{feed.addEventListener('click',go);feed.addEventListener('touchstart',ts,{passive:true});feed.addEventListener('touchend',te)},150);}));
 }
 function itemEl(it){
   let t=it.t;if(t==='b')t='say';if(t==='mono')t='th';if(t==='cap')t='nar';
   const w=document.createElement('div');let who=it.who||(t==='th'?N:'');
   const nay=who.toUpperCase().startsWith('NAYRA');
   if(t==='nar'||t==='sfx')w.className='it full';else w.className='it '+(nay?'l':'r')+(t==='th'?' thw':'');
-  if(t==='nar')w.innerHTML=`<div class="nar">${it.s}</div>`;
+  if(t==='nar')w.innerHTML=`<div class="nar"><span class="tx">${it.s}</span></div>`;
   else if(t==='sfx')w.innerHTML=`<div class="sfx">${it.s}</div>`;
-  else if(t==='th')w.innerHTML=`<div class="th"><span class="who">${who} · pensa</span>${it.s}</div>`;
-  else w.innerHTML=`<div class="bub ${it.c||''}">${who?`<span class="who">${who}</span>`:''}${it.s}</div>`;
+  else if(t==='th')w.innerHTML=`<div class="th"><span class="who">${who} · pensa</span><span class="tx">${it.s}</span></div>`;
+  else w.innerHTML=`<div class="bub ${it.c||''}">${who?`<span class="who">${who}</span>`:''}<span class="tx">${it.s}</span></div>`;
   return w;
 }
 /* panel({img,crop:[ratio,pos,zoom,origin],txt:'dark'|'paper',shake},items) — the picture stays clean, lettering runs below it */
+function typeIn(el){
+  const t=el.querySelector('.tx');if(!t||SET.motion==='off')return Promise.resolve();
+  const full=t.textContent;if(full.length<2)return Promise.resolve();
+  const v=document.createElement('span'),h=document.createElement('span');h.style.opacity='0';h.textContent=full;t.textContent='';t.append(v,h);
+  return race(new Promise(res=>{let i=0,tm;
+    const fin=()=>{clearTimeout(tm);feed.removeEventListener('click',skip);v.textContent=full;h.textContent='';res()};
+    const skip=e=>{if(e.target.closest('button,.scope,.sheet'))return;e.stopPropagation();fin()};
+    feed.addEventListener('click',skip);
+    const step=()=>{i+=1;v.textContent=full.slice(0,i);h.textContent=full.slice(i);if(i>=full.length)return fin();
+      const ch=full[i-1];tm=setTimeout(step,/[.!?…]/.test(ch)?220:/[,;:]/.test(ch)?110:24)};
+    tm=setTimeout(step,60);}));
+}
 async function panel(o,items=[]){
+  turn();
   const blk=document.createElement('div');blk.className='blk';let talk;
   if(o.img){unlock(o.img);const p=document.createElement('div');p.className='panel pic'+(o.shake?' shake':'');const im=document.createElement('img');im.src=IMG[o.img];im.alt='';
     if(o.crop){p.classList.add('crop');p.style.aspectRatio=o.crop[0];im.style.objectPosition=o.crop[1]||'50% 50%';if(o.crop[2]){im.style.transform=`scale(${o.crop[2]})`;im.style.transformOrigin=o.crop[3]||o.crop[1]}}
@@ -475,7 +500,7 @@ async function panel(o,items=[]){
   else{const p=document.createElement('div');p.className='panel txt'+(o.txt==='paper'?' paper':'');talk=document.createElement('div');talk.className='talk';p.appendChild(talk);blk.appendChild(p);}
   col.appendChild(blk);reveal(blk);await wait(320);
   if(!items.length)await tap();
-  for(const it of items){const e=itemEl(it);talk.appendChild(e);requestAnimationFrame(()=>e.classList.add('on'));reveal(e);if(it.t==='sfx'){await wait(800);continue}await tap(it.s.length)}
+  for(const it of items){const e=itemEl(it);talk.appendChild(e);requestAnimationFrame(()=>e.classList.add('on'));reveal(e);if(it.t==='sfx'){await wait(800);continue}await typeIn(e);await tap(it.s.length)}
   return blk;
 }
 const timed=()=>SET.timer==='off'?0:SET.timer==='relax'?10:5;
@@ -498,7 +523,7 @@ function choose(id,q,opts,{t=0,def=null}={}){
 
 /* telescope: drag to find the ship */
 function telescope(){
-  return race(new Promise(res=>{
+  return race(new Promise(res=>{turn();
     const w=document.createElement('div');w.style.cssText='display:flex;flex-direction:column;gap:8px';
     w.innerHTML=`<div class="scope"><img src="${IMG.t2}" alt="Il mare in tempesta visto nel cannocchiale"><div class="cross"></div></div><div class="note how">Tieni il dito sul cannocchiale e trascinalo per guardarti intorno. Cerca la luce sul mare.</div>`;
     col.appendChild(w);reveal(w);unlock('t2');
@@ -516,7 +541,7 @@ function telescope(){
 }
 /* action: pull him out */
 function pull(){
-  return race(new Promise(res=>{
+  return race(new Promise(res=>{turn();
     const c=document.createElement('div');c.className='act';
     c.innerHTML=`<h3>Tiralo fuori prima dell'onda!</h3><p class="how">Tocca <b>TIRA</b> tante volte, più veloce che puoi. Se la barra rossa arriva in fondo prima di quella dorata, l'onda se lo porta via.</p><div class="meter"><b></b><span>NAYRA</span></div><div class="meter w"><b></b><span>L'ONDA</span></div>`;
     const b=document.createElement('button');b.type='button';b.className='big';b.disabled=true;b.textContent='PRONTI…';c.appendChild(b);col.appendChild(c);reveal(c);
@@ -529,7 +554,7 @@ function pull(){
 }
 /* investigation on the debris */
 function investigate(){
-  return race(new Promise(res=>{
+  return race(new Promise(res=>{turn();
     const blk=document.createElement('div');blk.className='blk';
     const p=document.createElement('div');p.className='panel';p.style.position='relative';unlock('debris');
     p.innerHTML=`<img src="${IMG.debris}" alt="Rottami sulla spiaggia: una cassa, una bottiglia rotta, un registro" style="display:block;width:100%;height:auto">`;
@@ -549,11 +574,11 @@ function investigate(){
 }
 /* Kai's sound-sight */
 function sonar(){
-  return race(new Promise(res=>{
-    const box=document.createElement('div');box.className='sonar';box.innerHTML='<canvas></canvas><div class="tag">KAI · BUIO</div>';
+  return race(new Promise(res=>{turn();
+    const box=document.createElement('div');box.className='sonar';box.innerHTML='<canvas></canvas><div class="tag">SOGGETTO UNO · BUIO</div>';
     const snd=[[.5,.52,'Un cuore. Batte veloce.'],[.27,.24,'Il mare. Più forte di quello dell\'isola.'],[.72,.8,'Qualcosa di caldo, vicinissimo. Vibra.']];
     snd.forEach(s=>{const l=document.createElement('div');l.className='lbl';l.textContent=s[2];l.style.left=s[0]*100+'%';l.style.top=s[1]*100+'%';box.appendChild(l);s.el=l});
-    const c=document.createElement('div');c.className='choice';c.innerHTML='<p class="how">Ora sei <b>Kai</b>. Non vedi niente: tocca <b>ASCOLTA</b>, ogni suono disegna un pezzo della stanza.</p><div class="q">Suoni: 0 di 3</div>';
+    const c=document.createElement('div');c.className='choice';c.innerHTML='<p class="how">Ora sei <b>il bambino</b>. Non vedi niente: tocca <b>ASCOLTA</b>, ogni suono disegna un pezzo della stanza.</p><div class="q">Suoni: 0 di 3</div>';
     const b=document.createElement('button');b.type='button';b.className='big';b.textContent='ASCOLTA';c.appendChild(b);
     col.appendChild(box);col.appendChild(c);reveal(c);
     const cv=box.querySelector('canvas'),x=cv.getContext('2d');let rings=[],n=0,on=true;const dpr=devicePixelRatio||1;
@@ -729,11 +754,11 @@ const SCENES=[
   if(a===0){bump("trust",20,"Il bambino se ne ricorderà.");await panel({txt:"dark"},[say(B,"...Nayra.")])}
   if(a===1){bump("trust",6);clue("Il bambino non ha un nome, solo un numero");await panel({txt:"dark"},[say(B,"Sì. Sono io.")])}
   if(a===2){bump("trust",-20,"Il suo cuore accelera. E sente che anche il tuo accelera.");await panel({txt:"dark"},[say(B,"Nessuno. Sono scappato.")])}
-  await panel({img:"guilt"},[
+  await panel({img:S.f.hide===2?"cave_wrap":"guilt"},[
     say(B,"La nave... è colpa mia."),say(N,"Cosa dici?"),
     say(B,"Era troppo pesante. Gli altri hanno spinto troppo forte. Non volevano. Volevano solo che arrivassi."),
     say(N,"Arrivassi dove?"),say(B,"Fuori.")]);
-  await panel({img:"naming"},[
+  await panel(S.f.hide===2?{img:"cave"}:{img:"naming"},[
     say(N,"Come ti chiami?"),say(B,"Uno."),
     say(N,"Uno non è un nome. È un numero."),
     say(B,"Lì non ce n'erano, di nomi."),
@@ -984,7 +1009,7 @@ async function startGame(save){
   S=save?JSON.parse(JSON.stringify(save)):fresh();col.innerHTML='';show('game');feed.scrollTop=0;
   try{
     for(let i=S.scene;i<SCENES.length;i++){S.scene=i;store.set('save',S);$('sceneName').textContent='Cap. I · Scena '+(i<SC1?1:2)+' · '+SCENES[i][0];if(i===SC1&&S.scene===i&&col.children.length){const c=document.createElement('div');c.className='endc';c.innerHTML='<h3>Fine della Scena 1</h3><p>Il gioco ha salvato. Si continua con la Scena 2.</p>';col.appendChild(c);reveal(c);await tap()}
-      const h=document.createElement('div');h.className='note';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i<SC1?i+1:i-SC1+1)+' · '+SCENES[i][0];col.appendChild(h);
+      const h=document.createElement('div');h.className='note shead';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i<SC1?i+1:i-SC1+1)+' · '+SCENES[i][0];turn();col.appendChild(h);
       await SCENES[i][1]();}
     store.del('save');ending();
   }catch(e){if(e!==ABORT)console.error(e)}
