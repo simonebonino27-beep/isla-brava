@@ -340,19 +340,25 @@ function applySettings(){document.documentElement.style.setProperty('--fs',{s:.9
 applySettings();
 
 const $=id=>document.getElementById(id);
-const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp',naming:'img/naming.webp',argue:'img/argue.webp',door:'img/door.webp',lantern:'img/lantern.webp',truth:'img/truth.webp',cellar:'img/cellar.webp',cave:'img/cave.webp',coffee:'img/coffee.webp',bed:'img/bed.webp',flood:'img/flood.webp',run_dark:'img/run_dark.webp',shore:'img/shore.webp',debris:'img/debris.webp',heal:'img/heal.webp',flee:'img/flee.webp',grip:'img/grip.webp',pocket:'img/pocket.webp',shout:'img/shout.webp',guilt:'img/guilt.webp',cave_wrap:'img/cave_wrap.webp',innocent:'img/innocent.webp',listen:'img/listen.webp',lookup:'img/lookup.webp',diary:'img/diary.webp',smudges:'img/smudges.webp',s2_1:'img/s2_1.webp',s2_2:'img/s2_2.webp',s2_3:'img/s2_3.webp',s2_4:'img/s2_4.webp',s2_5:'img/s2_5.webp',s2_6:'img/s2_6.webp',s2_7:'img/s2_7.webp',s2_8:'img/s2_8.webp',s2_9:'img/s2_9.webp',s2_10:'img/s2_10.webp',s2_11:'img/s2_11.webp',s2_12:'img/s2_12.webp',s2_13:'img/s2_13.webp',s2_14:'img/s2_14.webp',s2_15:'img/s2_15.webp',s2_16:'img/s2_16.webp',s2_17:'img/s2_17.webp',s2_18:'img/s2_18.webp',s2_20:'img/s2_20.webp',s2_21:'img/s2_21.webp',s2_19:'img/s2_19.webp',s2_22:'img/s2_22.webp',s2_23:'img/s2_23.webp',s2_24:'img/s2_24.webp',s2_25:'img/s2_25.webp',s2_26:'img/s2_26.webp',s2_27:'img/s2_27.webp',s2_28:'img/s2_28.webp',s2_29:'img/s2_29.webp'};
-const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['pocket','La bottiglietta'],['papa','Le scale'],['smudges','Le ditate'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['run_dark','Al buio'],['heal','La ferita'],['t4','Sulla riva'],['shore','Soggetto Uno'],['sailor','Il marinaio'],['grip','L\'avvertimento'],['flee','La fuga'],['debris','I rottami'],['innocent','Che peccato'],['lantern','Nella lanterna'],['cellar','In cantina'],['cave_wrap','Nella grotta'],['cave','Pimienta nella grotta'],['shout','No!'],['truth','La verità'],['cat','Pimienta'],['guilt','La colpa'],['naming','Un nome'],['flood','La marea'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['listen','La voce'],['eco','Eco'],['lookup','Verso il faro'],['argue','Papà e gli uomini in nero'],['door','Alla porta'],['bed','Sotto il letto'],['coffee','Il caffè'],['diary','Il diario'],['doctor','Il dottor Marrajo'],['s2_3','Il gofio'],['s2_4','L\'oliva'],['s2_6','I cinque amici'],['s2_8','Eco torna'],['s2_9','Il faro dello Stato'],['s2_11','Il mercato'],['s2_14','Il corridoio'],['s2_15','La pentola'],['s2_16','Ciao, Uno'],['s2_17','Arguineguín'],['s2_19','Le lentiggini'],['s2_26','Nessuno, qui'],['s2_21','Il tramonto'],['s2_29','La grotta del nord']];
+const IMG={t1:'img/t1.webp',t2:'img/t2.webp',t3:'img/t3.webp',t4:'img/t4.webp',t5:'img/t5.webp',t6:'img/t6.webp',nayra:'img/nayra.webp',kai:'img/kai.webp',tomas:'img/tomas.webp',papa:'img/papa.webp',tonic:'img/tonic.webp',sailor:'img/sailor.webp',kitchen:'img/kitchen.webp',doctor:'img/doctor.webp',window:'img/window.webp',run:'img/run.webp',hands:'img/hands.webp',night:'img/night.webp',band:'img/band.webp',cat:'img/cat.webp',hide:'img/hide.webp',eco:'img/eco.webp',naming:'img/naming.webp',argue:'img/argue.webp',door:'img/door.webp',lantern:'img/lantern.webp',truth:'img/truth.webp',cellar:'img/cellar.webp',cave:'img/cave.webp',coffee:'img/coffee.webp',bed:'img/bed.webp',flood:'img/flood.webp',run_dark:'img/run_dark.webp',shore:'img/shore.webp',debris:'img/debris.webp',heal:'img/heal.webp',flee:'img/flee.webp',grip:'img/grip.webp',pocket:'img/pocket.webp',shout:'img/shout.webp',guilt:'img/guilt.webp',cave_wrap:'img/cave_wrap.webp',innocent:'img/innocent.webp',listen:'img/listen.webp',lookup:'img/lookup.webp',diary:'img/diary.webp',smudges:'img/smudges.webp',s2_1:'img/s2_1.webp',s2_2:'img/s2_2.webp',s2_3:'img/s2_3.webp',s2_4:'img/s2_4.webp',s2_5:'img/s2_5.webp',s2_6:'img/s2_6.webp',s2_7:'img/s2_7.webp',s2_8:'img/s2_8.webp',s2_9:'img/s2_9.webp',s2_10:'img/s2_10.webp',s2_11:'img/s2_11.webp',s2_12:'img/s2_12.webp',s2_13:'img/s2_13.webp',s2_14:'img/s2_14.webp',s2_15:'img/s2_15.webp',s2_16:'img/s2_16.webp',s2_17:'img/s2_17.webp',s2_18:'img/s2_18.webp',s2_20:'img/s2_20.webp',s2_21:'img/s2_21.webp',s2_19:'img/s2_19.webp',s2_22:'img/s2_22.webp',s2_23:'img/s2_23.webp',s2_24:'img/s2_24.webp',s2_25:'img/s2_25.webp',s2_26:'img/s2_26.webp',s2_27:'img/s2_27.webp',s2_28:'img/s2_28.webp',s2_29:'img/s2_29.webp',r1_bell:'img/r1_bell.webp',r1_window:'img/r1_window.webp',r1_village:'img/r1_village.webp',r1_kitchen:'img/r1_kitchen.webp',r1_door:'img/r1_door.webp',r2_oar:'img/r2_oar.webp',r2_cave:'img/r2_cave.webp',r2_talk:'img/r2_talk.webp'};
+const GALLERY=[['nayra','Nayra'],['kai','Kai'],['tomas','Papà Tomás'],['t1','Il faro, notte'],['window','La luce in mare'],['pocket','La bottiglietta'],['papa','Le scale'],['smudges','Le ditate'],['tonic','Il Tonico'],['t2','Nel cannocchiale'],['t3','Il naufragio'],['run','La discesa'],['run_dark','Al buio'],['heal','La ferita'],['t4','Sulla riva'],['shore','Soggetto Uno'],['sailor','Il marinaio'],['grip','L\'avvertimento'],['flee','La fuga'],['debris','I rottami'],['innocent','Che peccato'],['lantern','Nella lanterna'],['cellar','In cantina'],['cave_wrap','Nella grotta'],['cave','Pimienta nella grotta'],['shout','No!'],['truth','La verità'],['cat','Pimienta'],['guilt','La colpa'],['naming','Un nome'],['flood','La marea'],['band','La benda'],['t5','Gli occhi'],['kitchen','La cucina'],['t6','L\'alba'],['hide','Sotto la finestra'],['listen','La voce'],['eco','Eco'],['lookup','Verso il faro'],['argue','Papà e gli uomini in nero'],['door','Alla porta'],['bed','Sotto il letto'],['coffee','Il caffè'],['diary','Il diario'],['doctor','Il dottor Marrajo'],['s2_3','Il gofio'],['s2_4','L\'oliva'],['s2_6','I cinque amici'],['s2_8','Eco torna'],['s2_9','Il faro dello Stato'],['s2_11','Il mercato'],['s2_14','Il corridoio'],['s2_15','La pentola'],['s2_16','Ciao, Uno'],['s2_17','Arguineguín'],['s2_19','Le lentiggini'],['s2_26','Nessuno, qui'],['s2_21','Il tramonto'],['s2_29','La grotta del nord'],['r1_bell','La campana'],['r1_window','Una lanterna sulla spiaggia'],['r1_village','Il villaggio'],['r1_kitchen','La finestra di Pepe'],['r1_door','Pepe alla porta'],['r2_oar','Il remo'],['r2_cave','Bartolo nella grotta'],['r2_talk','Una domanda sola']];
 function unlock(id){if(!GAL.includes(id)){GAL.push(id);store.set('gallery',GAL)}}
 
 /* all decision points, for the route map */
 const NODES=[
  {id:'papa1',sc:'Il faro',q:'Papà e la lente',o:['Prometti di pulirla','La battuta sulla messa','Torni al diario']},
- {id:'lamp',sc:'La nave',q:'Come scendi alla riva',o:['Con la lanterna','Al buio']},
+ {id:'lamp',sc:'La nave',q:'Come scendi alla riva',o:['Con la lanterna','Al buio','Resti con papà']},
+ {id:'pepe1',sc:'La campana',q:'La lanterna verso il villaggio',o:['Esci di nascosto','Ci vai con papà','Torni a letto']},
+ {id:'pepe2',sc:'Il villaggio',q:'Come riprendi il bambino',o:['Dal retro','Bussi']},
+ {id:'pepe3',sc:'Il villaggio',q:'Pepe alla porta',o:['Il ciondolo','«Guardalo»','La minaccia']},
  {id:'pull',sc:'La riva',q:'Il salvataggio',o:['Lo tiri fuori in tempo','L\'onda lo colpisce']},
  {id:'sailor',sc:'Il marinaio',q:'Le lanterne si avvicinano',o:['Resti con il marinaio','Porti via il bambino','Resti paralizzata']},
+ {id:'bartolo',sc:'Il marinaio',q:'Il marinaio sotto l\'asse',o:['Provi a liberarlo','Pensi al bambino']},
+ {id:'bartq',sc:'La grotta',q:'Una domanda sola',o:['Cosa portavano via','Cosa portavano là','Chi comanda']},
  {id:'hide',sc:'Il faro',q:'Il nascondiglio',o:['La lanterna','La cantina','La grotta']},
  {id:'tell',sc:'Il faro',q:'Convincere papà',o:['La verità','La bugia','La supplica']},
  {id:'words',sc:'Kai',q:'Le prime parole',o:['Dolce','Curiosa','Diffidente']},
+ {id:'tide',sc:'L\'alba',q:'La marea sale',o:['Prima Kai','Prima Bartolo']},
  {id:'eco',sc:'L\'alba',q:'La voce di papà',o:['Rispondi','Resti in silenzio','Esiti']},
  {id:'band',sc:'La benda',q:'Papà e la benda',o:['Lo fermi','Lasci fare','Esiti']},
  {id:'tell2',sc:'Scena 2 · Un bambino nuovo',q:'La nuova storia per papà',o:['La verità','La cugina di Telde','«Non lo so nemmeno io»']},
@@ -365,7 +371,7 @@ const NODES=[
  {id:'confront',sc:'Scena 2 · Dopo',q:'Papà ti ha scoperta',o:['La verità','«Anche da te»','Silenzio']},
  {id:'face',sc:'Scena 2 · Dopo',q:'Il volto',o:['Sì','Meglio di no']},
  {id:'job',sc:'Scena 2 · L\'annuncio',q:'Il sanatorio',o:['Per i soldi','Per i bambini','Di nascosto']}];
-const ENDINGS=[['found','Ti hanno trovata','Eco sa dove sei'],['hidden','Nel silenzio','Gli uomini in nero non sanno niente'],['job','La porta principale','Nayra entra al sanatorio come aiutante'],['sneak','La grotta del lato nord','Nayra entrerà di nascosto']];
+const ENDINGS=[['found','Ti hanno trovata','Eco sa dove sei'],['hidden','Nel silenzio','Gli uomini in nero non sanno niente'],['job','La porta principale','Nayra entra al sanatorio come aiutante'],['sneak','La grotta del lato nord','Nayra entrerà di nascosto'],['silence','Il silenzio','Nayra non ha mai incontrato il bambino']];
 function markPath(id,i){if(i==null)return;const a=PATHS[id]||[];if(!a.includes(i)){a.push(i);PATHS[id]=a;store.set('paths',PATHS)}}
 function pathPct(){let tot=0,got=0;NODES.forEach(n=>{tot+=n.o.length;got+=(PATHS[n.id]||[]).length});return Math.round(got/tot*100)}
 
@@ -540,16 +546,16 @@ function telescope(){
   }));
 }
 /* action: pull him out */
-function pull(){
+function pull(o={}){
   return race(new Promise(res=>{turn();
     const c=document.createElement('div');c.className='act';
-    c.innerHTML=`<h3>Tiralo fuori prima dell'onda!</h3><p class="how">Tocca <b>TIRA</b> tante volte, più veloce che puoi. Se la barra rossa arriva in fondo prima di quella dorata, l'onda se lo porta via.</p><div class="meter"><b></b><span>NAYRA</span></div><div class="meter w"><b></b><span>L'ONDA</span></div>`;
+    c.innerHTML=`<h3>${o.h||"Tiralo fuori prima dell'onda!"}</h3><p class="how">${o.how||"Tocca <b>TIRA</b> tante volte, più veloce che puoi. Se la barra rossa arriva in fondo prima di quella dorata, l'onda se lo porta via."}</p><div class="meter"><b></b><span>NAYRA</span></div><div class="meter w"><b></b><span>${o.foe||"L'ONDA"}</span></div>`;
     const b=document.createElement('button');b.type='button';b.className='big';b.disabled=true;b.textContent='PRONTI…';c.appendChild(b);col.appendChild(c);reveal(c);
     const [pb,wb]=c.querySelectorAll('.meter b');let p=0,w=0,done=false,raf,taps=0;const sp=S.f.lamp?.32:.45;
-    const end=ok=>{if(done)return;done=true;cancelAnimationFrame(raf);b.disabled=true;b.classList.remove('pulse');b.textContent=ok?'PRESO!':'L\'ONDA…';setTimeout(()=>res(ok),700)};
+    const end=ok=>{if(done)return;done=true;cancelAnimationFrame(raf);b.disabled=true;b.classList.remove('pulse');b.textContent=ok?(o.win||'PRESO!'):(o.lose||'L\'ONDA…');setTimeout(()=>res(ok),700)};
     const tick=()=>{w+=sp;wb.style.width=Math.min(100,w)+'%';if(w>=100)end(false);else raf=requestAnimationFrame(tick)};
-    let n=3;const cd=()=>{if(n>0){b.textContent=n;n--;setTimeout(cd,650)}else{b.disabled=false;b.classList.add('pulse');b.textContent='TIRA!';raf=requestAnimationFrame(tick)}};setTimeout(cd,500);
-    b.onclick=e=>{e.stopPropagation();if(done)return;taps++;p+=7;pb.style.width=Math.min(100,p)+'%';b.textContent='TIRA! ×'+taps;if(p>=100)end(true)};
+    let n=3;const cd=()=>{if(n>0){b.textContent=n;n--;setTimeout(cd,650)}else{b.disabled=false;b.classList.add('pulse');b.textContent=o.verb||'TIRA!';raf=requestAnimationFrame(tick)}};setTimeout(cd,500);
+    b.onclick=e=>{e.stopPropagation();if(done)return;taps++;p+=7;pb.style.width=Math.min(100,p)+'%';b.textContent=(o.verb||'TIRA!')+' ×'+taps;if(p>=100)end(true)};
   }));
 }
 /* investigation on the debris */
@@ -569,6 +575,24 @@ function investigate(){
     const c=document.createElement('div');c.className='choice';c.innerHTML='<p class="how">Le lanterne sono ancora lontane. Tocca i <b>cerchi dorati</b> sulla tavola per esaminare gli oggetti, poi il pulsante qui sotto.</p><div class="q"></div>';
     const q=c.querySelector('.q');q.textContent='Oggetti esaminati: 0 di 3';
     const b=document.createElement('button');b.type='button';b.className='ch';b.innerHTML='<span>Basta, devo andare</span>';c.appendChild(b);col.appendChild(c);reveal(p);
+    b.onclick=e=>{e.stopPropagation();b.disabled=true;b.classList.add('picked');res()};
+  }));
+}
+/* look through a window: tap the spots */
+function peek(img,spots,how){
+  return race(new Promise(res=>{turn();unlock(img);
+    const blk=document.createElement('div');blk.className='blk';
+    const p=document.createElement('div');p.className='panel';p.style.position='relative';
+    p.innerHTML=`<img src="${IMG[img]}" alt="" style="display:block;width:100%;height:auto">`;
+    const talk=document.createElement('div');talk.className='talk';let found=0;
+    const c=document.createElement('div');c.className='choice';c.innerHTML=`<p class="how">${how}</p><div class="q"></div>`;
+    const q=c.querySelector('.q');q.textContent=`Guardati: 0 di ${spots.length}`;
+    spots.forEach(s=>{const d=document.createElement('button');d.type='button';d.className='spot';d.setAttribute('aria-label','Guarda');d.style.left=s[0]+'%';d.style.top=s[1]+'%';p.appendChild(d);
+      d.onclick=e=>{e.stopPropagation();if(d.classList.contains('found'))return;d.classList.add('found');found++;if(s[3])s[3]();q.textContent=`Guardati: ${found} di ${spots.length}`;
+        talk.innerHTML='';const it=itemEl(s[2]);talk.appendChild(it);requestAnimationFrame(()=>it.classList.add('on'));
+        if(found===spots.length){b.disabled=false;b.classList.remove('off')}}});
+    blk.append(p,talk);col.appendChild(blk);
+    const b=document.createElement('button');b.type='button';b.className='ch';b.disabled=true;b.innerHTML='<span>Continua</span>';c.appendChild(b);col.appendChild(c);reveal(p);
     b.onclick=e=>{e.stopPropagation();b.disabled=true;b.classList.add('picked');res()};
   }));
 }
@@ -611,6 +635,7 @@ const P="Papà",N="Nayra",K="Kai",B="Il bambino",M="Marinaio",U="Uomo in nero";
 const say=(who,s,c)=>({t:"say",who,s,c}),th=(s,who)=>({t:"th",who:who||N,s}),nar=s=>({t:"nar",s});
 function convinceThought(){
   if(S.f.warned)return "Perché ho urlato? «Non togliergli la benda, qualunque cosa ti dicano.» Me l'ha detto un uomo che stava morendo."+(S.f.crate?" E su quella cassa c'era lo squalo del dottore.":"");
+  if(S.f.pepe)return "Perché ho urlato? Sulla sua tunica c'è lo squalo dei Marrajo. E Pepe voleva venderlo proprio a loro.";
   if(S.f.crate)return "Perché ho urlato? Sulla spiaggia c'era una cassa con lo squalo dei Marrajo. E quel bambino veniva da quella nave.";
   return "Perché ho urlato? Non lo so. So solo che tremava. E che sulla spiaggia qualcuno lo cercava con le lanterne.";
 }
@@ -628,6 +653,81 @@ async function convince(when){
   if(a===1){S.f.lie=true;await panel({txt:"dark"},[say(P,"Arguineguín, eh? ...Va bene. Ma lo riaccompagni presto.")]);toast("Papà ci crede a metà. La bugia tornerà a galla.")}
   if(a===2){bump("papa",-8,"Papà cede, ma è preoccupato.");await panel({txt:"dark"},[say(P,"Un giorno. Uno solo.")])}
   if(S.f.messa&&a!==0)await panel({txt:"dark"},[say(P,"E se il dottore chiede, a messa ci vado tutte le domeniche.")]);
+}
+/* Ramo 1: Nayra stays with papà, Pepe takes the child */
+async function pepeNight(){
+  await panel({img:"r1_bell"},[
+    nar("Nayra sale con papà sul ballatoio. Tirano insieme la corda della campana, sotto la pioggia."),
+    say(P,"Brava. Stanotte servono braccia, non eroi."),
+    th("Laggiù qualcuno potrebbe essere ancora vivo. E io sto tirando una corda.")]);
+  await panel({img:"r1_window"},[
+    nar("Più tardi, dalla finestra. Lontano, sulla spiaggia, una lanterna si ferma tra i rottami. Poi torna piano verso il villaggio. Chi la porta ha qualcosa in braccio."),
+    say(N,"Papà, qualcuno ha preso qualcosa dalla spiaggia."),
+    say(P,"Sarà Pepe. Quello si prende tutto quello che porta il mare. Anche le scarpe dei morti.")]);
+  const a=await choose("pepe1","La lanterna va verso il villaggio",[{t:"Esci di nascosto e vai al villaggio"},{t:"«Papà, andiamo a vedere insieme.»",d:"Papà saprà tutto fin dall'inizio."},{t:"Torni a letto"}]);
+  if(a===2){
+    await panel({txt:"dark"},[nar("Nayra torna a letto. Fuori il vento si calma, piano, fino all'alba.")]);
+    await panel({img:"t6"},[nar("All'alba, sulla spiaggia, arriva una carrozza con uno squalo dipinto sulla portiera. Pepe parla con gli uomini in nero e gli consegna qualcosa avvolto in una rete."),
+      th("Da quassù sembra solo un fagotto. Non saprò mai cosa c'era dentro.")]);
+    await panel({txt:"dark"},[nar("Nayra non incontrerà mai quel bambino. Ma per anni, nelle notti di tempesta, guarderà la spiaggia e si chiederà che cosa ha lasciato andare.")]);
+    ENDS.includes("silence")||ENDS.push("silence");store.set("ends",ENDS);S.f.over="silence";return}
+  if(a===1){S.f.pepeDad=true;S.f.papaKnows=true;bump("papa",8,"Papà apprezza che tu gliel'abbia detto.")}
+  await panel({img:"r1_village"},[
+    nar(a===1?"Nayra e papà attraversano il villaggio addormentato. Una sola finestra è accesa: quella di Pepe.":"Nayra esce dal retro senza far rumore. Il villaggio dorme. Una sola finestra è accesa: quella di Pepe."),
+    th("Prima di bussare, voglio vedere cosa c'è dentro.")]);
+  await peek("r1_kitchen",[
+    [66,56,nar("Un bambino bendato, avvolto in una rete, dorme vicino al fuoco.")],
+    [57,36,nar("La moglie di Pepe gli asciuga i capelli con uno straccio, piano piano.")],
+    [60,69,th("Sul petto della tunica c'è uno squalo ricamato. Il simbolo dei Marrajo."),()=>clue("Sulla tunica del bambino c'è lo squalo dei Marrajo",1)]],
+    "Nayra guarda dalla finestra. Tocca i <b>cerchi dorati</b> sulla tavola.");
+  await panel({txt:"dark"},[th("Lo tengono al caldo. Ma sanno di chi è.")]);
+  let door=a===1;
+  if(!door){
+    const b=await choose("pepe2","Come lo riprendi?",[{t:"Entri dal retro",d:"Tre passi al buio. Se fai rumore, si sveglia il cane."},{t:"Bussi e parli con Pepe"}]);
+    if(b===0){
+      const steps=[["Il cortile",[{t:"Passi sotto le reti appese",d:"Ci sono dei galleggianti di vetro."},{t:"Cammini rasente al muro"}],0],
+        ["La cesta",[{t:"La scavalchi"},{t:"La sposti di lato",d:"È piena di cipolle."}],1],
+        ["La porta",[{t:"La spingi piano"},{t:"La sollevi un poco e poi la apri",d:"I cardini sono vecchi."}],0]];
+      let noise=false;
+      for(const [q,o,bad] of steps){const k=await choose("step",q,o);if(k===bad){noise=true;break}}
+      if(noise){door=true;await panel({txt:"dark"},[{t:"sfx",s:"BAU! BAU!"},nar("Il cane abbaia. In casa si accende un'altra lampada.")])}
+      else{S.f.wifeAlly=true;
+        await panel({txt:"dark"},[nar("Nayra entra in cucina. La moglie di Pepe si gira. Non urla. La guarda a lungo."),
+          say("Moglie di Pepe","Sei la figlia di Tomás."),
+          say("Moglie di Pepe","Portalo via, prima che Pepe si svegli. Io non ho visto niente."),
+          th("Grazie. Grazie davvero.")])}
+    }else door=true}
+  if(door){
+    await panel({img:"r1_door"},[
+      say("Pepe",a===1?"Tomás. E tua figlia. Alle tre di notte. So perché siete qui.":"Nayra di Tomás. Alle tre di notte. So perché sei qui."),
+      say(N,"Quel bambino non è roba del mare, Pepe."),
+      say("Pepe","Ha lo squalo dei Marrajo sulla camicia. E i Marrajo pagano sempre, quando gli riporti qualcosa. Mia moglie cuce reti finché le sanguinano le dita, Nayra.")]);
+    const c=await choose("pepe3","Cosa dici a Pepe?",[
+      {t:"«Ti do il ciondolo della mamma.»",d:"L'unica cosa che ti resta di lei."},
+      {t:"«Guardalo. Si tiene la benda anche mentre dorme. Ha paura di qualcuno, non del mare.»"},
+      {t:"«Se non me lo dai, dico alla Guardia Civil che rubi ai morti.»"}]);
+    if(c===0){S.f.noPendant=true;await panel({txt:"dark"},[nar("Pepe guarda il ciondolo a lungo. Poi lo chiude nel pugno."),say("Pepe","Prendilo e vattene."),th("Scusa, mamma.")])}
+    if(c===1){S.f.pepeAlly=true;await panel({txt:"dark"},[say("Moglie di Pepe · da dentro","Pepe."),nar("Lei gli mette una mano sul braccio. Pepe sospira e si fa da parte."),say("Pepe","Non l'abbiamo mai visto. Né io né lei.")]);toast("Pepe e sua moglie sono dalla tua parte.")}
+    if(c===2){S.f.pepeEnemy=true;await panel({txt:"dark"},[nar("Pepe diventa rosso. Poi si fa da parte."),say("Pepe","Prendilo. Ma questa me la ricordo, Nayra di Tomás."),th("Me lo sono fatto nemico.")]);toast("Pepe non te la perdonerà.")}
+  }
+  await panel({txt:"dark"},[
+    nar("All'alba Nayra rientra al faro con il bambino in braccio, ancora avvolto nella rete.")]);unlock("kai");
+  await panel({txt:"dark"},[
+    say(B,"Odora di pesce. Tutto odora di pesce.","whisper kai"),
+    say(N,"Benvenuto nel mondo di fuori.")]);
+}
+/* Ramo 2: Bartolo in the cave, one question */
+async function bartoloNight(){
+  if(!S.f.bartolo)return;
+  await panel({img:"r2_talk"},[
+    nar("Più tardi, quella notte, Nayra torna nella grotta con del pane e una coperta."),
+    say("Bartolo","Ho fatto quella rotta per due anni. Non ero lì per caso: ero lì per non fare domande."),
+    say("Bartolo","Chiedimi una cosa, ragazza. Una sola, finché ho la testa lucida.")]);
+  const q=await choose("bartq","Cosa gli chiedi?",[{t:"«Cosa portavate via dall'isola?»"},{t:"«Cosa portavate all'isola?»"},{t:"«Chi comanda, là?»"}]);
+  if(q===0){await panel({txt:"dark"},[say("Bartolo","Casse di cenere. Cenere azzurra. Il Tonico lo fanno con quella.")]);clue("Il Tonico è fatto con una cenere azzurra che viene dall'isola",1)}
+  if(q===1){await panel({txt:"dark"},[say("Bartolo","Culle vuote. E dopo qualche settimana riportavamo indietro delle casse piccole. Troppo piccole.")]);clue("Sull'isola arrivano culle vuote. Ne escono casse piccole",1)}
+  if(q===2){await panel({txt:"dark"},[say("Bartolo","Il dottore lo vedi alle feste. L'altro non lo vedi mai. Gli uomini in nero lo chiamano «il professore».")]);clue("Sopra il dottore c'è qualcuno: «il professore»",1)}
+  await panel({txt:"dark"},[nar("Poi la febbre lo trascina nel sonno.")]);
 }
 const SCENES=[
 ["Il faro",async()=>{
@@ -671,17 +771,18 @@ const SCENES=[
   await panel({img:"t3",shake:1},[{t:"sfx",s:"KRAAASH"},
     say(P,"Vado a suonare la campana per i pescatori. Tu resta qui."),
     say(N,"Certo, papà."),th("Neanche per sogno.")]);
-  const a=await choose("lamp","Come scendi alla riva?",[{t:"Prendo la lanterna",d:"Vedi meglio. Ma da lontano qualcuno vedrà la tua luce."},{t:"Scendo al buio",d:"Sulla riva sarai più lenta. Nessuno ti vedrà."}]);
-  S.f.lamp=a===0;
+  const a=await choose("lamp","Come scendi alla riva?",[{t:"Prendo la lanterna",d:"Vedi meglio. Ma da lontano qualcuno vedrà la tua luce."},{t:"Scendo al buio",d:"Sulla riva sarai più lenta. Nessuno ti vedrà."},{t:"Resto con papà",d:"Lo aiuti con la campana. Alla riva scenderà qualcun altro."}]);
+  S.f.lamp=a===0;S.f.pepe=a===2;
 }],
 ["La riva",async()=>{
+  if(S.f.pepe)return pepeNight();
   await panel({img:S.f.lamp?"run":"run_dark"},[
     nar(S.f.lamp?"La spiaggia è piena di assi, corde e casse sfondate. Non si muove nessuno.":"Nayra scende a tentoni. Un lampo illumina la spiaggia: assi, corde, casse sfondate. Non si muove nessuno."),
     th("Lo scoglio del Fraile. La corrente porta tutto lì."),
     nar("Dietro lo scoglio c'è una sagoma piccola. Ogni onda la trascina un po' più al largo.")]);
   const ok=await pull();markPath("pull",ok?0:1);S.log.push({id:"pull",i:ok?0:1});
   if(!ok){
-    await panel({txt:"dark"},[nar("L'onda lo sbatte contro la roccia. Quando Nayra riesce ad afferrarlo, ha la fronte aperta.")]);
+    S.f.cut=true;await panel({txt:"dark"},[nar("L'onda lo sbatte contro la roccia. Quando Nayra riesce ad afferrarlo, ha la fronte aperta.")]);
     await panel({img:"heal"},[th("Poi il taglio si richiude. Da solo, in meno di un minuto.")]);
     clue("La ferita del bambino si è richiusa da sola",1)}
   unlock("kai");
@@ -695,6 +796,7 @@ const SCENES=[
     th("La benda è annodata stretta. Il braccialetto non ha chiusura. Qualcuno non voleva che se li togliesse.")]);
 }],
 ["Il marinaio",async()=>{
+  if(S.f.pepe)return;
   await panel({img:"sailor"},[
     nar("Una voce arriva da sotto un'asse spezzata."),
     say(M,"L'hai trovato... Respira ancora?"),
@@ -711,48 +813,70 @@ const SCENES=[
     say(N,"Perché? Da dove venite?"),
     say(M,"Dall'isola del sanatorio. Portiamo le provviste. Il bambino si era nascosto nella stiva."),
     say(M,"Abbiamo provato a tornare indietro, ma la nave non girava. Sulla riva c'erano dei bambini, in fila. Guardavano la nave. E la nave si muoveva."),
-    nar("Il marinaio non dice altro."),
     th("Bambini che spostano una nave guardandola. Sto sognando. Per forza.")]);
   clue("Dei bambini dell'isola del sanatorio hanno spinto la nave",1);
+  const b=await choose("bartolo","Il marinaio è ancora sotto l'asse",[{t:"Provo a liberarlo",d:"Con un remo puoi fare leva. Ma le lanterne si avvicinano."},{t:"Lo lascio e penso al bambino"}]);
+  if(b===0){
+    const ok=await pull({h:"Fai leva con il remo!",how:"Tocca <b>SPINGI</b> tante volte, più veloce che puoi. Se la barra rossa arriva in fondo prima di quella dorata, l'asse non si muove più.",foe:"L'ASSE",verb:"SPINGI!",win:"SI ALZA!",lose:"NON SI MUOVE…"});
+    if(ok){S.f.bartolo=true;unlock("r2_oar");
+      await panel({img:"r2_oar"},[
+        nar("L'asse si solleva. Il marinaio si trascina fuori, con una gamba piegata male."),
+        say(M,"Bartolo. Mi chiamo Bartolo. Trent'anni di mare, e mi salva una ragazza con un remo."),
+        say(N,"Arrivano le lanterne. Riesce a camminare?"),
+        say("Bartolo","No. Ma a strisciare sì. Portami dove non mi trovano, e poi pensa al bambino.")]);
+      await panel({img:"r2_cave"},[
+        nar("La grotta sotto gli scogli è a pochi passi. Nayra ci trascina dentro Bartolo, gli lega la gamba tra due assi e gli lascia il suo scialle."),
+        th("Il faro è troppo in alto per lui. La grotta è l'unico posto. Basta che non arrivi l'alta marea.")]);
+      toast("Bartolo è vivo.");return}
+    await panel({txt:"dark"},[nar("L'asse non si muove più. Quando Nayra si ferma, senza fiato, il marinaio ha chiuso gli occhi.")])}
+  else await panel({txt:"dark"},[nar("Il marinaio non dice altro.")]);
   await investigate();
 }],
 ["Di nuovo al faro",async()=>{
-  const h=await choose("hide","Dove nascondi il bambino?",[{t:"In cima, nella stanza della lanterna",d:"Calda e asciutta. Ma è il primo posto dove guarderebbe chiunque."},{t:"In cantina, tra le botti",d:"Buia. Ma papà ci scende ogni sera a prendere il vino."},{t:"Nella grotta sotto gli scogli",d:"Non la conosce nessuno. Ma con l'alta marea si allaga."}]);
+  const h=await choose("hide","Dove nascondi il bambino?",[{t:"In cima, nella stanza della lanterna",d:"Calda e asciutta. Ma è il primo posto dove guarderebbe chiunque."},{t:"In cantina, tra le botti",d:"Buia. Ma papà ci scende ogni sera a prendere il vino."},{t:"Nella grotta sotto gli scogli",d:S.f.bartolo?"C'è già Bartolo. Ma con l'alta marea si allaga.":"Non la conosce nessuno. Ma con l'alta marea si allaga."}]);
   S.f.hide=h;
+  if(S.f.pepeDad){
+    await panel({img:h===2?"cave_wrap":h===0?"lantern":"cellar"},[
+      nar(h===2?"Nella grotta, Nayra avvolge il bambino in due coperte e gli lascia una candela.":h===0?"Il bambino si rannicchia accanto alla lente, ancora avvolto nella rete.":"Il bambino si rannicchia tra le botti, ancora avvolto nella rete."),
+      say(P,"Lo teniamo noi, finché non capiamo chi lo cerca. Ma nessuno deve saperlo. Nemmeno al porto."),
+      th("Papà ha visto lo squalo sulla tunica. Non nomina più il dottore.")]);
+    return bartoloNight()}
+  const back=S.f.pepe?"Poco dopo papà rientra dal porto, fradicio, e si lascia cadere su una sedia.":null;
   if(h===2){
     await panel({img:"cave_wrap"},[
       nar("Nella grotta, Nayra avvolge il bambino in due coperte e gli lascia una candela."),
       say(N,"Torno presto. Non muoverti.")]);
     await panel({img:"innocent"},[
-      nar("Un'ora dopo, in cucina. Papà rientra fradicio e si lascia cadere su una sedia."),
+      nar(back||"Un'ora dopo, in cucina. Papà rientra fradicio e si lascia cadere su una sedia."),
       say(P,"Niente. Nessun superstite. Una nave senza nome e senza bandiera."),
       say(N,"Che peccato."),
       say(P,"«Che peccato»? Ti senti bene?"),
       th("Stanotte papà non deve sapere niente. Domani ci penso.")]);
-    S.f.secret=true;return}
+    S.f.secret=true;return bartoloNight()}
   await panel({img:"innocent"},[
-    nar("Un'ora dopo. Papà rientra fradicio e si lascia cadere su una sedia."),
+    nar(back||"Un'ora dopo. Papà rientra fradicio e si lascia cadere su una sedia."),
     say(P,"Niente. Nessun superstite. Una nave senza nome e senza bandiera."),
     ...(h===0?[say(P,"Con questo vento la lanterna fa le bizze. Vado a controllarla."),th("No. No, no, no.")]
             :[say(P,"Mi ci vuole un bicchiere. Scendo a prendere il vino."),th("La cantina. Ogni sera scende in cantina. Come ho fatto a non pensarci?")])]);
   await panel({img:h===0?"lantern":"cellar"},[
     nar(h===0?"Papà sale. Nayra gli corre dietro. Il bambino è rannicchiato accanto alla lente.":"Papà scende in cantina. Nayra gli corre dietro. Il bambino è tra le botti, e trema."),
     say(P,"E questo chi è?"),
-    say(N,"L'ho trovato sulla spiaggia.")]);
+    say(N,S.f.pepe?"L'ho trovato da Pepe. Lo voleva rivendere.":"L'ho trovato sulla spiaggia.")]);
   await convince("Domattina");
+  await bartoloNight();
 }],
 ["Kai",async()=>{
   await sonar();
   const cave=S.f.hide===2;
-  await panel({img:cave?"cave":"cat"},[...(cave?[nar("Più tardi, quando papà dorme, Nayra torna nella grotta. Pimienta l'ha seguita fin quaggiù.")]:[]),
+  await panel({img:cave?"cave":"cat"},[...(cave?[nar(S.f.bartolo?"Bartolo dorme per la febbre. Nayra si siede accanto al bambino. Pimienta l'ha seguita fin quaggiù.":S.f.pepe?"Più tardi, appena può, Nayra torna nella grotta. Pimienta l'ha seguita fin quaggiù.":"Più tardi, quando papà dorme, Nayra torna nella grotta. Pimienta l'ha seguita fin quaggiù.")]:[]),
     say(B,cave?"C'è... qualcosa ai miei piedi. Vibra.":"C'è... qualcosa sulla pancia. Vibra."),
     say(N,"È Pimienta, la gatta. Fa le fusa."),
     say(B,"Morde?"),
     say(N,"Solo se sei papà.")]);
   await panel({txt:"dark"},[say(B,"Fa sempre così?"),say(N,"Solo con chi le piace."),say(B,"...Le piaccio?"),say(N,"Pare proprio di sì.")]);
-  const a=await choose("words","Cosa gli dici?",[{t:"«Sei al sicuro. Io sono Nayra.»"},{t:"«Soggetto Uno... sei tu?»"},{t:"«Chi ti ha mandato?»"}]);
+  const a=await choose("words","Cosa gli dici?",[{t:"«Sei al sicuro. Io sono Nayra.»"},{t:S.f.pepe?"«Da dove vieni?»":"«Soggetto Uno... sei tu?»"},{t:"«Chi ti ha mandato?»"}]);
   if(a===0){bump("trust",20,"Il bambino se ne ricorderà.");await panel({txt:"dark"},[say(B,"...Nayra.")])}
-  if(a===1){bump("trust",6);clue("Il bambino non ha un nome, solo un numero");await panel({txt:"dark"},[say(B,"Sì. Sono io.")])}
+  if(a===1){bump("trust",6);clue("Il bambino non ha un nome, solo un numero");await panel({txt:"dark"},[say(B,S.f.pepe?"Da un'isola. Lì non avevo un nome. Ero Soggetto Uno.":"Sì. Sono io.")])}
   if(a===2){bump("trust",-20,"Il suo cuore accelera. E sente che anche il tuo accelera.");await panel({txt:"dark"},[say(B,"Nessuno. Sono scappato.")])}
   await panel({img:S.f.hide===2?"cave_wrap":"guilt"},[
     say(B,"La nave... è colpa mia."),say(N,"Cosa dici?"),
@@ -768,16 +892,21 @@ const SCENES=[
   S.f.named=true;
 }],
 ["L'alba",async()=>{
-  if(S.f.secret){
+  if(S.f.hide===2){
     await panel({img:"flood"},[
-      nar("All'alba Nayra scende a controllare. La marea è salita: l'acqua arriva già alle caviglie."),
+      nar((S.f.pepe?"A metà mattina":"All'alba")+" Nayra scende a controllare. La marea è salita: l'acqua arriva già alle caviglie."),
       say(K,"Nayra. L'acqua.","whisper kai"),
-      th("L'alta marea. Me n'ero dimenticata. Devo portarlo su prima che papà si svegli."),
-      nar("Nayra lo nasconde in camera sua.")]);
-    S.f.secret="up"}
+      th(S.f.secret?"L'alta marea. Me n'ero dimenticata. Devo portarlo su prima che papà lo trovi.":"L'alta marea. Me n'ero dimenticata.")]);
+    if(S.f.bartolo){
+      await panel({img:"r2_cave"},[nar("Bartolo è sveglio, la gamba legata tra le assi. Non riesce ad alzarsi da solo."),say("Bartolo","Uno alla volta, ragazza. Non ce la fai con tutti e due.")]);
+      const t=await choose("tide","La marea sale. Chi porti al sicuro per primo?",[{t:"Prima Kai"},{t:"Prima Bartolo",d:"Kai resterà da solo nell'acqua che sale."}],{t:1,def:0});
+      if(t===0){S.f.bartWeak=true;await panel({txt:"dark"},[nar("Nayra porta Kai fuori dalla grotta. Quando torna, l'acqua arriva al petto di Bartolo. Lo trascina sulla sporgenza più alta, dove il mare non arriva."),say("Bartolo","Brava. Il bambino prima. Sempre."),nar("Trema di febbre. Ma è vivo.")])}
+      else{bump("trust",-10,"Kai ha avuto paura.");await panel({txt:"dark"},[nar("Nayra trascina Bartolo sulla sporgenza più alta. Quando torna da Kai, l'acqua gli arriva alla vita. Non piange. Si tiene la benda con tutte e due le mani."),say(K,"Pensavo che non tornassi.","whisper kai")])}}
+    await panel({txt:"dark"},[nar("Nayra nasconde Kai in camera sua.")]);
+    S.f.secret=S.f.secret?"up":false}
   await panel({img:"t6"},[
     nar("Sulla spiaggia ci sono degli uomini vestiti di nero e una carrozza con uno squalo dipinto sulla portiera."),
-    th("Il dottor Marrajo in persona. Alle sei del mattino. Per una nave «senza nome».")]);
+    th(S.f.pepe?"Il dottor Marrajo in persona. Per una nave «senza nome».":"Il dottor Marrajo in persona. Alle sei del mattino. Per una nave «senza nome».")]);
   await panel({img:"argue"},[
     nar("Papà scende a parlare con loro. Si sente fino al faro, da quanto urla."),
     say(P+" · dalla spiaggia","Ve l'ho detto: non c'è nessun superstite! Vado al porto a chiamare la Guardia Civil.","shout off"),
@@ -786,10 +915,11 @@ const SCENES=[
   await panel({img:"listen"},[say("Voce di papà · dalla spiaggia","NAYRA! Scendi, presto! Ho bisogno di te!","shout off"),th("È la voce di papà. Ma papà è andato al porto.")]);
   if(S.trust>=60)await panel({img:"hide"},[say(K,"Non è lui. Quel cuore batte piano, come se si stesse divertendo. È Eco: sa imitare chiunque. Se rispondi, saprà dove sei.","whisper kai")]);
   const a=await choose("eco","La voce di tuo padre ti chiama",[{t:"«Arrivo, papà!»"},{t:"Resti in silenzio"}],{t:1,def:null});
-  if(a===0){ENDS.includes("found")||ENDS.push("found");S.f.found=true;await panel({img:"lookup"},[nar("Gli uomini in nero alzano la testa verso il faro. Ora sanno dove sei.")]);toast("Il sospetto di Grau è salito.")}
+  if(a===0){ENDS.includes("found")||ENDS.push("found");S.f.found=true;await panel({img:"lookup"},[nar("Gli uomini in nero alzano la testa verso il faro. Ora sanno dove sei.")]);toast("Ora gli uomini in nero guardano il faro.")}
   else{ENDS.includes("hidden")||ENDS.push("hidden");if(a==null){bump("trust",5);await panel({txt:"dark"},[nar("Nayra trattiene il fiato. Il cuore le batte così forte che Kai le mette una mano sulla bocca.")])}
     await panel({img:"eco"},[nar("Dalla spiaggia arriva una risata di bambino. Poi più niente.")]);clue("Qualcuno sa imitare le voci alla perfezione",1)}
   store.set("ends",ENDS);
+  if(S.f.pepeEnemy){await panel({txt:"dark"},[nar("Più tardi, dalla finestra, Nayra vede Pepe sulla spiaggia. Parla con un uomo in nero e indica il faro."),th("Gli ho dato un motivo per odiarmi. E lui l'ha usato subito.")]);S.f.found=true}
   await panel({img:"doctor",crop:["3/4","50% 30%"]},[
     nar("Sulla spiaggia, lontano da tutti, il dottore guarda il faro. Ha gli occhi lucidi."),
     say("Dottor Marrajo · tra sé","Dove sei andato, piccolo mio?","whisper")]);
@@ -815,7 +945,7 @@ const SCENES=[
   }
   await panel({img:"band"},[
     nar("Più tardi, papà si inginocchia davanti al bambino con una ciotola d'acqua."),
-    say(P,"Hai del sangue sulla benda, ragazzo. Fammi dare un'occhiata."),
+    say(P,S.f.cut?"Hai del sangue sulla benda, ragazzo. Fammi dare un'occhiata.":"Hai la benda incrostata di sale, ragazzo. Fammi dare una pulita."),
     nar("Le dita di papà sono già sul nodo. Kai si irrigidisce.")]);
   const a=await choose("band","Papà sta per togliergli la benda",[{t:"«Papà, fermo!»"},{t:"Lasci fare a papà"}],{t:1,def:null});if(a!==0){S.f.forgot=true;S.f.papaKnows=false;S.f.lie=false}
   if(a===0){bump("trust",15,"Kai se ne ricorderà.");bump("papa",-6);
@@ -970,6 +1100,10 @@ SCENES.push(
 }],
 ["Dopo",async()=>{
   await panel({txt:"dark"},[nar(((S.f.d0||15)+1)+" ottobre, sera.")]);
+  if(S.f.bartolo&&S.f.found){S.f.bartTaken=true;
+    await panel({img:"r2_cave"},[nar("Nayra scende alla grotta con il pane per Bartolo. Sente dei passi dietro di sé. Troppo tardi."),nar("Due uomini in nero la superano ed entrano.")]);
+    await panel({txt:"dark"},[say("Bartolo","Il bambino è annegato. Sono l'unico rimasto."),nar("Lo portano via a braccia. Bartolo non guarda Nayra nemmeno una volta."),th("Ha mentito per noi. E io li ho portati da lui.")]);
+    toast("Bartolo è nelle mani del sanatorio.")}
   if(S.f.lie&&!S.f.forgot&&!S.f.papaKnows){
     await panel({img:"s2_17"},[nar("Bussa un vecchio pescatore, il berretto tra le mani."),say("Pepe, pescatore","Tomás, ho chiesto in giro ad Arguineguín. Nessuno ha perso un figlio. Nessuno."),say(P,"Grazie, Pepe. Grazie."),nar("Papà chiude la porta e si gira lentamente."),say(P,"Arguineguín, eh?")]);
     const a=await choose("confront","Papà ti ha scoperta",[{t:"Gli dici finalmente la verità",d:S.kc?"Hai qualcosa da raccontargli.":"Non hai visto niente da raccontargli.",off:!S.kc},{t:"«Volevo proteggerlo. Anche da te.»"},{t:"Non dici niente"}]);
@@ -985,6 +1119,11 @@ SCENES.push(
   else await panel({txt:"dark"},[nar("Kai abbassa la mano."),say(K,"Va bene.")]);
 }],
 ["L'annuncio",async()=>{
+  if(S.f.bartolo&&!S.f.bartTaken){
+    await panel({img:"r2_talk"},[nar("La notte prima, nella grotta. Bartolo ha ancora la febbre, ma la testa è lucida."),
+      ...(S.f.papaKnows?[say(P,"Bartolo, vecchio pirata! Ti credevo morto."),say("Bartolo","Anch'io, Tomás. Ringrazia tua figlia.")]:[]),
+      say("Bartolo","I Marrajo hanno già una barca nuova per le provviste. Parte ogni giovedì. Chi si nasconde tra le casse, entra.")]);
+    if(S.f.papaKnows)bump("papa",4);clue("Ogni giovedì una barca porta le provviste all'isola",1);S.f.boat=true}
   await panel({img:"s2_20"},[nar(((S.f.d0||15)+2)+" ottobre. Papà rientra dal paese con un foglio piegato e lo posa sul tavolo."),say(P,S.f.messa?"L'ha letto il prete, dopo la messa. Sì, ci sono andato. Non dirlo a nessuno.":"L'ha letto il prete, dopo la messa.")]);
   await panel({txt:"paper"},[nar("IL SANATORIO MARRAJO CERCA UNA GIOVANE CHE SAPPIA LEGGERE E SCRIVERE, PER TENERE I REGISTRI DEI PICCOLI PAZIENTI. VITTO E ALLOGGIO."),th("Leggere e scrivere. È l'unica cosa che so fare meglio di chiunque altro sull'isola."),
     th(S.f.logbook?"I registri dei pazienti. E un «laboratorio inferiore» che non compare da nessuna parte. Se c'è, sarà scritto lì.":S.f.poster?"Sanno della benda. Lì dentro qualcuno sa esattamente cos'è Kai.":"Gli altri cinque sono là dentro. Qualcuno deve pur entrarci.")]);
@@ -1010,14 +1149,15 @@ async function startGame(save){
   try{
     for(let i=S.scene;i<SCENES.length;i++){S.scene=i;store.set('save',S);$('sceneName').textContent='Cap. I · Scena '+(i<SC1?1:2)+' · '+SCENES[i][0];if(i===SC1&&S.scene===i&&col.children.length){const c=document.createElement('div');c.className='endc';c.innerHTML='<h3>Fine della Scena 1</h3><p>Il gioco ha salvato. Si continua con la Scena 2.</p>';col.appendChild(c);reveal(c);await tap()}
       const h=document.createElement('div');h.className='note shead';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i<SC1?i+1:i-SC1+1)+' · '+SCENES[i][0];turn();col.appendChild(h);
-      await SCENES[i][1]();}
+      await SCENES[i][1]();if(S.f.over)break;}
     store.del('save');ending();
   }catch(e){if(e!==ABORT)console.error(e)}
 }
 function ending(){
   const n=NODES.filter(x=>(PATHS[x.id]||[]).length).length;
   const c=document.createElement('div');c.className='endc';
-  c.innerHTML=`<h3>Fine della Scena 2</h3><p>Prossimamente: Parte 2, Il ragazzo senza volto.</p><p>Percorsi scoperti: ${pathPct()}% · ${ENDS.length}/${ENDINGS.length} finali di scena</p><div class="prog"><i style="width:${pathPct()}%"></i></div>`;
+  const ov=S&&S.f.over&&ENDINGS.find(e=>e[0]===S.f.over);
+  c.innerHTML=`<h3>${ov?'Finale: '+ov[1]:'Fine della Scena 2'}</h3><p>${ov?'Una delle fini possibili del capitolo. Rigioca e scegli diverso.':'Prossimamente: Parte 2, Il ragazzo senza volto.'}</p><p>Percorsi scoperti: ${pathPct()}% · ${ENDS.length}/${ENDINGS.length} finali di scena</p><div class="prog"><i style="width:${pathPct()}%"></i></div>`;
   const bt=document.createElement('div');bt.className='btns';
   [['Vedi i percorsi',()=>page('paths')],['Rigioca e scegli diverso',()=>startGame(null)],['Menu principale',buildMenu]].forEach(([t,f])=>{const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent=t;b.onclick=e=>{e.stopPropagation();f()};bt.appendChild(b)});
   c.appendChild(bt);col.appendChild(c);reveal(c);
