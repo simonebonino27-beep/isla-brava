@@ -571,9 +571,9 @@ function investigate(){
     const blk=document.createElement('div');blk.className='blk';
     const p=document.createElement('div');p.className='panel';p.style.position='relative';unlock('debris');
     p.innerHTML=`<img src="${IMG.debris}" alt="Rottami sulla spiaggia: una cassa, una bottiglia rotta, un registro" style="display:block;width:100%;height:auto">`;
-    const spots=[[24,40,'Una cassa con lo squalo dei Marrajo','Lo squalo dei Marrajo. Cosa ci fa su una nave che porta provviste?','crate'],
-      [50,50,'Una bottiglia di Tonico che brilla tra i sassi','È il Tonico di papà. Brilla dello stesso azzurro del mare di stanotte.'],
-      [78,40,'Il registro di bordo: «Carico per il laboratorio inferiore, NON per il sanatorio»','Laboratorio inferiore. Sotto il sanatorio c\'è qualcos\'altro.','logbook']];
+    const spots=[[30,40,'Una cassa con lo squalo dei Marrajo','Lo squalo dei Marrajo. Cosa ci fa su una nave che porta provviste?','crate'],
+      [48,75,'Una bottiglia di Tonico che brilla tra i sassi','È il Tonico di papà. Brilla dello stesso azzurro del mare di stanotte.'],
+      [80,58,'Il registro di bordo: «Carico per il laboratorio inferiore, NON per il sanatorio»','Laboratorio inferiore. Sotto il sanatorio c\'è qualcos\'altro.','logbook']];
     const talk=document.createElement('div');talk.className='talk';let found=0;
     spots.forEach(s=>{const d=document.createElement('button');d.type='button';d.className='spot';d.setAttribute('aria-label','Esamina');d.style.left=s[0]+'%';d.style.top=s[1]+'%';p.appendChild(d);
       d.onclick=e=>{e.stopPropagation();if(d.classList.contains('found'))return;d.classList.add('found');found++;if(s[4])S.f[s[4]]=true;clue(s[2],1);q.textContent=`Oggetti esaminati: ${found} di 3`;
@@ -654,7 +654,7 @@ async function convince(when){
     th(convinceThought())]);
   const a=await choose("tell","Come convinci papà?",[
     {t:"Gli racconti quello che hai visto",d:S.kc?"Hai qualcosa da raccontargli.":"Non hai visto niente da raccontargli. Forse sulla spiaggia c'era qualcosa che ti sei persa.",off:!S.kc},
-    {t:"«È il figlio di un pescatore di Arguineguín. Lo riaccompagno io.»",d:"Una bugia."},
+    {t:S.f.pepe?"«Pepe si sbagliava. È il figlio di un pescatore di Arguineguín. Lo riaccompagno io.»":"«È il figlio di un pescatore di Arguineguín. Lo riaccompagno io.»",d:"Una bugia."},
     {t:"«Solo un giorno, papà. Ti prego.»"}]);
   if(a===0){bump("papa",14,"Papà ti crede.");S.f.papaKnows=true;await panel({img:"truth"},[nar("Papà ascolta senza dire niente. Poi fissa a lungo la bottiglietta e la rimette in tasca senza bere."),say(P,"Aspettiamo. Finché non ci capiamo qualcosa.")])}
   if(a===1){S.f.lie=true;await panel({txt:"dark"},[say(P,"Arguineguín, eh? ...Va bene. Ma lo riaccompagni presto.")]);toast("Papà ci crede a metà. La bugia tornerà a galla.")}
@@ -683,9 +683,9 @@ async function pepeNight(){
     nar(a===1?"Nayra e papà attraversano il villaggio addormentato. Una sola finestra è accesa: quella di Pepe.":"Nayra esce dal retro senza far rumore. Il villaggio dorme. Una sola finestra è accesa: quella di Pepe."),
     th("Prima di bussare, voglio vedere cosa c'è dentro.")]);
   await peek("r1_kitchen",[
-    [66,56,nar("Un bambino bendato, avvolto in una rete, dorme vicino al fuoco.")],
-    [57,36,nar("La moglie di Pepe gli asciuga i capelli con uno straccio, piano piano.")],
-    [60,69,th("Sul petto della tunica c'è uno squalo ricamato. Il simbolo dei Marrajo."),()=>clue("Sulla tunica del bambino c'è lo squalo dei Marrajo",1)]],
+    [60,66,nar("Un bambino bendato, avvolto in una rete, dorme vicino al fuoco.")],
+    [54,30,nar("La moglie di Pepe gli asciuga i capelli con uno straccio, piano piano.")],
+    [30,55,th("Sulla sedia c'è la sua tunica, stesa ad asciugare. Sul petto è ricamato uno squalo. Il simbolo dei Marrajo."),()=>clue("Sulla tunica del bambino c'è lo squalo dei Marrajo",1)]],
     "Nayra guarda dalla finestra. Tocca i <b>cerchi dorati</b> sulla tavola.");
   await panel({txt:"dark"},[th("Lo tengono al caldo. Ma sanno di chi è.")]);
   let door=a===1;
@@ -866,7 +866,7 @@ const SCENES=[
     say(N,"Sì, papà!"),
     th("No.")]);
   await panel({img:"papa"},[
-    nar("Papà sale le scale col fiatone, una mano sulla schiena.")]);
+    nar("Papà sale le scale col fiatone, una mano sulla schiena. A metà si ferma e beve un sorso dalla sua bottiglietta.")]);
   await panel({img:"smudges"},[
     say(P,"Pulita, eh? Vedo le ditate da qui."),
     say(N,"Sono... decorazioni."),
@@ -874,7 +874,7 @@ const SCENES=[
     say(N,"La mamma aveva pazienza."),
     say(P,"Per forza: aveva sposato me.")]);
   await panel({img:"tonic"},[
-    nar("Papà tira fuori la solita bottiglietta. Sull'etichetta c'è uno squalo: il simbolo dei Marrajo."),
+    nar("Papà rigira la bottiglietta tra le dita. Sull'etichetta c'è uno squalo: il simbolo dei Marrajo."),
     say(N,"Ancora quella roba?"),
     say(P,"Me l'ha data il dottor Marrajo. Dice che la schiena di un guardiano va oliata, come la lanterna."),
     th("«Il dottor Marrajo dice.» Ormai mezza isola parla così.")]);
@@ -1049,7 +1049,7 @@ const SCENES=[
   store.set("ends",ENDS);
   if(S.f.pepeEnemy){await panel({txt:"dark"},[nar("Più tardi, dalla finestra, Nayra vede Pepe sulla spiaggia. Parla con un uomo in nero e indica il faro."),th("Gli ho dato un motivo per odiarmi. E lui l'ha usato subito.")]);S.f.found=true}
   await panel({img:"doctor",crop:["3/4","50% 30%"]},[
-    nar("Sulla spiaggia, lontano da tutti, il dottore guarda il faro. Ha gli occhi lucidi."),
+    nar("Sulla spiaggia, lontano da tutti, il dottore guarda il faro. Beve un sorso da una bottiglietta azzurra. Ha gli occhi lucidi."),
     say("Dottor Marrajo · tra sé","Dove sei andato, piccolo mio?","whisper")]);
 }],
 ["La benda",async()=>{
@@ -1225,7 +1225,7 @@ SCENES.push(
     await panel({img:"s2_10"},[say(U,"Il dottore le manda i suoi saluti, signorina. E le ricorda che al sanatorio cercano ragazze sveglie. Pagano bene."),th("Ha visto Kai. E mi sta offrendo un lavoro.")]);return}
   if(caught&&(S.f.ecoKnows||S.trust<40))return captured();
   if(caught){
-    await panel({img:"s2_16"},[nar("Eco si accovaccia davanti al nascondiglio di Kai. È a un palmo dalla sua benda."),say("Eco · sottovoce, con la sua voce","Ciao, Uno."),say(K,"...Ciao, Eco."),nar("Un lungo silenzio.")]);
+    await panel(S.f.kaiRoom===2?{img:"s2_16"}:{txt:"dark"},[nar("Eco si accovaccia davanti al nascondiglio di Kai. È a un palmo dalla sua benda."),say("Eco · sottovoce, con la sua voce","Ciao, Uno."),say(K,"...Ciao, Eco."),nar("Un lungo silenzio.")]);
     await panel({txt:"dark"},[say("Eco · ad alta voce","Qui niente! Andiamo."),say("Eco · a Kai, sottovoce","Mi devi un favore."),th("Perché l'ha lasciato andare?")]);
     S.f.ecoDebt=true;
   }else{
