@@ -1186,7 +1186,7 @@ SCENES.push(
   if(S.f.mount)return mountainEnd();
   await panel({txt:"dark"},[nar(((S.f.d0||15)+1)+" ottobre, mattina.")]);
   if(S.f.found){
-    await panel({img:"s2_8"},[nar("Davanti al faro ci sono quattro uomini in nero. In mezzo a loro, il bambino dai capelli chiari. Sorride.")]);
+    await panel({img:"s2_8"},[nar("Davanti al faro sono tornati gli uomini in nero. Con loro c'è il bambino dai capelli chiari. Sorride.")]);
     await panel({txt:"dark"},[say(U,"Buongiorno. Siamo tornati, come promesso."),say("Eco · con la voce di Nayra","Sono tornati, come promesso."),th("Ha la mia voce. Ha preso la mia voce."),say(U,"Il dottore è molto in pensiero per quel bambino. Permette che diamo un'occhiata?")]);
     if(S.f.papaKnows&&S.papa>=60){await panel({img:"s2_9"},[say(P,"Questo è un faro dello Stato. Se volete entrare, tornate con la Guardia Civil."),nar("Gli uomini si guardano. Poi se ne vanno. Eco fissa Nayra fino all'ultimo.")]);S.f.visit="refused";return}
     await panel({txt:"dark"},[say(P,"Fate pure. Non abbiamo niente da nascondere. ...Vero, Nayra?")]);S.f.visit="search";return}
