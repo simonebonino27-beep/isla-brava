@@ -591,6 +591,7 @@ function convinceThought(){
 }
 async function convince(when){
   await panel(when==="Domattina"?{img:"shout"}:{txt:"dark"},[
+    ...(when==="Domattina"?[nar("Più tardi, in cucina. Il bambino dorme avvolto in una coperta.")]:[]),
     say(P,when+" lo porto al sanatorio. Il dottor Marrajo saprà cosa fare. È un sant'uomo."),
     say(N,"No!","shout"),
     th(convinceThought())]);
@@ -791,7 +792,7 @@ const SCENES=[
     nar("Più tardi, papà si inginocchia davanti al bambino con una ciotola d'acqua."),
     say(P,"Hai del sangue sulla benda, ragazzo. Fammi dare un'occhiata."),
     nar("Le dita di papà sono già sul nodo. Kai si irrigidisce.")]);
-  const a=await choose("band","Papà sta per togliergli la benda",[{t:"«Papà, fermo!»"},{t:"Lasci fare a papà"}],{t:1,def:null});if(a!==0)S.f.forgot=true;
+  const a=await choose("band","Papà sta per togliergli la benda",[{t:"«Papà, fermo!»"},{t:"Lasci fare a papà"}],{t:1,def:null});if(a!==0){S.f.forgot=true;S.f.papaKnows=false;S.f.lie=false}
   if(a===0){bump("trust",15,"Kai se ne ricorderà.");bump("papa",-6);
     await panel({txt:"paper"},[say(P,"Ehi! Volevo solo pulirgli la faccia!"),say(N,"Lo so. Ma lui non vuole. Vero, Kai?"),say(K,"...Grazie.")]);
     if(S.trust>=60)await panel({txt:"dark"},[th("Il suo cuore è andato più veloce. Per me.",K)]);
@@ -854,7 +855,7 @@ function hideSeek(rounds){
 }
 SCENES.push(
 ["Un bambino nuovo",async()=>{
-  await panel({txt:"dark"},[nar("Scena 2 · I tre giorni dopo"),nar("15 ottobre 1893, pomeriggio.")]);
+  S.f.d0=S.f.forgot?16:15;await panel({txt:"dark"},[nar("Scena 2 · I tre giorni dopo"),nar(S.f.d0+" ottobre 1893, pomeriggio.")]);
   if(S.f.forgot){
     await panel({img:"s2_1"},[say(P,"Allora. Ricominciamo. Chi è?"),th("Gliel'ho già spiegato ieri. Per lui è la prima volta.")]);
     const a=await choose("tell2","Che storia gli racconti stavolta?",[
@@ -896,7 +897,7 @@ SCENES.push(
   if(S.f.leftSailor)await panel({img:"s2_7"},[nar("Quella notte Nayra sogna il marinaio. Lui la guarda dalla spiaggia e non dice niente."),th("Anche io ho lasciato indietro qualcuno.")]);
 }],
 ["La visita",async()=>{
-  await panel({txt:"dark"},[nar("16 ottobre, mattina.")]);
+  await panel({txt:"dark"},[nar(((S.f.d0||15)+1)+" ottobre, mattina.")]);
   if(S.f.found){
     await panel({img:"s2_8"},[nar("Davanti al faro ci sono quattro uomini in nero. In mezzo a loro, il bambino dai capelli chiari. Sorride.")]);
     await panel({txt:"dark"},[say(U,"Buongiorno. Siamo tornati, come promesso."),say("Eco · con la voce di Nayra","Sono tornati, come promesso."),th("Ha la mia voce. Ha preso la mia voce."),say(U,"Il dottore è molto in pensiero per quel bambino. Permette che diamo un'occhiata?")]);
@@ -943,7 +944,7 @@ SCENES.push(
   }
 }],
 ["Dopo",async()=>{
-  await panel({txt:"dark"},[nar("16 ottobre, sera.")]);
+  await panel({txt:"dark"},[nar(((S.f.d0||15)+1)+" ottobre, sera.")]);
   if(S.f.lie&&!S.f.forgot&&!S.f.papaKnows){
     await panel({img:"s2_17"},[nar("Bussa un vecchio pescatore, il berretto tra le mani."),say("Pepe, pescatore","Tomás, ho chiesto in giro ad Arguineguín. Nessuno ha perso un figlio. Nessuno."),say(P,"Grazie, Pepe. Grazie."),nar("Papà chiude la porta e si gira lentamente."),say(P,"Arguineguín, eh?")]);
     const a=await choose("confront","Papà ti ha scoperta",[{t:"Gli dici finalmente la verità",d:S.kc?"Hai qualcosa da raccontargli.":"Non hai visto niente da raccontargli.",off:!S.kc},{t:"«Volevo proteggerlo. Anche da te.»"},{t:"Non dici niente"}]);
@@ -953,13 +954,13 @@ SCENES.push(
   }
   if(S.f.pot){
     await panel({img:"s2_18"},[say(P,"La pentola di tua madre. Trent'anni e non si era mai ammaccata."),say(N,"Scusa, papà."),nar("Papà guarda Kai, poi lei."),say(P,"...L'hai fatto per lui, vero? Allora va bene. Era solo una pentola.")]);bump("papa",4)}
-  await panel({img:"naming"},[nar("Notte. Kai è seduto sul letto, una mano alzata a mezz'aria."),say(K,"Posso... sapere com'è la tua faccia? Con le mani. Non ho mai saputo com'è fatta la faccia di qualcuno.")]);
+  await panel({img:"s2_5"},[nar("Notte. Kai è seduto sul letto, una mano alzata a mezz'aria."),say(K,"Posso... sapere com'è la tua faccia? Con le mani. Non ho mai saputo com'è fatta la faccia di qualcuno.")]);
   const b=await choose("face","Cosa rispondi?",[{t:"«Sì.»"},{t:"«Meglio di no.»"}]);
   if(b===0){bump("trust",14,"Kai se ne ricorderà.");await panel({img:"s2_19"},[nar("Kai le sfiora la fronte, le guance, il naso."),say(K,"Hai tanti puntini."),say(N,"Si chiamano lentiggini."),say(K,"Le conto, una sera.")])}
   else await panel({txt:"dark"},[nar("Kai abbassa la mano."),say(K,"Va bene.")]);
 }],
 ["L'annuncio",async()=>{
-  await panel({img:"s2_20"},[nar("17 ottobre. Papà rientra dal paese con un foglio piegato e lo posa sul tavolo."),say(P,S.f.messa?"L'ha letto il prete, dopo la messa. Sì, ci sono andato. Non dirlo a nessuno.":"L'ha letto il prete, dopo la messa.")]);
+  await panel({img:"s2_20"},[nar(((S.f.d0||15)+2)+" ottobre. Papà rientra dal paese con un foglio piegato e lo posa sul tavolo."),say(P,S.f.messa?"L'ha letto il prete, dopo la messa. Sì, ci sono andato. Non dirlo a nessuno.":"L'ha letto il prete, dopo la messa.")]);
   await panel({txt:"paper"},[nar("IL SANATORIO MARRAJO CERCA UNA GIOVANE CHE SAPPIA LEGGERE E SCRIVERE, PER TENERE I REGISTRI DEI PICCOLI PAZIENTI. VITTO E ALLOGGIO."),th("Leggere e scrivere. È l'unica cosa che so fare meglio di chiunque altro sull'isola."),
     th(S.f.logbook?"I registri dei pazienti. E un «laboratorio inferiore» che non compare da nessuna parte. Se c'è, sarà scritto lì.":S.f.poster?"Sanno della benda. Lì dentro qualcuno sa esattamente cos'è Kai.":"Gli altri cinque sono là dentro. Qualcuno deve pur entrarci.")]);
   const a=await choose("job","Cosa decidi?",[
