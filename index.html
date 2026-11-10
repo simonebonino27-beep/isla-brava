@@ -1375,6 +1375,7 @@ async function routeA1(){
       ...(S.f.seen||S.f.visit==="search"||S.f.visit==="short"?[th("«Pagano bene.» L'uomo in nero alla nostra porta ha detto la stessa cosa. Con le stesse parole."),]:[])]);
     if(S.f.seen||S.f.visit)clue("Suor Mercedes parla come l'uomo in nero venuto al faro");
   }
+  await panel({txt:"dark"},[th(S.f.papaGone?(S.f.pepeAlly||S.f.wifeAlly?"Kai è rimasto da Pepe e sua moglie. Gli ho promesso che tornerò a prenderlo.":"Kai è rimasto al faro da solo, con Pimienta e la dispensa piena. Mi ha promesso di non aprire a nessuno."):"Kai è rimasto al faro con papà. Gli ho promesso che tornerò con i suoi amici.")]);
   await panel({img:"p2_h3"},[nar("Nell'ufficio, la suora le prende le mani e le gira, palmo in su."),
     say(ME,"Mani di chi lavora. Bene."),say(ME,"Le regole sono tre. Il Padiglione Bianco è tuo. Le scale che scendono, no. E qui non si fanno domande."),
     th("Le scale che scendono. Quindi ci sono.")]);
@@ -1425,18 +1426,18 @@ async function routeA2(){
   if(d===0){S.f.heardSusurro=true;await panel({txt:"dark"},[nar("Silenzio. Poi una voce, ma non nelle orecchie: dentro la testa."),say("Una voce nella testa","Tu sei quella che ha preso Uno. Grazie. Torna l'8 dicembre, quando sono tutti a messa."),th("Susurro. Quella che sente i pensieri.")]);clue("Susurro: «Torna l'8 dicembre, quando sono tutti a messa»",1)}
   else await panel({txt:"dark"},[th("Non ancora. Prima devo capire come si apre.")]);
   if(S.f.tito&&!S.f.titoSold){
-    await panel({txt:"dark"},[nar("Il mattino dopo, Tito le fa cenno di avvicinarsi."),say(T,"La suora non è la suora. Ha la cenere. Questo mese ha cambiato faccia tre volte. Una volta era un uomo in nero."),th("La Bambola. Kai me ne aveva parlato. Quella che cambia faccia.")]);
-    S.f.warned2=true;clue("Suor Mercedes è la Bambola: cambia faccia",1)}
+    await panel({txt:"dark"},[nar("Il mattino dopo, Tito le fa cenno di avvicinarsi."),say(T,"La suora non è la suora. Ha la cenere. Questo mese ha cambiato faccia tre volte. Una volta era un uomo in nero."),th("Una che cambia faccia come cera calda. Ecco perché sapeva del faro: era lei, alla nostra porta.")]);
+    S.f.warned2=true;clue("Suor Mercedes non è chi dice di essere: cambia faccia",1)}
 }
 
 /* ===== Strada B: la grotta ===== */
 async function routeB1(){
   const tun=S.f.p1==="mount"||S.f.p1==="papafound";
   if(tun){
-    await panel({txt:"dark"},[nar("Notte del 31 ottobre. Guayarmina vi accompagna nella galleria antica che scende sotto il mare, dalla costa fino all'isoletta del sanatorio."),
+    await panel({txt:"dark"},[nar(S.f.guayTaken?"Notte del 31 ottobre. Una galleria antica scende sotto il mare, dalla costa fino all'isoletta del sanatorio.":"Notte del 31 ottobre. Guayarmina vi accompagna nella galleria antica che scende sotto il mare, dalla costa fino all'isoletta del sanatorio."),
       nar("Dopo un'ora di cammino nel buio la galleria risale. Sopra le vostre teste, adesso, c'è l'isoletta con il vulcano. La roccia finisce contro un muro di mattoni nuovi."),
-      say("Guayarmina","Oltre questo muro, è roba loro. Io qui mi fermo. Questi vecchi piedi fanno troppo rumore."),
-      ...(S.f.p1==="papafound"?[say(P,"Io vengo. Non discutere.")]:[])]);
+      ...(S.f.guayTaken?[th("Guayarmina me l'aveva mostrata, l'entrata della galleria, prima che la prendessero. Adesso la percorro senza di lei.")]:[say("Guayarmina","Oltre questo muro, è roba loro. Io qui mi fermo. Questi vecchi piedi fanno troppo rumore.")]),
+      ...(S.f.p1==="papafound"?[say(P,"Io resto qui, al muro. Tengo libera la strada del ritorno. Se all'alba non siete tornati, vengo a prendervi.")]:[])]);
     if(S.f.p1==="papafound")S.f.papaWith=true;
   }else{
     if(S.f.boat){
@@ -1452,7 +1453,7 @@ async function routeB1(){
     ...(S.f.garraContact?[say("Garra · senza voltarsi","Il dolce me lo devi ancora, faro.")]:S.f.garraEnemy?[nar("Il ragazzo si ferma. Annusa l'aria.")]:[nar("Il ragazzo con le braccia di pietra passa a un metro da loro. Non si volta.")])]);
   if(S.f.garraEnemy){
     const ok=await pull({h:"Scappa nel buio!",how:"Tocca <b>CORRI</b> più veloce che puoi. Se la barra rossa arriva in fondo prima, Garra vi prende.",foe:"GARRA",verb:"CORRI!",win:"PERSO!",lose:"PRESI…"});
-    if(!ok){await panel({txt:"dark"},[say("Garra","Te l'avevo detto che me la ricordavo."),nar("Garra afferra Nayra per il braccio. Kai scappa nel buio, come lei gli ha insegnato.")]);S.f.over="caught";return}
+    if(!ok){await panel({txt:"dark"},[say("Garra","Te l'avevo detto che me la ricordavo."),nar("Garra afferra Nayra per il braccio. Kai scappa nel buio, come lei gli ha insegnato.")]);S.f.over="caught";return endP2()}
   }
   await panel({img:"p2_g4"},[nar("In una grotta piena di pozze, una bambina con le conchiglie nei capelli tiene un granchio sul palmo."),say(MA,"Il granchio dice che sei buona."),say(K,"Marea? Sei tu?"),say(MA,"Uno! Sei tornato! Aleta diceva che il mare ti avrebbe riportato.")]);
   await panel({img:"p2_g5"},[nar("Marea li porta per un passaggio basso, dove l'acqua gocciola dal soffitto."),say(MA,"Di qua le guardie non vengono. Hanno paura dei granchi."),
@@ -1466,22 +1467,24 @@ async function routeB2(){
   await panel({txt:"dark"},[nar("Niebla è quasi trasparente. Dalle ginocchia in giù non si vede più."),say("Susurro","Ogni giorno un po' di più. Le danno la cenere per tenerla qui. Senza, sparisce."),th("Se la porto via, la salvo o la uccido?")]);
   await panel({img:"p2_g8"},[nar("Roca allunga i polsi incatenati. Le manette sono legate a un anello di ferro nella roccia."),say("Roca","La mela era buona, Uno?"),say(K,"Buonissima, Roca.")]);
   const r=await choose("roca","Liberate Roca?",[{t:"Sì, adesso",d:"Brasa scalda il lucchetto. Ma domattina le guardie vedranno la catena rotta."},{t:"Non ancora",d:"Lo libererete quando tornerete per tutti."}]);
-  if(r===0){S.f.rocaFree=true;await panel({txt:"dark"},[{t:"sfx",s:"CRAC"},nar("Il lucchetto si apre. Roca si guarda i polsi come se fossero di un altro."),say("Roca","Leggeri.")]);toast("Roca è libero. Domani se ne accorgeranno.")}
+  if(r===0){S.f.rocaFree=true;await panel({txt:"dark"},[{t:"sfx",s:"CRAC"},nar("Il lucchetto si apre. Roca si guarda i polsi come se fossero di un altro."),say("Roca","Leggeri.")]);await panel({txt:"dark"},[say(K,"Rimettiti le catene addosso, Roca. Solo appoggiate. Se le guardie vedono che sono rotte, ci cercano."),say("Roca","Faccio finta. Sono bravo a fare finta.")]);toast("Roca è libero, ma fa finta di no.")}
   await panel({img:"p2_g9"},[nar("Marea li porta fino al bordo di un pozzo enorme. Lungo le pareti pendono gabbie di ferro nero."),say(MA,"Giù ci sono quelli rotti. Non bisogna parlarci.")]);
   await panel({img:"p2_g10"},[nar("Da una gabbia, un bambino senza capelli e senza lineamenti allunga le mani tra le sbarre."),
     nar("E canta. Con una voce di donna."),say("Il bambino della gabbia","A la nana, nanita..."),th("È la ninna nanna della mamma. È la voce della mamma.")]);
   S.f.specchio=true;clue("Nel Pozzo c'è un bambino che parla con la voce della mamma di Nayra",1);
   const p=await choose("pozzo","Il bambino della gabbia ti guarda",[{t:"Gli parli"},{t:"Te ne vai subito"}],{t:1,def:1});
   if(p===0){S.f.specchioTouched=true;
-    await panel({txt:"dark"},[say(N,"Dove l'hai sentita, quella voce?"),say("Il bambino della gabbia","Tua madre aveva le mani fredde, quando mi ha toccato. Poi si è addormentata. E non si è più svegliata."),
+    await panel({txt:"dark"},[say(N,"Dove l'hai sentita, quella voce?"),say("Il bambino della gabbia","Da una donna, tanti anni fa, nella clinica di sopra. Aspettava un bambino e lo cantava ogni notte. Una volta mi ha accarezzato la testa. Da allora la sua voce è anche mia."),
+      say("Il bambino della gabbia","Poi una notte ha smesso di cantare."),
       nar("Una mano esce dalle sbarre e le stringe il polso. Fredda come un pesce."),say("Il bambino della gabbia · con la voce di Nayra","Grazie. Adesso ho anche la tua.")]);
-    clue("La mamma di Nayra è morta nella clinica del sanatorio",1)}
+    clue("La mamma di Nayra è stata nella clinica del sanatorio, incinta",1)}
   const w=await choose("who","La marea sta per salire. Il passaggio si chiude tra poco.",[{t:"Porti via Niebla e Marea, le più piccole"},{t:"Porti via Brasa e Aleta, i più forti"},{t:"Non porti via nessuno: tornerete per tutti"}]);
   S.f.out=w===0?["Niebla","Marea"]:w===1?["Brasa","Aleta"]:[];
   if(w===2){bump("trust",8);await panel({txt:"dark"},[say(K,"Se manca anche uno solo, il professore lo capisce. Torniamo per tutti."),say("Susurro","L'8 dicembre. Sono tutti a messa. Anche le guardie.")])}
   else await panel({txt:"dark"},[nar(S.f.out.join(" e ")+" seguono Nayra nel buio. Gli altri restano a guardarli andare."),say("Susurro","Tornate l'8 dicembre. Sono tutti a messa."),th("Ho scelto chi salvare. Gli altri lo sanno.")]);
   clue("L'8 dicembre sono tutti a messa: è la notte per tornare",1);
-  if(S.f.out.includes("Niebla"))await panel({txt:"dark"},[nar("Fuori, sulla barca, Niebla guarda le sue mani. Si vedono un po' meno di prima."),say("Niebla","Non importa. Ho visto il mare.")]);
+  if(S.f.out.includes("Niebla")){await panel({txt:"dark"},[nar("Fuori, all'aria aperta, Niebla guarda le sue mani. Si vedono un po' meno di prima."),say("Niebla","Non importa. Ho visto il mare.")]);
+    kill("Niebla","Niebla è sparita.");await panel({txt:"dark"},[nar("Il mattino dopo, al posto di Niebla c'è solo la sua tunica grigia, piegata con cura."),th("Senza la cenere, sparisce. Lo sapevo. L'ho portata via lo stesso."),say(MA,"Ha detto che il mare era più bello di come se lo immaginava.")])}
 }
 
 /* ===== Strada C: il prigioniero (si gioca con Kai) ===== */
@@ -1504,9 +1507,10 @@ async function routeC1(){
 }
 async function routeC2(){
   await panel({img:"p2_k5"},[nar("Una voce dentro la testa."),say("Susurro","Uno. Siamo qui, dall'altra parte del muro. Aleta stanotte va al mare. Cosa le diciamo?"),
-    say(K,"Lato nord. Bassa marea. La notte della festa."),say("Susurro","L'8 dicembre. Tutti a messa. Anche le guardie.")]);
-  await panel({img:"p2_k6"},[nar("Il faro di Punta Negra, all'alba. Ora sei di nuovo Nayra."),nar("Tra gli scogli c'è uno squalo grigio. Poi non c'è più: c'è una bambina che trema, avvolta in un sacco da pescatore."),
-    say("Aleta","Sei tu Nayra? Uno dice: lato nord, bassa marea, l'8 dicembre. Quando sono tutti a messa.")]);
+    say(K,"Come fa Aleta a uscire?"),say("Susurro","Dal canale dell'acqua sporca, che finisce in mare. Lei da squalo ci passa. Deve tornare prima dell'alba."),
+    say(K,"Allora dille di andare al faro di Punta Negra. Lato nord. Bassa marea. La notte della festa."),say("Susurro","L'8 dicembre. Tutti a messa. Anche le guardie.")]);
+  await panel({img:"p2_k6"},[nar("Il faro di Punta Negra, all'alba. Ora sei di nuovo Nayra."),...(S.f.p1==="alone"?[th("Sono tornata al faro dopo che Kai è sparito dalla montagna. È l'unico posto dove sa di trovarmi.")]:[]),nar("Tra gli scogli c'è uno squalo grigio. Poi non c'è più: c'è una bambina che trema, avvolta in un sacco da pescatore."),
+    say("Aleta","Sei tu Nayra? Uno dice: lato nord, bassa marea, l'8 dicembre. Quando sono tutti a messa."),say("Aleta","Adesso torno. Se all'alba non sono nel letto, se ne accorgono.")]);
   clue("Kai: «Lato nord, bassa marea, l'8 dicembre»",1);
   const opts=[];
   if(!S.f.papaGone&&(S.f.papaAlly||S.papa>=55))opts.push({t:"Papà",k:"papa"});
@@ -1547,9 +1551,9 @@ async function finale(){
       ...(S.f.titoSold?[]:S.f.tito?[say(T,"Vengo anch'io. Dentro sento chi ha la cenere. Ti servo.")]:[])]);
     if(S.f.tito&&!S.f.titoSold)S.f.titoWith=true;
   }
-  if(R==="B")await panel({txt:"dark"},[nar("Bassa marea, lato nord. Seconda volta."),say(K,"Questa volta non lasciamo nessuno.")]);
+  if(R==="B")await panel({txt:"dark"},[nar(S.f.p1==="mount"||S.f.p1==="papafound"?"La galleria antica, sotto il mare. Seconda volta.":"Bassa marea, lato nord. Seconda volta."),...((S.f.out||[]).includes("Brasa")?[nar("Brasa e Aleta sono tornati con loro. Conoscono le gallerie meglio di chiunque.")]:[]),say(K,"Questa volta non lasciamo nessuno.")]);
   if(R==="C"){
-    await panel({txt:"dark"},[nar("Kai, nella cella. Un clic nella serratura."),...(S.f.ecoPromise?[say("Eco","Promessa mantenuta. Ora tocca a te.")]:[say("Susurro","Brasa ha sciolto la serratura. Corri, Uno.")])]);
+    await panel({txt:"dark"},[nar("Kai, nella cella. Un clic nella serratura."),...(S.f.ecoPromise?[say("Eco","Promessa mantenuta. Ora tocca a te.")]:[nar("Qualcuno ha forzato la serratura da fuori, con un ferro da pescatore.")])]);
     await panel({txt:"dark"},[nar("In fondo alla galleria si muove una lanterna. Dietro la lanterna, Nayra."),
       ...(S.f.helper==="papa"?[nar("E dietro Nayra, papà, con un remo in mano come una spada.")]:S.f.helper==="pepe"?[nar("E dietro Nayra, Pepe, che bestemmia sottovoce contro i granchi.")]:S.f.helper==="bartolo"?[nar("E dietro Nayra, Bartolo, appoggiato a un bastone.")]:S.f.helper==="garra"?[nar("Al molo, Garra tiene già slegata la barca nuova.")]:[]),
       say(K,"Sei venuta."),say(N,"Te l'avevo promesso. Lato nord, bassa marea.")]);
@@ -1597,9 +1601,7 @@ async function finale(){
     }
   }
   // Niebla
-  {
-    if((S.f.out||[]).includes("Niebla")){kill("Niebla","Niebla è sparita.");await panel({txt:"dark"},[nar("Niebla non è venuta. Marea dice che stamattina, alla barca, non c'era più. C'era solo la sua tunica, piegata sulla panca."),th("Senza la cenere, sparisce. Lo sapevo. L'ho portata via lo stesso.")])}
-  }
+
   // the father
   if(S.f.alvTold){
     await panel({img:"p2_x7"},[nar("Nel corridoio compare il dottor Marrajo, senza cappello, senza bottiglietta. Si mette tra loro e Grau."),
@@ -1614,7 +1616,8 @@ async function finale(){
   }
   if(S.f.titoSold)await panel({txt:"dark"},[nar("Nel corridoio delle celle, Nayra vede un letto con le lenzuola del Padiglione Bianco. Vuoto."),th("Tito. Dove l'hanno messo? Non ho tempo di cercarlo. Non ho tempo.")]);
   // last choice: Kai
-  await panel({img:"p2_x8"},[nar("Il cancello del mare. La barca dondola. Grau è a un corridoio di distanza."),
+  await panel({img:"p2_x8"},[nar(R==="C"?"Il cancello del mare. Fuori aspetta la barca con cui Nayra è arrivata. Grau è a un corridoio di distanza.":"Il cancello del mare. Legata al molo interno dondola la barca delle provviste. Grau è a un corridoio di distanza."),
+    ...(R==="A"&&S.f.papaGone&&S.f.papaAlly?[nar("Ai remi c'è già papà. Sono due giorni che non beve il Tonico."),say(P,"Sali. Torniamo a casa.")]:[]),
     ...(S.f.ecoWith?[say("Eco · con la voce di Grau, verso il corridoio","Tutti alla cappella! Subito!"),nar("I passi delle guardie si allontanano nella direzione sbagliata."),say("Eco","Te l'avevo detto che ero utile, Uno.")]:[]),
     ...(R==="A"&&S.f.metFive?[nar("Sulla barca, Brasa, Susurro, Niebla e Aleta si stringono uno all'altro."+(alive("Roca")&&!S.f.rocaFree?" Roca no: è rimasto incatenato alla roccia. Nessuno aveva la chiave giusta.":""))]:[]),
     ...(R==="A"?[th("Kai mi aspetta al faro. Gli porto quello che ho trovato: i suoi amici, e la verità.")]:[])]);
