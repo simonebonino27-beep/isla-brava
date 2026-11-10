@@ -1207,7 +1207,13 @@ SCENES.push(
   }
 }],
 ["Il gofio",async()=>{
-  if(S.f.mount)return;
+  if(S.f.mount){
+    await panel({img:"r3_cave"},[nar("Il giorno dopo. Guayarmina impasta il gofio con latte di capra, in una ciotola di legno, e la mette in mano a Kai."),
+      say(K,"Cos'è?"),say("Guayarmina","Gofio. Lo mangiavano i miei nonni, e i nonni dei miei nonni. Ti tiene in piedi più del pane."),
+      nar("Kai assaggia. Si ferma. Poi ne prende un'altra manciata."),say(K,"Sa di fuoco spento. Di qualcosa di vecchio. Mi piace."),
+      th("Al faro non avrebbe mangiato niente di diverso. Qui sembra quasi a casa.")]);
+    await panel({txt:"dark"},[say("Guayarmina","Stasera mi racconti chi hai lasciato là sotto, figlio. Chi non si ricorda dei suoi, si perde.")]);
+    return}
   await panel({img:"s2_3"},[nar("Nayra impasta il gofio con il miele e il latte. Kai annusa la ciotola, la testa inclinata."),say(K,"Cos'è?"),say(N,"Gofio. Farina di cereali tostati. Qui lo mangiamo tutti, da sempre."),say(K,"Sull'isola mangiavamo pappa grigia. Sempre la stessa. Sapeva di ferro.")]);
   await picker("Assaggi","Fai assaggiare a Kai le tre cose sul tavolo. Ogni sapore gli fa tornare in mente qualcosa.",[
     {t:"Il gofio col miele",lines:[say(K,"È... dolce. Non sapevo che si potesse mangiare una cosa dolce.")]},
@@ -1220,9 +1226,9 @@ SCENES.push(
   if(a===2){bump("trust",12,"Kai se ne ricorderà.");await panel({txt:"dark"},[nar("Kai beve in silenzio. Poi, da solo:"),say(K,"Sono cinque. Stasera te li racconto.")])}
 }],
 ["Gli altri",async()=>{
-  await panel(S.f.mount?{txt:"dark"}:{img:"s2_5"},[nar(S.f.mount?"Sera, nella grotta di Guayarmina. Il fuoco è basso, il diario è aperto.":"Sera. La stanza di Nayra, una candela. Il diario è aperto."),say(K,"Sono cinque. Siamo... eravamo sei."),say(N,"Com'erano?"),say(K,"Non lo so. Non li ho mai visti. Nessuno di noi si è mai visto."),th("Certo. Porta la benda da sempre. Li conosce solo dalle voci."),say(N,"Allora raccontameli come li senti tu. Io provo a disegnarli.")]);
+  await panel(S.f.mount?{txt:"dark"}:{img:"s2_5"},[nar(S.f.mount?"Sera, nella grotta di Guayarmina. Il fuoco è basso, il diario è aperto.":"Sera. La stanza di Nayra, una candela. Il diario è aperto."),...(S.f.mount?[say("Guayarmina","Allora, figlio. Chi hai lasciato là sotto?")]:[]),say(K,"Sono cinque. Siamo... eravamo sei."),say(N,"Com'erano?"),say(K,"Non lo so. Non li ho mai visti. Nessuno di noi si è mai visto."),th("Certo. Porta la benda da sempre. Li conosce solo dalle voci."),say(N,"Allora raccontameli come li senti tu. Io provo a disegnarli.")]);
   const heard=[];
-  await picker("Amici disegnati","Tocca un nome: Kai lo descrive e Nayra lo disegna nel diario. Ascoltane almeno due.",FRIENDS.map((f,i)=>({t:`${f[0]} · ${f[1]}`,lines:[say(K,f[2])],fx:()=>heard.push(i)})),2,"Ho finito di disegnare");
+  await picker("Amici disegnati","Tocca ogni nome: Kai lo descrive e Nayra lo disegna nel diario. Ascoltali tutti e cinque.",FRIENDS.map((f,i)=>({t:`${f[0]} · ${f[1]}`,lines:[say(K,f[2])],fx:()=>heard.push(i)})),5,"Ho finito di disegnare");
   S.f.heard=heard.slice();
   const fa=await choose("friend","Di chi vuoi sapere di più?",FRIENDS.map(f=>({t:f[0]})));
   S.f.friend=fa;bump("trust",4);
@@ -1448,7 +1454,9 @@ async function routeB1(){
     if(!ok){await panel({txt:"dark"},[say("Garra","Te l'avevo detto che me la ricordavo."),nar("Garra afferra Nayra per il braccio. Kai scappa nel buio, come lei gli ha insegnato.")]);S.f.over="caught";return}
   }
   await panel({img:"p2_g4"},[nar("In una grotta piena di pozze, una bambina con le conchiglie nei capelli tiene un granchio sul palmo."),say(MA,"Il granchio dice che sei buona."),say(K,"Marea? Sei tu?"),say(MA,"Uno! Sei tornato! Aleta diceva che il mare ti avrebbe riportato.")]);
-  await panel({img:"p2_g5"},[nar("Marea li porta per un passaggio basso, dove l'acqua gocciola dal soffitto."),say(MA,"Di qua le guardie non vengono. Hanno paura dei granchi.")]);
+  await panel({img:"p2_g5"},[nar("Marea li porta per un passaggio basso, dove l'acqua gocciola dal soffitto."),say(MA,"Di qua le guardie non vengono. Hanno paura dei granchi."),
+    say(K,"Marea. Gli altri sono ancora dove dormivamo prima?"),say(MA,"Sì. Nel dormitorio delle Gallerie. Di notte vi chiudono dentro, ma la porta del pozzo d'aria no. Vi ci porto."),
+    th("Il dormitorio dove Kai ha passato dieci anni. I cinque che lo hanno spinto via con la nave. Sono ancora lì, a cento passi da noi.")]);
 }
 async function routeB2(){
   await panel({img:"p2_g6"},[nar("Un dormitorio scavato nella roccia. Cinque bambini si tirano su dai giacigli di paglia, tutti insieme."),say("Susurro","Lo sapevo. Lo pensavi così forte che ti sentivo da giorni.")]);
@@ -1632,6 +1640,7 @@ async function startGame(save){
     for(let i=S.scene;i<SCENES.length;i++){S.scene=i;store.set('save',S);$('sceneName').textContent=(i>=SC2?'Cap. I · Parte 2 · ':'Cap. I · Scena '+(i<SC1?1:2)+' · ')+SCENES[i][0];if(i===SC2&&S.scene===i&&col.children.length){const c=document.createElement('div');c.className='endc';c.innerHTML='<h3>Fine della Parte 1</h3><p>Il gioco ha salvato. Si continua con la Parte 2: l\'isola.</p>';col.appendChild(c);reveal(c);await tap()}if(i===SC1&&S.scene===i&&col.children.length){const c=document.createElement('div');c.className='endc';c.innerHTML='<h3>Fine della Scena 1</h3><p>Il gioco ha salvato. Si continua con la Scena 2.</p>';col.appendChild(c);reveal(c);await tap()}
       const h=document.createElement('div');h.className='note shead';h.style.cssText='padding:10px 0 2px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)';h.textContent=(i<SC1?i+1:i<SC2?i-SC1+1:i-SC2+1)+' · '+SCENES[i][0];turn();col.appendChild(h);
       await SCENES[i][1]();
+      if(col.lastElementChild===h)h.remove();
       if(S.f.over&&i<SC2){if(S.f.over==='silence')break;S.f.p1=S.f.over;S.f.over=null;i=SC2-1;continue}
       if(S.f.over)break;
       if(i===SC2-1){S.f.p1=S.f.route||'job';}}
