@@ -1433,7 +1433,8 @@ async function routeA2(){
 async function routeB1(){
   const tun=S.f.p1==="mount"||S.f.p1==="papafound";
   if(tun){
-    await panel({txt:"dark"},[nar("Guayarmina vi accompagna nella galleria antica, sotto il mare. Dopo un'ora di cammino la roccia finisce contro un muro di mattoni nuovi."),
+    await panel({txt:"dark"},[nar("Notte del 31 ottobre. Guayarmina vi accompagna nella galleria antica che scende sotto il mare, dalla costa fino all'isoletta del sanatorio."),
+      nar("Dopo un'ora di cammino nel buio la galleria risale. Sopra le vostre teste, adesso, c'è l'isoletta con il vulcano. La roccia finisce contro un muro di mattoni nuovi."),
       say("Guayarmina","Oltre questo muro, è roba loro. Io qui mi fermo. Questi vecchi piedi fanno troppo rumore."),
       ...(S.f.p1==="papafound"?[say(P,"Io vengo. Non discutere.")]:[])]);
     if(S.f.p1==="papafound")S.f.papaWith=true;
@@ -1455,7 +1456,7 @@ async function routeB1(){
   }
   await panel({img:"p2_g4"},[nar("In una grotta piena di pozze, una bambina con le conchiglie nei capelli tiene un granchio sul palmo."),say(MA,"Il granchio dice che sei buona."),say(K,"Marea? Sei tu?"),say(MA,"Uno! Sei tornato! Aleta diceva che il mare ti avrebbe riportato.")]);
   await panel({img:"p2_g5"},[nar("Marea li porta per un passaggio basso, dove l'acqua gocciola dal soffitto."),say(MA,"Di qua le guardie non vengono. Hanno paura dei granchi."),
-    say(K,"Marea. Gli altri sono ancora dove dormivamo prima?"),say(MA,"Sì. Nel dormitorio delle Gallerie. Di notte vi chiudono dentro, ma la porta del pozzo d'aria no. Vi ci porto."),
+    say(K,"Marea. Gli altri sono ancora dove dormivamo prima?"),say(MA,"Sì. Nel dormitorio delle Gallerie, qui sotto il vulcano. Di notte vi chiudono dentro, ma la porta del pozzo d'aria no. Vi ci porto."),
     th("Il dormitorio dove Kai ha passato dieci anni. I cinque che lo hanno spinto via con la nave. Sono ancora lì, a cento passi da noi.")]);
 }
 async function routeB2(){
